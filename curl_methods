@@ -1,0 +1,23 @@
+curl -X POST -F "budlight_positive_examples=@budlight.zip" -F "budweiser_positive_examples=@budweiser.zip" -F "corona_positive_examples=@corona.zip" -F "hoegaarden_positive_examples=@hoegaarden.zip" -F "platinum_positive_examples=@platinum.zip" -F "stella_positive_examples=@stella.zip" -F "ultra_positive_examples=@ultra.zip" -F "negative_examples=@negative.zip" -F "name=beercaps" "https://gateway-a.watsonplatform.net/visual-recognition/api/v3/classifiers?api_key=24f5aba0d5d54d4ecc619de28e71ddfca61c7559&version=2016-05-20"
+
+
+
+curl -X GET "https://gateway-a.watsonplatform.net/visual-recognition/api/v3/classifiers/beercaps_101725851?api_key=24f5aba0d5d54d4ecc619de28e71ddfca61c7559&version=2016-05-20"
+
+
+"classifier_id": "beercaps_101725851",
+    "name": "beercaps",
+    "owner": "f84f5f31-89d2-44e7-807e-673f63e5cd02",
+    "status": "ready",
+    "created": "2016-10-20T20:57:39.020Z",
+    "classes": [
+        {"class": "hoegaarden"},
+        {"class": "corona"},
+        {"class": "budweiser"},
+        {"class": "budlight"},
+        {"class": "ultra"},
+        {"class": "stella"},
+        {"class": "platinum"}
+
+
+curl -X POST -F "images_file=@platinum.png" -F "parameters=@myparams.json" "https://gateway-a.watsonplatform.net/visual-recognition/api/v3/classify?api_key=24f5aba0d5d54d4ecc619de28e71ddfca61c7559&version=2016-05-20"
