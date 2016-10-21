@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-img_for_cropping = cv2.imread('test-pictures/plat17.png')
-img = cv2.imread('test-pictures/plat17.png',0)
+img_for_cropping = cv2.imread('test-pictures/obaoba.png')
+img = cv2.imread('test-pictures/obaoba.png',0)
 height, width = img.shape
 img = cv2.medianBlur(img,21)
 img = cv2.blur(img,(1,1))
@@ -42,7 +42,7 @@ for i in circles[0,:]:
     crop_img = img_for_cropping[originY:endPointH, originX:endPointW]
 
 
-    cv2.imwrite('results/platinum_%s.png'%(i),crop_img)
+    cv2.imwrite('results/obaoba_%s.png'%(i),crop_img)
 
         # draw the outer circle
     cv2.circle(img_for_cropping,(i[0],i[1]),i[2],(0,255,0),2)
