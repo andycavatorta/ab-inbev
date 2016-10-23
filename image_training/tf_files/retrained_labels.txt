@@ -1,7 +1,7 @@
-budlight
 corona
-ultra
-hoegaarden
-budweiser
 platinum
+hoegaarden
 stella
+ultra
+budlight
+budweiser
