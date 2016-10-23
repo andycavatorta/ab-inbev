@@ -87,6 +87,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-# images (only need these when training)
-image_training/tf_files/caps
