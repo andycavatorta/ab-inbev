@@ -25,3 +25,5 @@ $ sudo python3 retrain.py \
 --output_labels=tf_files/retrained_labels.txt \
 --image_dir tf_files/caps
 ```
+
+**NOTE**: remove *the --how_many_training_steps* parameter touse the default (4000) and get better results.
