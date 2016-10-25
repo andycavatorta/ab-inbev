@@ -1,0 +1,126 @@
+{
+  "images": [
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_312_314.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997775, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }, 
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_320_112.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997105, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }, 
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_508_316.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997907, 
+              "class": "budlight"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }, 
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_524_90.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997875, 
+              "class": "budweiser"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }, 
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_72_320.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997952, 
+              "class": "budweiser"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }, 
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_764_346.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.999569, 
+              "class": "stella"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }, 
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_774_108.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997546, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }, 
+    {
+      "image": "/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47.zip/Users/joaopedro/GitHub/ab-inbev/results/2016-10-25-13-25-47/platinum_80_94.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997764, 
+              "class": "budlight"
+            }
+          ], 
+          "classifier_id": "beercaps_101725851", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 8
+}
