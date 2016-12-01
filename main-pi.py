@@ -13,7 +13,7 @@ import RPi.GPIO as GPIO
 dir_path = os.path.dirname(os.path.realpath(__file__))
 now = datetime.datetime.now()
 realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
-foldername = ("%s/results/%s") %(dir_path, realnow)
+foldername = ("%s/cropped/%s") %(dir_path, realnow)
 caps_positions = []
 results_json = []
 images_folder = "%s" % (realnow)
