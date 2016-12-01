@@ -37,12 +37,15 @@ def take_picture(image_number):
 
 	print "Taking picture..."
 	try: 
-		cap = cv2.VideoCapture(1)
-		ret, frame = cap.read()
-		# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-		cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
-		cap.release()
-		print "Picture taken"
+		cap = cv2.VideoCapture(0)
+		if is not cap.isOpened():
+			cap.open()
+		else:
+			ret, frame = cap.read()
+			# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+			cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
+			cap.release()
+			print "Picture taken"
 	except Exception as e:
 		print "Oops! something went wrong %s" % (e)
 
