@@ -243,9 +243,9 @@ for pin in camera_pins:
 	GPIO.output(pin, GPIO.HIGH)
 	time.sleep(2)
 	take_picture(number)
+	time.sleep(1)
 	GPIO.output(pin, GPIO.LOW)
 	number = number + 1
-time.sleep(1)
 for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
 		filename = str(filename)
