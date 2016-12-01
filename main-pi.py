@@ -242,14 +242,7 @@ number = 1
 for pin in camera_pins:
 	GPIO.output(pin, GPIO.HIGH)
 	time.sleep(2)
-	try:
-		take_picture(number)
-	except:
-		GPIO.output(pin, GPIO.LOW)
-		time.sleep(1)
-		GPIO.output(pin, GPIO.HIGH)
-		time.sleep(2)
-		take_picture(number)
+	take_picture(number)
 	GPIO.output(pin, GPIO.LOW)
 	number = number + 1
 for filename in os.listdir("%s/" % (images_folder)):
