@@ -39,6 +39,7 @@ def take_picture(image_number):
 	try: 
 		cap = cv2.VideoCapture(0)
 		if cap.isOpened() == False:
+			print "Cap not open... trying to fix it..."
 			cap.open()
 		else:
 			ret, frame = cap.read()
@@ -241,7 +242,7 @@ def process_data():
 ##############################
 ######## NARRATIVE ###########
 ##############################
-number = 1
+number = 0
 for pin in camera_pins:
 	GPIO.output(pin, GPIO.HIGH)
 	time.sleep(2)
@@ -249,6 +250,7 @@ for pin in camera_pins:
 	GPIO.output(pin, GPIO.LOW)
 	time.sleep(1)
 	number = number + 1
+	
 for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
 		filename = str(filename)
