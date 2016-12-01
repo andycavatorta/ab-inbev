@@ -84,10 +84,10 @@ def undistort_image(src):
 
 def process_image(src):
 	print "Processing image..."
-	img_for_cropping = cv2.imread(src)
+	img_for_cropping = cv2.imread("%s/%s" %(images_folder, src))
 	# img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
 	img_for_cropping = undistort_image(img_for_cropping)
-	img = cv2.imread(src,0)
+	img = cv2.imread("%s/%s" %(images_folder, src),0)
 	# img = cv2.resize(img, (800,450), cv2.INTER_AREA)
 	img = undistort_image(img)
 	cv2.imshow('dst', img)
