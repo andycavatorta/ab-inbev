@@ -104,7 +104,7 @@ def process_image(src):
 	img = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
 
 	print "Detecting circles..."
-	circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
+	circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=27,minRadius=20,maxRadius=80)
 	circles = np.uint16(np.around(circles))
 
 	for i in circles[0,:]:
