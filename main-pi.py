@@ -242,9 +242,9 @@ def process_data():
 number = 1
 for pin in camera_pins:
 	GPIO.output(pin, GPIO.HIGH)
-	time.sleep(0.1)
+	time.sleep(1)
 	take_picture(number)
-	time.sleep(0.1)
+	time.sleep(1)
 	GPIO.output(pin, GPIO.LOW)
 	number = number + 1
 for filename in os.listdir("%s/" % (images_folder)):
