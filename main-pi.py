@@ -18,7 +18,7 @@ caps_positions = []
 results_json = []
 images_folder = "%s" % (realnow)
 os.makedirs(images_folder)
-
+os.makedirs(foldername)
 ##############################
 ####### INIT CAMERAS #########
 ##############################
@@ -100,7 +100,6 @@ def process_image(src):
 	print "Detecting circles..."
 	circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
 	circles = np.uint16(np.around(circles))
-	os.makedirs(foldername)
 
 	for i in circles[0,:]:
 	    # crop cap
