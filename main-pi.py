@@ -1,11 +1,12 @@
-import numpy as np
 import cv2
+import numpy as np
 import os
 import zipfile
 import json
 from os.path import join, dirname
 from os import environ
 from watson_developer_cloud import VisualRecognitionV3
+import time
 import datetime
 import RPi.GPIO as GPIO
 
@@ -245,7 +246,7 @@ for pin in camera_pins:
 	take_picture(number)
 	GPIO.output(pin, GPIO.LOW)
 	number = number + 1
-for filename in os.listdir("%s/" % (images_folder))
+for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
 		process_image(filename)
 
