@@ -37,7 +37,7 @@ def take_picture(image_number):
 
 	print "Taking picture..."
 	try: 
-		cap = cv2.VideoCapture()
+		cap = cv2.VideoCapture(0)
 		ret, frame = cap.read()
 		# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
@@ -243,8 +243,8 @@ for pin in camera_pins:
 	GPIO.output(pin, GPIO.HIGH)
 	time.sleep(2)
 	take_picture(number)
-	time.sleep(1)
 	GPIO.output(pin, GPIO.LOW)
+	time.sleep(1)
 	number = number + 1
 for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
