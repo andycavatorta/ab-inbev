@@ -249,7 +249,7 @@ for pin in camera_pins:
 for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
 		print filename
-		process_image(filename)
+		process_image(str(filename))
 
 compress_folder()
 # run_nn()
