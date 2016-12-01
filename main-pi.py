@@ -38,8 +38,8 @@ def take_picture(image_number):
 	print "Taking picture..."
 	try: 
 		cap = cv2.VideoCapture(0)
-		if !cap.isOpened():
-			while !.cap.isOpened():
+		if not cap.isOpened():
+			while not cap.isOpened():
 				print "Cap not open... trying to fix it..."
 				cap.open()
 				time.sleep(1)
