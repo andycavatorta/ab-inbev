@@ -241,10 +241,10 @@ def process_data():
 ##############################
 number = 1
 for pin in camera_pins:
-	GPIO.output(pin, GPIO.HIGH)
+	GPIO.output(pin, GPIO.LOW)
 	time.sleep(1)
 	take_picture(number)
-	GPIO.output(pin, GPIO.LOW)
+	GPIO.output(pin, GPIO.HIGH)
 	number = number + 1
 for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
