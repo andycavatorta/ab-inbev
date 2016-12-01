@@ -87,9 +87,9 @@ def process_image(src):
 	img_for_cropping = cv2.imread(src)
 	# img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
 	img_for_cropping = undistort_image(img_for_cropping)
-	img_raw = cv2.imread(src,0)
+	img = cv2.imread(src,0)
 	# img = cv2.resize(img, (800,450), cv2.INTER_AREA)
-	img = undistort_image(img_raw)
+	img = undistort_image(img)
 	cv2.imshow('dst', img)
 	height, width = img.shape
 	img = cv2.medianBlur(img,21)
@@ -249,6 +249,7 @@ for pin in camera_pins:
 for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
 		process_image(filename)
+		print filename
 
 compress_folder()
 # run_nn()
