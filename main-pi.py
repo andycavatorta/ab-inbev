@@ -38,7 +38,7 @@ def take_picture(image_number):
 	print "Taking picture..."
 	try: 
 		cap = cv2.VideoCapture(0)
-		if is not cap.isOpened():
+		if cap.isOpened() == False:
 			cap.open()
 		else:
 			ret, frame = cap.read()
