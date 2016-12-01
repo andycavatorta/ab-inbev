@@ -90,7 +90,7 @@ def process_image(src):
 	img = cv2.imread("%s/%s" %(images_folder, src),0)
 	# img = cv2.resize(img, (800,450), cv2.INTER_AREA)
 	img = undistort_image(img)
-	cv2.imshow('dst', img)
+	# cv2.imshow('dst', img)
 	height, width = img.shape
 	img = cv2.medianBlur(img,21)
 	img = cv2.blur(img,(1,1))
@@ -131,7 +131,7 @@ def process_image(src):
 	    cv2.circle(img_for_cropping,(i[0],i[1]),2,(0,0,255),3)
 	    print len(circles)
 
-	cv2.imshow('detected circles',img_for_cropping)
+	# cv2.imshow('detected circles',img_for_cropping)
 	cv2.destroyAllWindows()
 	print caps_positions
 	print "Processing image done"
