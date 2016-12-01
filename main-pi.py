@@ -88,7 +88,7 @@ def process_image(src):
 	img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
 	img_for_cropping = undistort_image(img_for_cropping)
 	img = cv2.imread(src,0)
-	img = cv2.resize(img, (800,450), cv2.INTER_AREA)
+	# img = cv2.resize(img, (800,450), cv2.INTER_AREA)
 	img = undistort_image(img)
 	cv2.imshow('dst', img)
 	height, width = img.shape
@@ -242,9 +242,9 @@ def process_data():
 number = 1
 for pin in camera_pins:
 	GPIO.output(pin, GPIO.HIGH)
-	time.sleep(2)
+	time.sleep(0.1)
 	take_picture(number)
-        time.sleep(1)
+    time.sleep(0.1)
 	GPIO.output(pin, GPIO.LOW)
 	number = number + 1
 for filename in os.listdir("%s/" % (images_folder)):
