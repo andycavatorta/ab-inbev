@@ -37,7 +37,7 @@ def take_picture(image_number):
 
 	print "Taking picture..."
 	try: 
-		cap = cv2.VideoCapture(0)
+		cap = cv2.VideoCapture()
 		ret, frame = cap.read()
 		# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
