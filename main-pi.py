@@ -23,12 +23,12 @@ os.makedirs(images_folder)
 ####### INIT CAMERAS #########
 ##############################
 
-camera_pins = [2,3,4,14,15,17,18,27,22,23,24,10]
+camera_pins = [2,3,4,14,15,17,18,27,22,23,24]
 
 GPIO.setmode(GPIO.BCM)
 for pin in camera_pins:
 	GPIO.setup(pin, GPIO.OUT)
-
+        GPIO.output(pin, GPIO.LOW)
 ##############################
 ###### TAKE A PICTURE ########
 ##############################
@@ -241,10 +241,11 @@ def process_data():
 ##############################
 number = 1
 for pin in camera_pins:
-	GPIO.output(pin, GPIO.LOW)
-	time.sleep(1)
-	take_picture(number)
 	GPIO.output(pin, GPIO.HIGH)
+	time.sleep(2)
+	take_picture(number)
+        time.sleep(1)
+	GPIO.output(pin, GPIO.LOW)
 	number = number + 1
 for filename in os.listdir("%s/" % (images_folder)):
 	if filename.endswith(".png"):
