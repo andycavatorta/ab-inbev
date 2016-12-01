@@ -36,21 +36,21 @@ for pin in camera_pins:
 def take_picture(image_number):
 
 	print "Taking picture..."
-	try: 
-		cap = cv2.VideoCapture(0)
-		if not cap.isOpened():
-			while not cap.isOpened():
-				print "Cap not open... trying to fix it..."
-				cap.open()
-				time.sleep(1)
-		else:
-			ret, frame = cap.read()
-			# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-			cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
-			cap.release()
-			print "Picture taken"
-	except Exception as e:
-		print "Oops! something went wrong %s" % (e)
+	# try: 
+	cap = cv2.VideoCapture(0)
+	if not cap.isOpened():
+		while not cap.isOpened():
+			print "Cap not open... trying to fix it..."
+			cap.open()
+			time.sleep(1)
+	else:
+		ret, frame = cap.read()
+		# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+		cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
+		cap.release()
+		print "Picture taken"
+	# except Exception as e:
+	# 	print "Oops! something went wrong %s" % (e)
 
 ##############################
 ######## UNDISTORT ###########
