@@ -41,7 +41,7 @@ def take_picture(image_number):
 	if not cap.isOpened():
 		while not cap.isOpened():
 			print "Cap not open... trying to fix it..."
-			cap.open()
+			cap.open(0)
 			time.sleep(1)
 	else:
 		ret, frame = cap.read()
