@@ -63,7 +63,7 @@ def undistort_image(src):
 	height = src.shape[0]
 	distCoeff = np.zeros((4,1),np.float64)
 
-	k1 = -8.0e-5; # negative to remove barrel distortion
+	k1 = -9.0e-5; # negative to remove barrel distortion
 	k2 = 0.0;
 	p1 = 0.0;
 	p2 = 0.0;
