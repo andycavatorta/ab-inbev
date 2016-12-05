@@ -23,7 +23,7 @@ os.makedirs(foldername)
 ####### INIT CAMERAS #########
 ##############################
 
-camera_pins = [18,27] # [2,3,4,14,15,17,18,27]
+camera_pins = [2,3,4,14,15,17,18,27]
 GPIO.setmode(GPIO.BCM)
 for pin in camera_pins:
 	GPIO.setup(pin, GPIO.OUT)
@@ -262,8 +262,8 @@ for filename in os.listdir("%s/" % (images_folder)):
 		process_image(filename)
 
 compress_folder()
-run_nn()
-process_data()
+# run_nn()
+# process_data()
 
 
 
