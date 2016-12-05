@@ -72,10 +72,10 @@ def process_image():
 	print "Processing image..."
 	img_for_cropping = cv2.imread('videocapture/videocapture1.png')
 	img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
-	img_for_cropping = undistort_image(img_for_cropping)
+	# img_for_cropping = undistort_image(img_for_cropping)
 	img = cv2.imread('videocapture/videocapture1.png',0)
 	img = cv2.resize(img, (800,450), cv2.INTER_AREA)
-	img = undistort_image(img)
+	# img = undistort_image(img)
 	cv2.imshow('dst', img)
 	height, width = img.shape
 	img = cv2.medianBlur(img,21)
@@ -118,6 +118,7 @@ def process_image():
 	    print len(circles)
 
 	cv2.imshow('detected circles',img_for_cropping)
+	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 	print caps_positions
 	print "Processing image done"
@@ -226,8 +227,8 @@ def process_data():
 
 # take_picture()
 process_image()
-run_nn()
-process_data()
+# run_nn()
+# process_data()
 
 
 
