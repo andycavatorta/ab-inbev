@@ -39,7 +39,6 @@ def take_picture(image_number):
 		cap = cv2.VideoCapture(0)
 		cap.set(3,1280)
 		cap.set(4,720)
-		cap.set(15, 0.1)
 		if not cap.isOpened():
 			while not cap.isOpened():
 				print "Cap not open... trying to fix it..."
@@ -47,6 +46,7 @@ def take_picture(image_number):
 				time.sleep(1)
 		else:
 			ret, frame = cap.read()
+			time.sleep(1)
 			# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
 			cap.release()
