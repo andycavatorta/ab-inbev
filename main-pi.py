@@ -24,10 +24,6 @@ os.makedirs(foldername)
 ##############################
 
 camera_pins = [2,3,4,14,15,17,18,27]
-<<<<<<< HEAD
-=======
-
->>>>>>> 8fcbfe837c628058c2b69aa06d58dfe38686952b
 GPIO.setmode(GPIO.BCM)
 for pin in camera_pins:
 	GPIO.setup(pin, GPIO.OUT)
