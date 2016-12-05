@@ -96,7 +96,7 @@ def process_image(src):
 	img_for_cropping = undistort_image(img_for_cropping)
 	img = cv2.imread("%s/%s" %(images_folder, src),0)
 	img = cv2.resize(img, (800,450), cv2.INTER_AREA)
-	img = undistort_image(img)
+	# img = undistort_image(img)
 	# cv2.imshow('dst', img)
 	height, width = img.shape
 	img = cv2.medianBlur(img,21)
