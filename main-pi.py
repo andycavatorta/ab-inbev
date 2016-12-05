@@ -161,11 +161,11 @@ def compress_folder():
 def run_nn():
 	#  michelle: 0ba27a1a79d9d2f600ad71cc3c32fada1499a3a2
 	#  joao: 24f5aba0d5d54d4ecc619de28e71ddfca61c7559
-	visual_recognition = VisualRecognitionV3('2016-05-20', api_key='24f5aba0d5d54d4ecc619de28e71ddfca61c7559')
+	visual_recognition = VisualRecognitionV3('2016-05-20', api_key='04b86ee445d9781762e7759131f130bcce64b45a')
 
 	"Uploading to the Neural Network..."
 	with open("%s.zip"%(foldername), 'rb') as image_file:
-		results = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_101725851'], threshold=0.99), indent=2)
+		results = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercapz_620319077'], threshold=0.99), indent=2)
 	print results
 	global results_json
 	results_json = results
