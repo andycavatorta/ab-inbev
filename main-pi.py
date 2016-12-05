@@ -39,7 +39,7 @@ def take_picture(image_number):
 	try: 
 		cap = cv2.VideoCapture(0)
 		cap.set(3,1280)
-		cap.set(4,720)pyth
+		cap.set(4,720)
 		if not cap.isOpened():
 			while not cap.isOpened():
 				print "Cap not open... trying to fix it..."
