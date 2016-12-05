@@ -112,7 +112,7 @@ def process_image(src):
 	    # crop cap
 	    global caps_positions
 	    caps_positions.append((i[0],i[1]))
-	    margin = 30
+	    margin = 40
 	    originX = int(i[0])-int(i[2])-margin
 	    originY = int(i[1])-int(i[2])-margin
 	    endPointH = int(i[1])+int(i[2])+margin
@@ -261,8 +261,8 @@ for filename in os.listdir("%s/" % (images_folder)):
 		process_image(filename)
 
 compress_folder()
-run_nn()
-process_data()
+# run_nn()
+# process_data()
 
 
 
