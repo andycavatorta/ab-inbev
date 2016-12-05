@@ -45,8 +45,8 @@ def take_picture(image_number):
 				cap.open()
 				time.sleep(1)
 		else:
-			ret, frame = cap.read()
 			time.sleep(1)
+			ret, frame = cap.read()
 			# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
 			cap.release()
