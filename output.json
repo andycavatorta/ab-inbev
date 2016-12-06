@@ -1,95 +1,35 @@
 {
   "images": [
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_200_242.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.99952, 
-              "class": "stella"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_798_374.png", 
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_130_388.png", 
       "classifiers": []
     }, 
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_162_34.png", 
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_714_146.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.997738, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercapz_620319077", 
+          "name": "beercapz"
+        }
+      ]
+    }, 
+    {
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_60_344.png", 
       "classifiers": []
     }, 
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_678_306.png", 
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_208_244.png", 
       "classifiers": [
         {
           "classes": [
             {
-              "score": 0.997751, 
-              "class": "budlight"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_764_382.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.99802, 
-              "class": "budweiser"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_66_84.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.997545, 
-              "class": "budlight"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_274_336.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.997716, 
-              "class": "budweiser"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_14_110.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.997096, 
+              "score": 0.999561, 
               "class": "stella"
             }
           ], 
@@ -99,27 +39,24 @@
       ]
     }, 
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_752_366.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.997814, 
-              "class": "budweiser"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_448_302.png", 
+      "classifiers": []
     }, 
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_678_348.png", 
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_292_328.png", 
+      "classifiers": []
+    }, 
+    {
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_46_124.png", 
+      "classifiers": []
+    }, 
+    {
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_36_112.png", 
       "classifiers": [
         {
           "classes": [
             {
-              "score": 0.999593, 
+              "score": 0.999496, 
               "class": "stella"
             }
           ], 
@@ -129,13 +66,25 @@
       ]
     }, 
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_476_108.png", 
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_168_28.png", 
+      "classifiers": []
+    }, 
+    {
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_276_156.png", 
+      "classifiers": []
+    }, 
+    {
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_498_322.png", 
+      "classifiers": []
+    }, 
+    {
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_472_86.png", 
       "classifiers": [
         {
           "classes": [
             {
-              "score": 0.997976, 
-              "class": "budlight"
+              "score": 0.999586, 
+              "class": "stella"
             }
           ], 
           "classifier_id": "beercapz_620319077", 
@@ -144,12 +93,16 @@
       ]
     }, 
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_276_158.png", 
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_630_274.png", 
+      "classifiers": []
+    }, 
+    {
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_496_118.png", 
       "classifiers": [
         {
           "classes": [
             {
-              "score": 0.990625, 
+              "score": 0.994535, 
               "class": "platinum"
             }
           ], 
@@ -159,72 +112,12 @@
       ]
     }, 
     {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_76_330.png", 
+      "image": "/home/pi/ab-inbev/cropped/2016-12-05-22-40-36.zip/home/pi/ab-inbev/cropped/2016-12-05-22-40-36/image_708_146.png", 
       "classifiers": [
         {
           "classes": [
             {
-              "score": 0.99805, 
-              "class": "budweiser"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_286_98.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.994969, 
-              "class": "platinum"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_490_112.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.998073, 
-              "class": "budweiser"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_236_122.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.997317, 
-              "class": "budlight"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_442_304.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.995774, 
+              "score": 0.992292, 
               "class": "hoegaarden"
             }
           ], 
@@ -232,59 +125,8 @@
           "name": "beercapz"
         }
       ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_494_346.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.99761, 
-              "class": "budlight"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_228_126.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.995968, 
-              "class": "budlight"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2016-12-05-20-56-03.zip/home/pi/ab-inbev/cropped/2016-12-05-20-56-03/image_284_112.png", 
-      "classifiers": [
-        {
-          "classes": [
-            {
-              "score": 0.998052, 
-              "class": "budweiser"
-            }
-          ], 
-          "classifier_id": "beercapz_620319077", 
-          "name": "beercapz"
-        }
-      ]
-    }
-  ], 
-  "warnings": [
-    {
-      "description": "Max number of images (20) reached.", 
-      "warning_id": "batch_limit_reached"
     }
   ], 
   "custom_classes": 7, 
-  "images_processed": 20
+  "images_processed": 15
 }
