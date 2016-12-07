@@ -45,7 +45,6 @@ def take_picture(image_number):
 				cap.open()
 				time.sleep(1)
 		else:
-			time.sleep(1)
 			ret, frame = cap.read()
 			# gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			cv2.imwrite('%s/image_%s.png' % (images_folder,image_number),frame)
@@ -249,7 +248,7 @@ def process_data():
 number = 0
 for pin in camera_pins:
 	GPIO.output(pin, GPIO.HIGH)
-	time.sleep(2)
+	time.sleep(1)
 	take_picture(number)
 	GPIO.output(pin, GPIO.LOW)
 	time.sleep(1)
