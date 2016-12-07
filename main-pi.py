@@ -23,7 +23,7 @@ os.makedirs(foldername)
 ####### INIT CAMERAS #########
 ##############################
 
-camera_pins = [2,3,4,14,15,17,18,27]
+camera_pins = [2,3,4,14,15,17,18,27,22,23,24,10]
 GPIO.setmode(GPIO.BCM)
 for pin in camera_pins:
 	GPIO.setup(pin, GPIO.OUT)
