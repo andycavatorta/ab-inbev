@@ -6,6 +6,7 @@ import json
 from os.path import join, dirname
 from os import environ
 from classifier import Classifier
+from os import walk
 image_classifier = Classifier()
 # from watson_developer_cloud import VisualRecognitionV3
 import datetime
@@ -111,7 +112,7 @@ def process_image():
 
 	    crop_img = img_for_cropping[originY:endPointH, originX:endPointW]
 
-	    cv2.imwrite('%s/platinum_%s_%s.png'%(foldername, i[0], i[1]),crop_img)
+	    cv2.imwrite('%s/cap_%s_%s.jpg'%(foldername, i[0], i[1]),crop_img)
 
 	    # draw the outer circle
 	    cv2.circle(img_for_cropping,(i[0],i[1]),i[2],(0,255,0),2)
@@ -119,45 +120,35 @@ def process_image():
 	    cv2.circle(img_for_cropping,(i[0],i[1]),2,(0,0,255),3)
 	    print(len(circles))
 
-	print("Processing image done")
-
-	
-	# cv2.imshow('detected circles',img_for_cropping)
+	cv2.imshow('detected circles',img_for_cropping)
 	# cv2.waitKey(0)
-	# cv2.destroyAllWindows()
-	# print(caps_positions)
-	# print("Processing image done")
-	# print("Compressing folder...")
-	# myzip = zipfile.ZipFile("%s.zip"%(foldername), "w", zipfile.ZIP_DEFLATED)
-	# for root, dirs, files in os.walk(foldername):
-	#     for file in files:
-	#         myzip.write(os.path.join(root, file))
-	# myzip.close
-	# print("Folder compressed")
+	cv2.destroyAllWindows()
+	print(caps_positions)
+	print("Processing image done")
 	
+
 ##############################
 #### SEND TO TENSORFLOW ######
 ##############################
-# def run_tensorflow():
-
-##############################
-###### SEND TO WATSON ########
-##############################
-
-def run_nn():
-	#  michelle: 0ba27a1a79d9d2f600ad71cc3c32fada1499a3a2
-	#  joao: 24f5aba0d5d54d4ecc619de28e71ddfca61c7559
-	visual_recognition = VisualRecognitionV3('2016-05-20', api_key='24f5aba0d5d54d4ecc619de28e71ddfca61c7559')
-
-	"Uploading to the Neural Network..."
-	with open("%s.zip"%(foldername), 'rb') as image_file:
-		results = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_101725851'], threshold=0.99), indent=2)
+def run_tensorflow():
+	f = []
+	for (dirpath, dirnames, filenames) in walk(foldername):
+		f.extend(filenames)
+		break
+	results = []
+	for image in f:
+		guess = image_classifier.guess_image(foldername+'/'+image)
+		results.append(guess)
 	print(results)
-	global results_json
-	results_json = results
+	write_to_json(results)
+
+
+def write_to_json(results):
+	results_json = json.dumps(results, indent=2)
 
 	with open('output.json', 'w') as file_:
-		file_.write(results)
+		file_.write(results_json)
+
 
 ##############################
 ######### DATA VIZ ###########
@@ -235,6 +226,7 @@ def process_data():
 
 # take_picture()
 process_image()
+run_tensorflow()
 # run_nn()
 # process_data()
 
