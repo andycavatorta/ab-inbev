@@ -8,7 +8,6 @@ from os import environ
 from classifier import Classifier
 from os import walk
 image_classifier = Classifier()
-# from watson_developer_cloud import VisualRecognitionV3
 import datetime
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -121,7 +120,7 @@ def process_image():
 	    print(len(circles))
 
 	cv2.imshow('detected circles',img_for_cropping)
-	# cv2.waitKey(0)
+	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 	print(caps_positions)
 	print("Processing image done")
@@ -146,7 +145,7 @@ def run_tensorflow():
 def write_to_json(results):
 	results_json = json.dumps(results, indent=2)
 
-	with open('output.json', 'w') as file_:
+	with open('output-tf.json', 'w') as file_:
 		file_.write(results_json)
 
 
