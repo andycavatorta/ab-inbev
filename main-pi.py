@@ -240,7 +240,7 @@ def process_data():
 
 	print ("Budlights: %s | Stella: %s | Hoegaarden: %s | Budweiser: %s | Platinum: %s | Ultra: %s " % (budlight, stella, hoegaarden, budweiser, platinum, ultra))
 
-	data_viz(list_of_x,list_of_y,list_of_names)
+	# data_viz(list_of_x,list_of_y,list_of_names)
 
 
 ##############################
