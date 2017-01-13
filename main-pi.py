@@ -23,7 +23,7 @@ os.makedirs(foldername)
 ####### INIT CAMERAS #########
 ##############################
 
-camera_pins = [2,3,4,14,15,17,18,27,22,23,24,10]
+camera_pins = [2,3,4,14,15,17,18]#,27,22,23,24,10]
 GPIO.setmode(GPIO.BCM)
 for pin in camera_pins:
 	GPIO.setup(pin, GPIO.OUT)
@@ -240,7 +240,7 @@ def process_data():
 
 	print ("Budlights: %s | Stella: %s | Hoegaarden: %s | Budweiser: %s | Platinum: %s | Ultra: %s " % (budlight, stella, hoegaarden, budweiser, platinum, ultra))
 
-	# data_viz(list_of_x,list_of_y,list_of_names)
+	data_viz(list_of_x,list_of_y,list_of_names)
 
 
 ##############################
@@ -264,7 +264,6 @@ for filename in os.listdir("%s/" % (images_folder)):
 compress_folder()
 run_nn()
 process_data()
-data_viz()
 
 
 
