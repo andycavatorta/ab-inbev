@@ -262,8 +262,8 @@ for filename in os.listdir("%s/" % (images_folder)):
 		process_image(filename)
 
 compress_folder()
-run_nn()
-process_data()
+# run_nn()
+# process_data()
 
 
 
