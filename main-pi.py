@@ -186,8 +186,8 @@ def data_viz(list_of_x, list_of_y, list_of_names):
 
 		img = cv2.circle(img, (int(x),int(y)),40, (255,255,255), -1)
 		cv2.putText(img, name, (int(x)-30,int(y)+60), font, 0.5,(255,255,255),2,cv2.LINE_AA)
-
-	cv2.imwrite('img',img)
+    
+	cv2.imwrite('img.png',img)
 	# cv2.waitKey(0)
 	cv2.destroyAllWindows()
 
