@@ -171,7 +171,7 @@ def run_nn():
 		for file in filenames:
 			with open('output.json', 'a') as file_:
 				with open(os.path.join(root, file), 'rb') as image_file:
-					result = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
+					result = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_1272635442'], owners=["f84f5f31-89d2-44e7-807e-673f63e5cd02"], threshold=0.99), indent=2)
 					file_.write(result)
 
 	global results_json
@@ -211,18 +211,18 @@ def process_data():
 
 	with open('output.json') as json_data:
 	    d = json.load(json_data)
-	    
-	for images in d['images']:
-		image_name = images['image'].rsplit('/',1)[-1]
-		image_y = image_name.rsplit('_',1)[-1]
-		image_y = image_y.rsplit('.',1)[-2]
-		image_x = image_name.rsplit('_',2)[-2]
-		list_of_x.append(str(image_x))
-		list_of_y.append(str(image_y))
+	for files in d:   
+		for images in d['images']:
+			image_name = images['image'].rsplit('/',1)[-1]
+			image_y = image_name.rsplit('_',1)[-1]
+			image_y = image_y.rsplit('.',1)[-2]
+			image_x = image_name.rsplit('_',2)[-2]
+			list_of_x.append(str(image_x))
+			list_of_y.append(str(image_y))
 
-		for classy in images['classifiers']:
-			for scores in classy['classes']:
-				list_of_names.append(str(scores['class']))
+			for classy in images['classifiers']:
+				for scores in classy['classes']:
+					list_of_names.append(str(scores['class']))
 
 	budlight = 0
 	stella = 0
