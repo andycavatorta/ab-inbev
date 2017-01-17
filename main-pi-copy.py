@@ -169,9 +169,9 @@ def run_nn():
 	results = []
 	for root, dirs, filenames in os.walk(foldername):
 		for f in filenames:
-			log = with open(os.path.join(root, f), 'r')
-			result = json.dumps(visual_recognition.classify(images_file=log,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
-			results.append(result)
+			with open(os.path.join(root, f), 'r') as log:
+				result = json.dumps(visual_recognition.classify(images_file=log,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
+				results.append(result)
 	print results
 	global results_json
 	results_json = results
