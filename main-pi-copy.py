@@ -162,7 +162,7 @@ def run_nn():
 	#  joao: 24f5aba0d5d54d4ecc619de28e71ddfca61c7559
 	#  andy: e7b1ac2095bb25f8a919bb29c2c60af78701477c
 	#  andy paid: 753a741d6f32d80e1935503b40a8a00f317e85c6 
-	visual_recognition = VisualRecognitionV3('2016-05-20', api_key='e7b1ac2095bb25f8a919bb29c2c60af78701477c')
+	visual_recognition = VisualRecognitionV3('2016-05-20', api_key='753a741d6f32d80e1935503b40a8a00f317e85c6')
 
 	"Uploading to the Neural Network..."
 	# with open("%s.zip"%(foldername), 'rb') as image_file:
