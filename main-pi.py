@@ -190,9 +190,39 @@ def data_viz(list_of_x, list_of_y, list_of_names, list_of_camera):
 	font = cv2.FONT_HERSHEY_SIMPLEX
 
 	for x, y, name, camera in zip(list_of_x, list_of_y, list_of_names, list_of_camera):
+		if camera == "2":
+			x = x + 800
+		elif camera == "3":
+			x = x + (2*800)
+		elif camera ==  "4":
+			y = y + 450
+		elif camera == "5":
+			x = x + 800
+			y = y + 450
+		elif camera == "6":
+			x = x + (2*800)
+			y = y + 450
+		elif camera == "7":
+			y = y + (2*450)
+		elif camera == "8":
+			y = y + (2*450)
+			x = x + 800
+		elif camera == "9":
+			y = y + (2*450)
+			x = x + (2*800)
+		elif camera == "10":
+			y = y + (3*450)
+		elif camera == "11":
+			y = y + (3*450)
+			x = x + 800
+		elif camera == "12"
+			y = y + (3*450)
+			x = x + (2*800)
+
 		img = cv2.circle(img, (int(x),int(y)),40, (255,255,255), -1)
 		cv2.putText(img, name, (int(x)-30,int(y)+60), font, 0.5,(255,255,255),2,cv2.LINE_AA)
-    	cv2.imwrite('%s.png' % camera,img)
+    
+    cv2.imwrite('results.png',img)
 	# cv2.waitKey(0)
 	cv2.destroyAllWindows()
 
