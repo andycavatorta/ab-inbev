@@ -223,7 +223,7 @@ def process_data():
 ######## NARRATIVE ###########
 ##############################
 
-# take_picture()
+take_picture()
 process_image()
 run_tensorflow()
 # run_nn()
