@@ -171,7 +171,7 @@ def run_nn():
 		for file in filenames:
 			with open('output.json', 'a') as file_:
 				with open(os.path.join(root, file), 'rb') as image_file:
-					result = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_1272635442'], owners=["f84f5f31-89d2-44e7-807e-673f63e5cd02"], threshold=0.99), indent=2)
+					result = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99), indent=2)
 					file_.write(result)
 
 	global results_json
