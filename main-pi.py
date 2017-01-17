@@ -162,17 +162,23 @@ def run_nn():
 	#  joao: 24f5aba0d5d54d4ecc619de28e71ddfca61c7559
 	#  andy: e7b1ac2095bb25f8a919bb29c2c60af78701477c
 	#  andy paid: 753a741d6f32d80e1935503b40a8a00f317e85c6 
-	visual_recognition = VisualRecognitionV3('2016-05-20', api_key='e7b1ac2095bb25f8a919bb29c2c60af78701477c')
+	visual_recognition = VisualRecognitionV3('2016-05-20', api_key='753a741d6f32d80e1935503b40a8a00f317e85c6')
 
 	"Uploading to the Neural Network..."
-	with open("%s.zip"%(foldername), 'rb') as image_file:
-		results = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
-	print results
+	# with open("%s.zip"%(foldername), 'rb') as image_file:
+	results = []
+	for root, dirs, filenames in os.walk(foldername):
+		print filenames
+		for file in filenames:
+			with open(os.path.join(root, file), 'rb') as image_file:
+				result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
+				results.append(result)
+
 	global results_json
 	results_json = results
 
-	with open('output.json', 'w') as file_:
-		file_.write(results)
+	# with open('output.json', 'w') as file_:
+	# 	file_.write(results)
 
 ##############################
 ######### DATA VIZ ###########
@@ -203,20 +209,25 @@ def process_data():
 	list_of_y = []
 	list_of_names = []
 
-	with open('output.json') as json_data:
-	    d = json.load(json_data)
-	    
-	for images in d['images']:
-		image_name = images['image'].rsplit('/',1)[-1]
-		image_y = image_name.rsplit('_',1)[-1]
-		image_y = image_y.rsplit('.',1)[-2]
-		image_x = image_name.rsplit('_',2)[-2]
-		list_of_x.append(str(image_x))
-		list_of_y.append(str(image_y))
+	# with open('output.json') as json_data:
+	#     d = json.load(json_data)
 
-		for classy in images['classifiers']:
-			for scores in classy['classes']:
-				list_of_names.append(str(scores['class']))
+	d = results_json
+
+	print d
+
+	for files in d:   
+		for images in files['images']:
+			image_name = images['image'].rsplit('/',1)[-1]
+			image_y = image_name.rsplit('_',1)[-1]
+			image_y = image_y.rsplit('.',1)[-2]
+			image_x = image_name.rsplit('_',2)[-2]
+			list_of_x.append(str(image_x))
+			list_of_y.append(str(image_y))
+
+			for classy in images['classifiers']:
+				for scores in classy['classes']:
+					list_of_names.append(str(scores['class']))
 
 	budlight = 0
 	stella = 0
@@ -262,7 +273,7 @@ for filename in os.listdir("%s/" % (images_folder)):
 		print filename
 		process_image(filename)
 
-compress_folder()
+# compress_folder()
 run_nn()
 process_data()
 
