@@ -212,7 +212,7 @@ def process_data():
 	with open('output.json') as json_data:
 	    d = json.load(json_data)
 	for files in d:   
-		for images in d['images']:
+		for images in files['images']:
 			image_name = images['image'].rsplit('/',1)[-1]
 			image_y = image_name.rsplit('_',1)[-1]
 			image_y = image_y.rsplit('.',1)[-2]
