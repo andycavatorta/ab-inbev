@@ -165,7 +165,7 @@ def run_nn():
 
 	"Uploading to the Neural Network..."
 	with open("%s.zip"%(foldername), 'rb') as image_file:
-		results = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_378443345'], threshold=0.99), indent=2)
+		results = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
 	print results
 	global results_json
 	results_json = results
@@ -262,8 +262,8 @@ for filename in os.listdir("%s/" % (images_folder)):
 		process_image(filename)
 
 compress_folder()
-# run_nn()
-# process_data()
+run_nn()
+process_data()
 
 
 
