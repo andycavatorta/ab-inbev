@@ -168,8 +168,8 @@ def run_nn():
 	# with open("%s.zip"%(foldername), 'rb') as image_file:
 	results = []
 	for root, dirs, filenames in os.walk(foldername):
-	    for f in filenames:
-	        log = open(f, 'r')
+		for f in filenames:
+		log = open(f, 'r')
 			result = json.dumps(visual_recognition.classify(images_file=log,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
 			results.append(result)
 	print results
