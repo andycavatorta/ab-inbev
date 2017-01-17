@@ -169,6 +169,7 @@ def run_nn():
 	results = []
 	for images in os.walk(foldername):
 		for image_file in images:
+			print image_file
 			result = json.dumps(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
 			results.append(result)
 	print results
