@@ -212,19 +212,18 @@ def process_data():
 	list_of_names = []
 
 	with open('output.json') as json_data:
-	    d = json.load(json_data)
-	for files in d:   
-		for images in files['images']:
-			image_name = images['image'].rsplit('/',1)[-1]
-			image_y = image_name.rsplit('_',1)[-1]
-			image_y = image_y.rsplit('.',1)[-2]
-			image_x = image_name.rsplit('_',2)[-2]
-			list_of_x.append(str(image_x))
-			list_of_y.append(str(image_y))
+	    d = json.load(json_data)  
+	for images in files['images']:
+		image_name = images['image'].rsplit('/',1)[-1]
+		image_y = image_name.rsplit('_',1)[-1]
+		image_y = image_y.rsplit('.',1)[-2]
+		image_x = image_name.rsplit('_',2)[-2]
+		list_of_x.append(str(image_x))
+		list_of_y.append(str(image_y))
 
-			for classy in images['classifiers']:
-				for scores in classy['classes']:
-					list_of_names.append(str(scores['class']))
+		for classy in images['classifiers']:
+			for scores in classy['classes']:
+				list_of_names.append(str(scores['class']))
 
 	budlight = 0
 	stella = 0
