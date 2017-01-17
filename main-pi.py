@@ -186,7 +186,7 @@ def run_nn():
 
 def data_viz(list_of_x, list_of_y, list_of_names, list_of_camera):
 
-	img = np.zeros((450,800,3), np.uint8)
+	img = np.zeros((1800,2400,3), np.uint8)
 	font = cv2.FONT_HERSHEY_SIMPLEX
 
 	for x, y, name, camera in zip(list_of_x, list_of_y, list_of_names, list_of_camera):
