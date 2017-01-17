@@ -226,9 +226,9 @@ def process_data():
 ##############################
 
 # take_picture()
-process_image()
+# process_image()
 # run_nn()
-# process_data()
+process_data()
 
 
 
