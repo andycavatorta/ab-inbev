@@ -171,7 +171,7 @@ def run_nn():
 		print filenames
 		for file in filenames:
 			with open(os.path.join(root, file), 'rb') as image_file:
-				result = json.loads(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99), indent=2)
+				result = json.loads(visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99))
 				results.append(result)
 
 	global results_json
