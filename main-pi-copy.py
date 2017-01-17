@@ -170,7 +170,7 @@ def run_nn():
 	for root, dirs, filenames in os.walk(foldername):
 		print filenames
 		for file in filenames:
-			print file
+			print file.name
 			json.dumps(visual_recognition.classify(images_file=file,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
 			results.append(result)
 	print results
