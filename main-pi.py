@@ -10,6 +10,11 @@ import time
 import datetime
 import RPi.GPIO as GPIO
 
+from classifier import Classifier
+from os import walk
+image_classifier = Classifier()
+
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 now = datetime.datetime.now()
 realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
@@ -181,6 +186,21 @@ def run_nn():
 	# 	file_.write(results)
 
 ##############################
+#### SEND TO TENSORFLOW ######
+##############################
+def run_tensorflow():
+	f = []
+	for (dirpath, dirnames, filenames) in walk(foldername):
+		f.extend(filenames)
+		break
+	results = []
+	for image in f:
+		guess = image_classifier.guess_image(foldername+'/'+image)
+		results.append(guess)
+	print(results)
+	write_to_json(results)
+
+##############################
 ######### DATA VIZ ###########
 ##############################
 
@@ -306,8 +326,9 @@ for filename in os.listdir("%s/" % (images_folder)):
 		cam = cam + 1
 
 # compress_folder()
-run_nn()
-process_data()
+# run_nn()
+run_tensorflow()
+# process_data()
 
 
 
