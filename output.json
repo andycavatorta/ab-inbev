@@ -1,92 +1,1598 @@
 {
   "images": [
     {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_602_140.png", 
-      "classifiers": []
-    }, 
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_362_72.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995955, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
     {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_494_42.png", 
-      "classifiers": []
-    }, 
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_372_270.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.994588, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
     {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_734_248.png", 
-      "classifiers": []
-    }, 
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_572_242.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993618, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
     {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_172_266.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_100_88.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_72_70.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_94_322.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_184_448.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_540_286.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_302_88.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_164_326.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_650_198.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_568_426.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_770_278.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_388_312.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_266_138.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_374_272.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_750_342.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_790_298.png", 
-      "classifiers": []
-    }, 
-    {
-      "image": "/home/pi/ab-inbev/cropped/2017-01-17-17-40-34.zip/home/pi/ab-inbev/cropped/2017-01-17-17-40-34/image_554_256.png", 
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_790_302.png", 
       "classifiers": []
     }
   ], 
-  "warnings": [
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
     {
-      "description": "Max number of images (20) reached.", 
-      "warning_id": "batch_limit_reached"
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_750_128.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995905, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
     }
   ], 
-  "custom_classes": 0, 
-  "images_processed": 20
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_768_368.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_76_64.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99583, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_184_448.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_302_88.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993255, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_164_326.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993449, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_316_100.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_328_86.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995563, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_558_78.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995854, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_548_290.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.994909, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_38_246.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995371, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_328_272.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993352, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_492_38.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995688, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_548_252.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99587, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_538_384.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.992926, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_556_150.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995992, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_118_314.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.996043, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_266_144.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995938, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_104_94.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99569, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_82_94.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993523, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_314_74.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995384, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_168_268.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995846, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_266_264.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_2_278.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995929, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_266_50.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995867, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_394_272.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995945, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_334_308.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993673, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_324_100.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.992374, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_770_286.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995981, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_696_50.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995841, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_528_38.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.992987, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_212_108.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_568_438.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99576, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_316_246.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99588, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_544_316.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995866, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_562_206.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.994797, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_636_270.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.996, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_380_446.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995737, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_338_434.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_166_312.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995779, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_100_86.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99579, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_732_246.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995246, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_750_346.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.994376, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_734_340.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99241, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_532_126.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.992976, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_544_310.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995906, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_508_136.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_392_312.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99535, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_658_200.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995471, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_404_102.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99368, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_94_324.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993432, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_342_290.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995664, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_282_330.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995856, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_412_166.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_148_104.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995671, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_744_254.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995908, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_326_300.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995408, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_240_58.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995624, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_336_310.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.992622, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_792_298.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995837, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_588_54.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995511, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_34_412.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995746, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_546_102.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995752, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_180_96.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.991789, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_620_32.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995751, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_798_80.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_572_448.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_538_250.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995679, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_622_290.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995266, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_730_64.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995831, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_4_312.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.99433, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_112_402.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_734_124.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.992796, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_526_344.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.993261, 
+              "class": "platinum"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_790_82.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.994812, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_4_84.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.994435, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_66_284.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995559, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_384_280.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995967, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_578_244.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995917, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_662_446.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.994547, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_586_10.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.9957, 
+              "class": "ultra"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_470_80.png", 
+      "classifiers": []
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
+}{
+  "images": [
+    {
+      "image": "/home/pi/ab-inbev/cropped/2017-01-17-21-46-45/image_208_274.png", 
+      "classifiers": [
+        {
+          "classes": [
+            {
+              "score": 0.995679, 
+              "class": "hoegaarden"
+            }
+          ], 
+          "classifier_id": "beercaps_697951100", 
+          "name": "beercaps"
+        }
+      ]
+    }
+  ], 
+  "custom_classes": 7, 
+  "images_processed": 1
 }
