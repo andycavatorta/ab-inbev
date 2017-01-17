@@ -169,7 +169,7 @@ def run_nn():
 	results = []
 	for root, dirs, filenames in os.walk(foldername):
 		for f in filenames:
-			log = open(os.path.join(root, f), 'r')
+			log = with open(os.path.join(root, f), 'r')
 			result = json.dumps(visual_recognition.classify(images_file=log,  classifier_ids=['beercaps_1272635442'], threshold=0.99), indent=2)
 			results.append(result)
 	print results
