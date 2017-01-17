@@ -215,7 +215,7 @@ def data_viz(list_of_x, list_of_y, list_of_names, list_of_camera):
 		elif camera == "11":
 			y = y + (3*450)
 			x = x + 800
-		elif camera == "12"
+		elif camera == "12":
 			y = y + (3*450)
 			x = x + (2*800)
 
