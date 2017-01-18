@@ -189,18 +189,20 @@ def run_nn():
 #### SEND TO TENSORFLOW ######
 ##############################
 def run_tensorflow():
-	f = []
-	for (dirpath, dirnames, filenames) in walk(foldername):
-		f.extend(filenames)
-		break
-	print("Found " + str(len(f)) + " files")
-	results = []
-	for image in f:
-		guess = image_classifier.guess_image(foldername+'/'+image)
-		results.append(guess)
-	print("done guessing")
-	print(results)
-	write_to_json(results)
+	guess = image_classifier.guess_image(foldername)
+	print(guess)
+	# f = []
+	# for (dirpath, dirnames, filenames) in walk(foldername):
+	# 	f.extend(filenames)
+	# 	break
+	# print("Found " + str(len(f)) + " files")
+	# results = []
+	# for image in f:
+	# 	guess = image_classifier.guess_image(foldername+'/'+image)
+	# 	results.append(guess)
+	# print("done guessing")
+	# print(results)
+	# write_to_json(results)
 
 ##############################
 ######### DATA VIZ ###########
