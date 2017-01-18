@@ -134,7 +134,7 @@ def process_image(src, camera_number):
 
 	    crop_img = img_for_cropping[originY:endPointH, originX:endPointW]
 
-	    cv2.imwrite('%s/image_%s_%s_%s.png'%(foldername, camera_number,i[0], i[1]),crop_img)
+	    cv2.imwrite('%s/image_%s_%s_%s.jpg'%(foldername, camera_number,i[0], i[1]),crop_img)
 
 	    # draw the outer circle
 	    cv2.circle(img_for_cropping,(i[0],i[1]),i[2],(0,255,0),2)
