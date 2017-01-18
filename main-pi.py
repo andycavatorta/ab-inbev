@@ -10,7 +10,7 @@ import zipfile
 import json
 from os.path import join, dirname
 from os import environ
-from watson_developer_cloud import VisualRecognitionV3
+#from watson_developer_cloud import VisualRecognitionV3
 import time
 import datetime
 import RPi.GPIO as GPIO
