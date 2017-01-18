@@ -6,8 +6,12 @@
 ```
 // Mac OS X, CPU only, Python 3.4 or 3.5:
 $ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-0.11.0rc1-py3-none-any.whl
-
 $ pip3 install --upgrade $TF_BINARY_URL
+
+// For the Raspberry PI
+$ wget https://github.com/samjabrahams/tensorflow-on-raspberry-pi/releases/download/v0.11.0/tensorflow-0.11.0-cp27-none-linux_armv7l.whl
+$ sudo pip install tensorflow-0.11.0-cp27-none-linux_armv7l.whl
+
 ```
 
 ### Training
