@@ -76,7 +76,7 @@ class Cameras():
             os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
         def take_all_photos(self):
-            for cam in self.self.cameras:
+            for cam in self.cameras:
                 cam.take_photo()
                 time.sleep(1)
         def get_images_folder(self):
