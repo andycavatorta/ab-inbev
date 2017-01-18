@@ -193,7 +193,7 @@ def run_tensorflow():
 	for (dirpath, dirnames, filenames) in walk(foldername):
 		f.extend(filenames)
 		break
-	print("Found " + len(f) + " files")
+	print("Found " + str(len(f)) + " files")
 	results = []
 	for image in f:
 		guess = image_classifier.guess_image(foldername+'/'+image)
