@@ -48,6 +48,9 @@ class Camera():
 
             GPIO.output(self.pin, GPIO.HIGH)
             try: 
+                print self.images_folder,self.cam_id
+                filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
+                print filename
                 cap = cv2.VideoCapture(0)
                 cap.set(3,1280)
                 cap.set(4,720)
@@ -58,7 +61,7 @@ class Camera():
                         time.sleep(1)
                 else:
                     ret, frame = cap.read()
-                    cv2.imwrite('%s/image_%s.png' % (self.images_folder,self.cam_id),frame)
+                    cv2.imwrite(filename,frame)
                     cap.release()
                     print "Picture taken"
             except Exception as e:
