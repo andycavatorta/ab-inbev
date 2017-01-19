@@ -102,7 +102,6 @@ class Cameras():
         def get_capture_data(self):
             return self.lastImages
         def get_offset_from_id(self, id):
-            id = int(id)
             return [self.x_offsets[id],self.y_offsets[id]]
 
  
@@ -284,14 +283,15 @@ class Classifier():
 def data_viz(img_metadata):
     canvas = np.zeros((1800,2400,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    for cap_images in img_metadata:
-        offsets = cameras.get_offset_from_id(cap_images['capture'])
-        x_plus_offset = int(cap_images['x'])+offsets[0]
-        y_plus_offset = int(cap_images['y'])+offsets[1]
-        canvas = cv2.circle(canvas, x_plus_offset,y_plus_offset,40, (255,255,255), -1)
-        cv2.putText(canvas, cap_images['label'], (x_plus_offset-30,y_plus_offset-30), font, 0.5,(255,255,255),2,cv2.LINE_AA)
-        cv2.imwrite('results.png',img)
-        cv2.destroyAllWindows()
+    for camera in img_metadata:
+        for imageMetadata in camera:
+            offsets = cameras.get_offset_from_id(imageMetadata['capture'])
+            x_plus_offset = imageMetadata['x']+offsets[0]
+            y_plus_offset = imageMetadata['y']+offsets[1]
+            canvas = cv2.circle(canvas, x_plus_offset,y_plus_offset,40, (255,255,255), -1)
+            cv2.putText(canvas, imageMetadata['label'], (x_plus_offset-30,y_plus_offset-30), font, 0.5,(255,255,255),2,cv2.LINE_AA)
+            cv2.imwrite('results.png',img)
+            cv2.destroyAllWindows()
 
 
 
