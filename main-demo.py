@@ -165,18 +165,18 @@ class ImageParser(): # class not necessary.  used for organization
             y=int(y)
             radius=int(radius)
 
-            leftEdge = x-radius-margin
-            rightEdge = x+radius+margin
-            topEdge = y-radius-margin
-            bottomEdge = y+radius+margin
+            #leftEdge = x-radius-margin
+            #rightEdge = x+radius+margin
+            #topEdge = y-radius-margin
+            #bottomEdge = y+radius+margin
 
-            if leftEdge < 0 or  rightEdge > width or topEdge < 0 or bottomEdge > height:
-                continue
+            #if leftEdge < 0 or  rightEdge > width or topEdge < 0 or bottomEdge > height:
+            #   continue
 
-            #leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
-            #rightEdge = x+radius+margin if x+radius+margin <= width else width
-            #topEdge = y-radius-margin if y-radius-margin >=0 else 0
-            #bottomEdge = y+radius+margin if y+radius+margin <= height else height
+            leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
+            rightEdge = x+radius+margin if x+radius+margin <= width else width
+            topEdge = y-radius-margin if y-radius-margin >=0 else 0
+            bottomEdge = y+radius+margin if y+radius+margin <= height else height
 
             crop_img = img_for_cropping[topEdge:bottomEdge, leftEdge:rightEdge]
 
@@ -261,10 +261,19 @@ def data_viz(img_metadata):
             cv2.imwrite('results.png',canvas)
             cv2.destroyAllWindows()
 
+def processInventory():
+    def __init__(self):
+        pass
+    def updateInventoryData
+
+
+
 class Report():
     def __init__(self):
         pass
+
     def collect_inventory_data(self):
+
         #PATH_FOR_THIS_FILE
         d = {
             'cooler_id':0,
@@ -277,6 +286,9 @@ class Report():
         }
 
     def generate_email(self):
+        pass
+
+    def send_email(self):
         pass
 
 
