@@ -169,7 +169,7 @@ class ImageParser(): # class not necessary.  used for organization
         print "Processing image done"
 
     def processImages(self, captureLIst):
-        for index, cap_metadata in enumerate(S)
+        for index, cap_metadata in enumerate(captureLIst):
             self.process_image(cap_metadata[0],index)
 
 
