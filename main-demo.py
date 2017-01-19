@@ -118,6 +118,7 @@ class ImageParser(): # class not necessary.  used for organization
 
     def process_image(self, filename, camera_id):
         print "Processing image...", camera_id, filename
+        return
         parsedImageMetadata = self.parsedCaptures.append([]) # images are introduce in order of cap_id, so list index == cap_id
 
         img_for_cropping = cv2.imread("%s/%s" %(images_folder, filename))
