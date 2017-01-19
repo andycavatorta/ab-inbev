@@ -47,6 +47,7 @@ class Camera():
             print  'Camera {} taking picture'.format(self.cam_id)
 
             GPIO.output(self.pin, GPIO.HIGH)
+            time.sleep()
             #filename = '{}/image_{}.png'.format(self.images_folder,self.cam_id)
             filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
             
@@ -93,9 +94,13 @@ class Cameras():
             os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
         def take_all_photos(self):
+            self.set_all_pins_low()
             for cam in self.cameras:
                 cam.take_photo()
                 time.sleep(1)
+        def set_all_pins_low(self):
+            for pin in self.pins:
+                GPIO.output(pin, GPIO.LOW)
         def get_images_folder(self):
             return self.self.images_folder_name
  
