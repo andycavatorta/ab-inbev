@@ -261,12 +261,35 @@ def data_viz(img_metadata):
             cv2.imwrite('results.png',canvas)
             cv2.destroyAllWindows()
 
-def processInventory():
+def ProcessInventory():
     def __init__(self):
-        pass
-    def updateInventoryData(self):
-        pass
-
+        self.data_raw = None
+        self.data_processed = None
+        self.inventory_template = {
+            "budlight":0,
+            "budwiser":0,
+            "corona":0,
+            "hoegaarden":0,
+            "platinum":0,
+            "stella":0,
+            "ultra":0
+        }
+    def process_inventory_data(self, data):
+        self.data_raw = data
+        self.detect_overlaps()
+        self.collate_inventory()
+    def detect_overlaps(self):
+        self.data_processed = self.data_raw
+    def collate_inventory(self):
+        inventory = dict(self.inventory_template)
+        for cam in self.data_processed:
+            for product in cam:
+                productName = product["label"]
+                if productName in inventory.keys():
+                    inventory[productName] += 1
+                else:
+                    print "ProcessInventory.collate_inventory: product name not found:", repr(product)
+        return inventory
 
 class Report():
     def __init__(self):
@@ -297,6 +320,8 @@ def main():
     cameras = Cameras()
     imageparser = ImageParser()
     classifier = Classifier()
+    processinventory = ProcessInventory()
+    report = Report()
     while True:
         print "starting main inventory loop"
         cameras.take_all_photos()
@@ -306,7 +331,10 @@ def main():
         parsed_images = imageparser.get_parsed_images()
         parsed_folder_name = imageparser.get_foldername()
         classifier.classify_images(parsed_images)
-        print parsed_images
+        processinventory.process_inventory_data(parsed_images)
+        inventory = processinventory.collate_inventory()
+        print "inventory=", repr(inventory)
+        #print parsed_images
         data_viz(parsed_images)
 
         time.sleep(60)
