@@ -244,9 +244,8 @@ class Classifier():
                         score = predictions[0][node_id]
                         print('%s (score = %.5f)' % (human_string, score))
                     # print(self.label_lines[top_k[0]])
-                    results.append(self.label_lines[top_k[0]])
-                return results
-
+                    imageMetadata["label"] = self.label_lines[top_k[0]]
+                    imageMetadata["confidence"] = predictions[0][top_k[0]]
 
     def guess_images(self, foldername):
         files = []
@@ -310,9 +309,9 @@ parsed_folder_name = imageparser.get_foldername()
 
 classifier = Classifier()
 
-print classifier.classify_images(parsed_images)
+classifier.classify_images(parsed_images)
 
-#print parsed_images
+print parsed_images
 
 data_viz(imageparser.parsedImageMetadata)
 
