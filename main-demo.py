@@ -51,19 +51,32 @@ class Camera():
             filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
             
             try: 
+                print "---->", 1
                 cap = cv2.VideoCapture(0)
+                print "---->", 2
                 cap.set(3,1280)
+                print "---->", 3
                 cap.set(4,720)
+                print "---->", 4
                 if not cap.isOpened():
+                    print "---->", 5
                     while not cap.isOpened():
+                        print "---->", 6
                         print "Camera capture not open ... trying to fix it..."
                         cap.open()
+                        print "---->", 7
                         time.sleep(1)
+                        print "---->", 8
                 else:
+                    print "---->", 9
                     print filename
+                    print "---->", 10
                     ret, frame = cap.read()
+                    print "---->", 11
                     cv2.imwrite(filename,frame)
+                    print "---->", 12
                     cap.release()
+                    print "---->", 13
                     print "Picture taken"
             except Exception as e:
                   print "Oops! something went wrong %s" % (e)
