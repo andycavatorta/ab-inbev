@@ -58,8 +58,8 @@ class Cameras():
         def __init__(self):
             GPIO.setmode(GPIO.BCM)
             self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
-            self.x_offsets = [0,0,0,0,0,0,0,0,0,0,0,0]
-            self.y_offsets = [0,0,0,0,0,0,0,0,0,0,0,0]
+            self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
+            self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
             now = datetime.datetime.now()
             self.images_folder_name = ("%s/camera_capture_images/%s") % (os.path.dirname(os.path.realpath(__file__)), now.strftime("%Y-%m-%d-%H-%M-%S"))
             os.makedirs(self.images_folder_name)
@@ -77,6 +77,9 @@ class Cameras():
             return self.images_folder_name
         def get_capture_data(self):
             return self.lastImages
+        def get_offset_from_id(self, id):
+            return [self.x_offsets[id],self.y_offsets[id]]
+
  
 
 class ImageParser(): # class not necessary.  used for organization
@@ -227,6 +230,19 @@ class Classifier():
                 results.append(self.label_lines[top_k[0]])
             return results
 
+def data_viz(img_metadata):
+    canvas = np.zeros((1800,2400,3), np.uint8)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    for cap_images in img_medata:
+        offsets = cameras.get_offset_from_id(cap_images['capture'])
+        x_plus_offset = cap_images['x']+offsets[0]
+        y_plus_offset = cap_images['y']+offsets[1]
+        canvas = cv2.circle(canvas, x_plus_offset,y_plus_offset,40, (255,255,255), -1)
+        cv2.putText(canvas, cap_images['label'], (x_plus_offset-30,y_plus_offset-30), font, 0.5,(255,255,255),2,cv2.LINE_AA)
+        cv2.imwrite('results.png',img)
+        cv2.destroyAllWindows()
+
+
 
 cameras = Cameras()
 
@@ -246,6 +262,8 @@ classifier = Classifier()
 print classifier.guess_images(parsed_folder_name)
 
 print parsed_images
+
+data_viz(imageparser.parsedImageMetadata)
 
 ##################################################################################################################
 
