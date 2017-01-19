@@ -188,12 +188,18 @@ class ImageParser(): # class not necessary.  used for organization
             # draw the center of the circle
             cv2.circle(img_for_cropping,(x,y),2,(0,0,255),3)
             #print len(circles)
+            offsets = cameras.get_offset_from_id(camera_id)
+            totalX = x + offsets[0]
+            totalY = y + offsets[1]
+
             parsedImageMetadata.append( {
                 'capture':camera_id,
                 'imageName':imageName,
                 'pathName':pathName,
                 'x':x,
                 'y':y,
+                'totalX':totalX,
+                'totalY':totalY,
                 'radius':radius,
                 'leftEdge':leftEdge,
                 'rightEdge':rightEdge,
@@ -248,14 +254,12 @@ class Classifier():
 def data_viz(img_metadata):
     canvas = np.zeros((1800,2400,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    for cap_images in img_medata:
-        offsets = cameras.get_offset_from_id(cap_images['capture'])
-        x_plus_offset = cap_images['x']+offsets[0]
-        y_plus_offset = cap_images['y']+offsets[1]
-        canvas = cv2.circle(canvas, x_plus_offset,y_plus_offset,40, (255,255,255), -1)
-        cv2.putText(canvas, cap_images['label'], (x_plus_offset-30,y_plus_offset-30), font, 0.5,(255,255,255),2,cv2.LINE_AA)
-        cv2.imwrite('results.png',img)
-        cv2.destroyAllWindows()
+    for camera in img_metadata:
+        for imageMetadata in camera:
+            canvas = cv2.circle(canvas, (imageMetadata['totalX'],imageMetadata['totalY']),40, (255,255,255), -1)
+            cv2.putText(canvas, imageMetadata['label'], (imageMetadata['totalX']-30,imageMetadata['totalY']-30), font, 0.5,(255,255,255),2,cv2.LINE_AA)
+            cv2.imwrite('results.png',canvas)
+            cv2.destroyAllWindows()
 
 class Report():
     def __init__(self):
@@ -291,10 +295,8 @@ def main():
         parsed_folder_name = imageparser.get_foldername()
         classifier.classify_images(parsed_images)
         print parsed_images
-        data_viz(imageparser.parsedImageMetadata)
+        data_viz(parsed_images)
 
         time.sleep(60)
 
-
-
-
+main()
