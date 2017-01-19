@@ -5,7 +5,6 @@ old:
     create new images for feedback
 
 new features:
-    periodic inventory
     detect / fix overlap
     email report
         slick formatting
@@ -222,6 +221,7 @@ class ImageParser(): # class not necessary.  used for organization
 
 class Classifier():
     def __init__(self):
+        self.cooling_period = 10
         # Loads label file, strips off carriage return
         self.label_lines = [line.rstrip() for line 
             in tf.gfile.GFile("image_classifier/tf_files/retrained_labels.txt")]
@@ -232,9 +232,11 @@ class Classifier():
             graph_def.ParseFromString(f.read())
             _ = tf.import_graph_def(graph_def, name='')
         with tf.Session() as sess:
+            image_count = 0
             for camera in  imageMetadataList:
                 for imageMetadata in camera:
-        
+                    print "classifying image", image_count
+                    image_count += 1
                     image_data = tf.gfile.FastGFile(imageMetadata["pathName"], 'rb').read()
                     
                     softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')# Feed the image_data as input to the graph and get first prediction
@@ -242,6 +244,8 @@ class Classifier():
                              {'DecodeJpeg/contents:0': image_data})
                     top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]# Sort to show labels of first prediction in order of confidence
                     #print "top_k=", repr(top_k)
+
+                    time.sleep(5)
                     for node_id in top_k:
                         human_string = self.label_lines[node_id]
                         score = predictions[0][node_id]
@@ -330,9 +334,9 @@ def main():
         parsed_images = imageparser.get_parsed_images()
         parsed_folder_name = imageparser.get_foldername()
         classifier.classify_images(parsed_images)
-        print "inventory=", repr(inventory)
         processinventory.process_inventory_data(parsed_images)
         inventory = processinventory.collate_inventory()
+        print "inventory=", repr(inventory)
         #print parsed_images
         data_viz(parsed_images)
 
