@@ -288,7 +288,7 @@ def data_viz(img_metadata):
             offsets = cameras.get_offset_from_id(imageMetadata['capture'])
             x_plus_offset = imageMetadata['x']+offsets[0]
             y_plus_offset = imageMetadata['y']+offsets[1]
-            canvas = cv2.circle(canvas, x_plus_offset,y_plus_offset,40, (255,255,255), -1)
+            canvas = cv2.circle(canvas, (x_plus_offset,y_plus_offset),40, (255,255,255), -1)
             cv2.putText(canvas, imageMetadata['label'], (x_plus_offset-30,y_plus_offset-30), font, 0.5,(255,255,255),2,cv2.LINE_AA)
             cv2.imwrite('results.png',img)
             cv2.destroyAllWindows()
