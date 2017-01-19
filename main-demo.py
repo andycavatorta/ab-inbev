@@ -164,7 +164,7 @@ class ImageParser(): # class not necessary.  used for organization
             #print len(circles)
             parsedImageMetadata.append( {
                 'capture':camera_id,
-                'imageName':,imageName,
+                'imageName':imageName,
                 'pathName':pathName,
                 'x':x,
                 'y':y,
