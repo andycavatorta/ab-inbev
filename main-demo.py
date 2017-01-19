@@ -285,8 +285,11 @@ class ProcessInventory():
         }
     def process_inventory_data(self, data):
         self.data_raw = data
+        #self.filter_low_confidence()
         self.detect_overlaps()
         self.collate_inventory()
+    def filter_low_confidence(self):
+        pass
     def detect_overlaps(self):
         self.data_processed = self.data_raw
     def collate_inventory(self):
@@ -340,10 +343,10 @@ def main():
         parsed_images = imageparser.get_parsed_images()
         parsed_folder_name = imageparser.get_foldername()
         classifier.classify_images(parsed_images)
+        print parsed_images
         processinventory.process_inventory_data(parsed_images)
         inventory = processinventory.collate_inventory()
         print "inventory=", repr(inventory)
-        #print parsed_images
         data_viz(parsed_images)
 
         time.sleep(60)
