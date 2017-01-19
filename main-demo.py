@@ -18,9 +18,6 @@ image_classifier = Classifier()
 
 
 
-
-
-
 dir_path = os.path.dirname(os.path.realpath(__file__))
 now = datetime.datetime.now()
 realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
@@ -30,7 +27,6 @@ results_json = []
 images_folder = "%s" % (realnow)
 os.makedirs(images_folder)
 os.makedirs(foldername)
-
 
 
 
@@ -52,32 +48,19 @@ class Camera():
             filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
             
             try: 
-                print "---->", 1
                 cap = cv2.VideoCapture(0)
-                print "---->", 2
                 cap.set(3,1280)
-                print "---->", 3
                 cap.set(4,720)
-                print "---->", 4
                 if not cap.isOpened():
-                    print "---->", 5
                     while not cap.isOpened():
-                        print "---->", 6
                         print "Camera capture not open ... trying to fix it..."
                         cap.open()
-                        print "---->", 7
                         time.sleep(1)
-                        print "---->", 8
                 else:
-                    print "---->", 9
                     print filename
-                    print "---->", 10
                     ret, frame = cap.read()
-                    print "---->", 11
                     cv2.imwrite(filename,frame)
-                    print "---->", 12
                     cap.release()
-                    print "---->", 13
                     print "Picture taken"
             except Exception as e:
                   print "Oops! something went wrong %s" % (e)
@@ -94,111 +77,121 @@ class Cameras():
             os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
         def take_all_photos(self):
-            self.set_all_pins_low()
+            self.set_all_pins_low() # just in case
             for cam in self.cameras:
                 cam.take_photo()
-                time.sleep(1)
         def set_all_pins_low(self):
             for pin in self.pins:
                 GPIO.output(pin, GPIO.LOW)
         def get_images_folder(self):
-            return self.self.images_folder_name
+            return self.images_folder_name
  
-cameras = Cameras()
 
+class ImageParser(): # class not necessary.  used for organization
+    def __init__(self):
+        pass
+    def undistort_image(self, image):
+        width = image.shape[1]
+        height = image.shape[0]
+        distCoeff = np.zeros((4,1),np.float64)
+        k1 = -6.0e-5; # negative to remove barrel distortion
+        k2 = 0.0;
+        p1 = 0.0;
+        p2 = 0.0;
+        distCoeff[0,0] = k1;
+        distCoeff[1,0] = k2;
+        distCoeff[2,0] = p1;
+        distCoeff[3,0] = p2;
+        # assume unit matrix for camera
+        cam = np.eye(3,dtype=np.float32)
+        cam[0,2] = width/2.0  # define center x
+        cam[1,2] = height/2.0 # define center y
+        cam[0,0] = 10.        # define focal length x
+        cam[1,1] = 10.        # define focal length y
+        # here the undistortion will be computed
+        return cv2.undistort(image,cam,distCoeff)
+
+    def process_image(self, filename, camera_id):
+        print "Processing image...", camera_id
+        img_for_cropping = cv2.imread("%s/%s" %(images_folder, filename))
+        img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
+        img_for_cropping = self.undistort_image(img_for_cropping)
+        img = cv2.imread("%s/%s" %(images_folder, filename),0)
+        img = cv2.resize(img, (800,450), cv2.INTER_AREA)
+        img = self.undistort_image(img)
+        # cv2.imshow('dst', img)
+        height, width = img.shape
+        img = cv2.medianBlur(img,21)
+        img = cv2.blur(img,(1,1))
+        img = cv2.Canny(img, 0, 23, True)
+        img = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
+
+        print "Detecting circles..."
+        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
+        circles = np.uint16(np.around(circles))
+        for i in circles[0,:]:
+            # crop cap
+            global caps_positions
+            caps_positions.append((i[0],i[1]))
+            margin = 30
+            originX = int(i[0])-int(i[2])-margin
+            originY = int(i[1])-int(i[2])-margin
+            endPointH = int(i[1])+int(i[2])+margin
+            endPointW = int(i[0])+int(i[2])+margin
+            if originX <= 0:
+                originX = 0
+            if originY <= 0: 
+                originY = 0
+            if endPointH >= height:
+                endPointH = height
+            if endPointW >= width:
+                endPointW = width
+            crop_img = img_for_cropping[originY:endPointH, originX:endPointW]
+            cv2.imwrite('%s/image_%s_%s_%s.jpg'%(foldername, camera_id,i[0], i[1]),crop_img)
+            # draw the outer circle
+            cv2.circle(img_for_cropping,(i[0],i[1]),i[2],(0,255,0),2)
+            # draw the center of the circle
+            cv2.circle(img_for_cropping,(i[0],i[1]),2,(0,0,255),3)
+            print len(circles)
+        # cv2.imshow('detected circles',img_for_cropping)
+        cv2.destroyAllWindows()
+        print caps_positions
+        print "Processing image done"
+
+cameras = Cameras()
+imageparser = ImageParser()
+
+cameras.take_all_photos()
+time.sleep(1)
+
+capture_folder =  cameras.get_images_folder()
+
+print capture_folder
+
+for filename in os.listdir("%s/" % (capture_folder)):
+    if filename.endswith(".png"):
+        print filename
+
+
+"""
+cam = 1
+for filename in os.listdir("%s/" % (images_folder)):
+    if filename.endswith(".png"):
+        filename = str(filename)
+        print filename
+        process_image(filename, cam)
+        cam = cam + 1
+
+run_tensorflow()
+"""
 
 
 ##################################################################################################################
 
 
 ##############################
-######## UNDISTORT ###########
-##############################
-
-def undistort_image(src):
-
-    width = src.shape[1]
-    height = src.shape[0]
-    distCoeff = np.zeros((4,1),np.float64)
-
-    k1 = -6.0e-5; # negative to remove barrel distortion
-    k2 = 0.0;
-    p1 = 0.0;
-    p2 = 0.0;
-
-    distCoeff[0,0] = k1;
-    distCoeff[1,0] = k2;
-    distCoeff[2,0] = p1;
-    distCoeff[3,0] = p2;
-
-    # assume unit matrix for camera
-    cam = np.eye(3,dtype=np.float32)
-
-    cam[0,2] = width/2.0  # define center x
-    cam[1,2] = height/2.0 # define center y
-    cam[0,0] = 10.        # define focal length x
-    cam[1,1] = 10.        # define focal length y
-    # here the undistortion will be computed
-    dst = cv2.undistort(src,cam,distCoeff)
-    return dst
-
-
-##############################
 ####### PROCESS IMAGE ########
 ##############################
-
-def process_image(src, camera_number):
-    print "Processing image..."
-    img_for_cropping = cv2.imread("%s/%s" %(images_folder, src))
-    img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
-    img_for_cropping = undistort_image(img_for_cropping)
-    img = cv2.imread("%s/%s" %(images_folder, src),0)
-    img = cv2.resize(img, (800,450), cv2.INTER_AREA)
-    img = undistort_image(img)
-    # cv2.imshow('dst', img)
-    height, width = img.shape
-    img = cv2.medianBlur(img,21)
-    img = cv2.blur(img,(1,1))
-    img = cv2.Canny(img, 0, 23, True)
-    img = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
-
-    print "Detecting circles..."
-    circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
-    circles = np.uint16(np.around(circles))
-
-    for i in circles[0,:]:
-        # crop cap
-        global caps_positions
-        caps_positions.append((i[0],i[1]))
-        margin = 30
-        originX = int(i[0])-int(i[2])-margin
-        originY = int(i[1])-int(i[2])-margin
-        endPointH = int(i[1])+int(i[2])+margin
-        endPointW = int(i[0])+int(i[2])+margin
-
-        if originX <= 0:
-            originX = 0
-        if originY <= 0: 
-            originY = 0
-        if endPointH >= height:
-            endPointH = height
-        if endPointW >= width:
-            endPointW = width
-
-        crop_img = img_for_cropping[originY:endPointH, originX:endPointW]
-
-        cv2.imwrite('%s/image_%s_%s_%s.jpg'%(foldername, camera_number,i[0], i[1]),crop_img)
-
-        # draw the outer circle
-        cv2.circle(img_for_cropping,(i[0],i[1]),i[2],(0,255,0),2)
-        # draw the center of the circle
-        cv2.circle(img_for_cropping,(i[0],i[1]),2,(0,0,255),3)
-        print len(circles)
-
-    # cv2.imshow('detected circles',img_for_cropping)
-    cv2.destroyAllWindows()
-    print caps_positions
-    print "Processing image done"
 
 
 ##############################
@@ -357,22 +350,6 @@ def process_data():
 ##############################
 
 
-cameras.take_all_photos()
-time.sleep(1)
-
-print cameras.get_images_folder()
-
-"""
-cam = 1
-for filename in os.listdir("%s/" % (images_folder)):
-    if filename.endswith(".png"):
-        filename = str(filename)
-        print filename
-        process_image(filename, cam)
-        cam = cam + 1
-
-run_tensorflow()
-"""
 
 
 
