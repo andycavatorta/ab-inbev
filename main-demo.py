@@ -2,16 +2,11 @@
 todo:
 
 old:
-    return more contextual data from classifier
-      confidence values
-      parsed image id
-
     create new images for feedback
 
 new features:
-
-    detect / fix overlap
     periodic inventory
+    detect / fix overlap
     email report
         slick formatting
         inventory
@@ -38,6 +33,7 @@ import tensorflow as tf
 import time
 #import zipfile
 
+PATH_FOR_THIS_FILE = os.path.dirname(os.path.realpath(__file__))
 
 class Camera():
         def __init__(self, images_folder, cam_id, pin, x_offset, y_offset):
@@ -165,12 +161,14 @@ class ImageParser(): # class not necessary.  used for organization
         circles = np.uint16(np.around(circles))
         margin = 30
         for x, y, radius in circles[0,:]:
+            x=int(x)
+            y=int(y)
+            radius=int(radius)
 
-
-            leftEdge = int(x)-int(radius)-int(margin)
-            rightEdge = int(x)+int(radius)+int(margin)
-            topEdge = int(y)-int(radius)-int(margin)
-            bottomEdge = int(y)+int(radius)+int(margin)
+            leftEdge = x-radius-margin
+            rightEdge = x+radius+margin
+            topEdge = y-radius-margin
+            bottomEdge = y+radius+margin
 
             if leftEdge < 0 or  rightEdge > width or topEdge < 0 or bottomEdge > height:
                 continue
@@ -238,47 +236,14 @@ class Classifier():
                     predictions = sess.run(softmax_tensor, \
                              {'DecodeJpeg/contents:0': image_data})
                     top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]# Sort to show labels of first prediction in order of confidence
-                    print "top_k=", repr(top_k)
+                    #print "top_k=", repr(top_k)
                     for node_id in top_k:
                         human_string = self.label_lines[node_id]
                         score = predictions[0][node_id]
-                        print('%s (score = %.5f)' % (human_string, score))
+                        #print('%s (score = %.5f)' % (human_string, score))
                     # print(self.label_lines[top_k[0]])
                     imageMetadata["label"] = self.label_lines[top_k[0]]
                     imageMetadata["confidence"] = predictions[0][top_k[0]]
-
-    def guess_images(self, foldername):
-        files = []
-        results = []
-        for (dirpath, dirnames, filenames) in walk(foldername):
-            files.extend(filenames)
-            break
-        print("Found " + str(len(files)) + " files")            
-        # change this as you see fit
-        # image_path = sys.argv[1]
-        # image_path = img
-        # Unpersists graph from file
-        with tf.gfile.FastGFile("image_classifier/tf_files/retrained_graph.pb", 'rb') as f:
-            graph_def = tf.GraphDef()
-            graph_def.ParseFromString(f.read())
-            _ = tf.import_graph_def(graph_def, name='')
-        with tf.Session() as sess:
-            for image in files:
-                # Read in the image_data
-                image_data = tf.gfile.FastGFile(foldername + "/" + image, 'rb').read()
-                # Feed the image_data as input to the graph and get first prediction
-                softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
-                predictions = sess.run(softmax_tensor, \
-                         {'DecodeJpeg/contents:0': image_data})
-                # Sort to show labels of first prediction in order of confidence
-                top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]
-                for node_id in top_k:
-                    human_string = self.label_lines[node_id]
-                    score = predictions[0][node_id]
-                    print('%s (score = %.5f)' % (human_string, score))
-                # print(self.label_lines[top_k[0]])
-                results.append(self.label_lines[top_k[0]])
-            return results
 
 def data_viz(img_metadata):
     canvas = np.zeros((1800,2400,3), np.uint8)
@@ -292,25 +257,44 @@ def data_viz(img_metadata):
         cv2.imwrite('results.png',img)
         cv2.destroyAllWindows()
 
+class Report():
+    def __init__(self):
+        pass
+    def collect_inventory_data(self):
+        #PATH_FOR_THIS_FILE
+        d = {
+            'cooler_id':0,
+            'location':"Dark Matter",
+            'address':"33 Flatbush Avenue, Brooklyn NY 11217 USA",
+            'date_formatted':time.strftime('%A, %B %d %Y at %H:%M:%S'),
+            'inventory':[], # tabular data
+            'strangers':[], # image paths
+            'mapImagePath':""
+        }
+
+    def generate_email(self):
+        pass
 
 
-cameras = Cameras()
+def main():
+    # create instances
+    cameras = Cameras()
+    imageparser = ImageParser()
+    classifier = Classifier()
+    while True:
+        print "starting main inventory loop"
+        cameras.take_all_photos()
+        time.sleep(1)
+        capture_list = cameras.get_capture_data()
+        imageparser.processImages(capture_list)
+        parsed_images = imageparser.get_parsed_images()
+        parsed_folder_name = imageparser.get_foldername()
+        classifier.classify_images(parsed_images)
+        print parsed_images
+        data_viz(imageparser.parsedImageMetadata)
 
-cameras.take_all_photos()
-time.sleep(1)
+        time.sleep(60)
 
-capture_list = cameras.get_capture_data()
 
-imageparser = ImageParser()
-imageparser.processImages(capture_list)
 
-parsed_images = imageparser.get_parsed_images()
-parsed_folder_name = imageparser.get_foldername()
 
-classifier = Classifier()
-
-classifier.classify_images(parsed_images)
-
-print parsed_images
-
-data_viz(imageparser.parsedImageMetadata)
