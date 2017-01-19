@@ -19,6 +19,7 @@ new features:
 import sys
 sys.path.append('/usr/local/lib/python2.7/site-packages')
 
+import commands
 import cv2
 import datetime
 import json
@@ -226,6 +227,9 @@ class Classifier():
         self.label_lines = [line.rstrip() for line 
             in tf.gfile.GFile("image_classifier/tf_files/retrained_labels.txt")]
 
+    def check_temp(self):
+        print "temperature=", commands.getstatusoutput("/opt/vc/bin/vcgencmd measure_temp")
+    
     def classify_images(self, imageMetadataList):
         with tf.gfile.FastGFile("image_classifier/tf_files/retrained_graph.pb", 'rb') as f:
             graph_def = tf.GraphDef()
@@ -244,7 +248,7 @@ class Classifier():
                              {'DecodeJpeg/contents:0': image_data})
                     top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]# Sort to show labels of first prediction in order of confidence
                     #print "top_k=", repr(top_k)
-
+                    self.check_temp()
                     time.sleep(5)
                     for node_id in top_k:
                         human_string = self.label_lines[node_id]
@@ -263,6 +267,8 @@ def data_viz(img_metadata):
             cv2.putText(canvas, "%s - %s" % (imageMetadata['label'],imageMetadata['capture']), (imageMetadata['totalX']-30,imageMetadata['totalY']+50), font, 0.5,(100,100,100),2,cv2.LINE_AA)
     cv2.imwrite('results.png',canvas)
     cv2.destroyAllWindows()
+
+
 
 class ProcessInventory():
     def __init__(self):
