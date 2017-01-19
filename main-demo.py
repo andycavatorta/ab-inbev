@@ -139,10 +139,19 @@ class ImageParser(): # class not necessary.  used for organization
         margin = 30
         for x, y, radius in circles[0,:]:
 
-            leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
-            rightEdge = x+radius+margin if x+radius+margin <= width else width
-            topEdge = y-radius-margin if y-radius-margin >=0 else 0
-            bottomEdge = y+radius+margin if y+radius+margin <= height else height
+
+            leftEdge = x-radius-margin
+            rightEdge = x+radius+margin
+            topEdge = y-radius-margin
+            bottomEdge = y+radius+margin
+
+            if leftEdge < 0 or  rightEdge > width or topEdge < 0 or bottomEdge > height:
+                continue
+
+            #leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
+            #rightEdge = x+radius+margin if x+radius+margin <= width else width
+            #topEdge = y-radius-margin if y-radius-margin >=0 else 0
+            #bottomEdge = y+radius+margin if y+radius+margin <= height else height
 
             crop_img = img_for_cropping[topEdge:bottomEdge, leftEdge:rightEdge]
 
@@ -238,21 +247,7 @@ print classifier.guess_images(parsed_folder_name)
 
 print parsed_images
 
-"""
-cam = 1
-for filename in os.listdir("%s/" % (images_folder)):
-    if filename.endswith(".png"):
-        filename = str(filename)
-        print filename
-        process_image(filename, cam)
-        cam = cam + 1
-
-run_tensorflow()
-"""
-
-
 ##################################################################################################################
-
 
 ##############################
 #### SEND TO TENSORFLOW ######
@@ -260,18 +255,6 @@ run_tensorflow()
 def run_tensorflow():
     guess = image_classifier.guess_image(foldername)
     print(guess)
-    # f = []
-    # for (dirpath, dirnames, filenames) in walk(foldername):
-    #     f.extend(filenames)
-    #     break
-    # print("Found " + str(len(f)) + " files")
-    # results = []
-    # for image in f:
-    #     guess = image_classifier.guess_image(foldername+'/'+image)
-    #     results.append(guess)
-    # print("done guessing")
-    # print(results)
-    # write_to_json(results)
 
 ##############################
 ######### DATA VIZ ###########
