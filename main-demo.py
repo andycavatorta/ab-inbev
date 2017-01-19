@@ -142,7 +142,7 @@ class ImageParser(): # class not necessary.  used for organization
             print "detected circle:", repr(x, y, radius)
 
 
-            parsedImageMetadata.append( {'capture':camera_id,'x':,'y':,'radius':,} )
+            parsedImageMetadata.append( {'capture':camera_id,'x':x,'y':y,'radius':,radius} )
 
 
 
@@ -171,8 +171,9 @@ class ImageParser(): # class not necessary.  used for organization
             cv2.circle(img_for_cropping,(i[0],i[1]),2,(0,0,255),3)
             print len(circles)
         # cv2.imshow('detected circles',img_for_cropping)
+
         cv2.destroyAllWindows()
-        print caps_positions
+        print parsedImageMetadata
         print "Processing image done"
 
     def processImages(self, captureLIst):
