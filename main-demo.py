@@ -66,6 +66,7 @@ class Camera():
                   print "Oops! something went wrong %s" % (e)
             finally:
                  GPIO.output(self.pin, GPIO.LOW)
+            time.sleep(1)
             return [filename, self.x_offset, self.y_offset]
 
 class Cameras():
