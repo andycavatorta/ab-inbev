@@ -96,6 +96,12 @@ class Cameras():
 class ImageParser(): # class not necessary.  used for organization
     def __init__(self):
         self.parsedCaptures = [] # 2D list of capture:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        now = datetime.datetime.now()
+        realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
+        self.foldername = ("%s/cropped/%s") %(dir_path, realnow)
+        os.makedirs(self.foldername)
+
     def undistort_image(self, image):
         width = image.shape[1]
         height = image.shape[0]
@@ -141,25 +147,34 @@ class ImageParser(): # class not necessary.  used for organization
         margin = 30
         for x, y, radius in circles[0,:]:
 
-            leftEdge = int(x)-int(radius)-margin if int(x)-int(radius)-margin >= 0 else 0
+            leftEdge = x-radius-margin if int(x)-int(radius)-margin >= 0 else 0
             rightEdge = int(x)+int(radius)+margin if int(x)+int(radius)+margin <= width else width
             topEdge = int(y)-int(radius)-margin if int(y)-int(radius)-margin >=0 else 0
             bottomEdge = int(y)+int(radius)+margin if int(y)+int(radius)+margin <= height else height
 
+            crop_img = img_for_cropping[topEdge:bottomEdge, leftEdge:rightEdge]
 
-            print "detected circle:", repr(x), repr(y), repr(radius), leftEdge, rightEdge, topEdge, bottomEdge
-
-            continue
-            crop_img = img_for_cropping[originY:endPointH, originX:endPointW]
-            cv2.imwrite('%s/image_%s_%s_%s.jpg'%(foldername, camera_id,x, y),crop_img)
+            imageName = 'image_%s_%s_%s.jpg'%(camera_id,x, y)
+            pathName = '%s/%s'%(self.foldername, imageName)
+            cv2.imwrite(pathName,crop_img)
             # draw the outer circle
             cv2.circle(img_for_cropping,(x,y),radius,(0,255,0),2)
             # draw the center of the circle
             cv2.circle(img_for_cropping,(x,y),2,(0,0,255),3)
-            print len(circles)
-
-
-            parsedImageMetadata.append( {'capture':camera_id,'x':x,'y':y,'radius':radius} )
+            #print len(circles)
+            parsedImageMetadata.append( {
+                'capture':camera_id,
+                'imageName':,imageName,
+                'pathName':pathName,
+                'x':x,
+                'y':y,
+                'radius':radius,
+                'leftEdge':leftEdge,
+                'rightEdge':rightEdge,
+                'topEdge':topEdge,
+                'bottomEdge':bottomEdge
+            } )
+            print "detected circle:", repr(x), repr(y), repr(radius), leftEdge, rightEdge, topEdge, bottomEdge
 
         # cv2.imshow('detected circles',img_for_cropping)
 
