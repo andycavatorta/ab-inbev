@@ -60,6 +60,7 @@ class Cameras():
             self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
             self.x_offsets = [0,0,0,0,0,0,0,0,0,0,0,0]
             self.y_offsets = [0,0,0,0,0,0,0,0,0,0,0,0]
+            now = datetime.datetime.now()
             self.images_folder_name = ("%s/camera_capture_images/%s") % (os.path.dirname(os.path.realpath(__file__)), now.strftime("%Y-%m-%d-%H-%M-%S"))
             os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
