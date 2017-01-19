@@ -116,16 +116,15 @@ class ImageParser(): # class not necessary.  used for organization
         # here the undistortion will be computed
         return cv2.undistort(image,cam,distCoeff)
 
-    def process_image(self, filename, camera_id):
-        print "Processing image...", camera_id, filename
-        return
+    def process_image(self, filepath, camera_id):
+        print "Processing image...", camera_id, filepath
         parsedImageMetadata = self.parsedCaptures.append([]) # images are introduce in order of cap_id, so list index == cap_id
 
-        img_for_cropping = cv2.imread("%s/%s" %(images_folder, filename))
+        img_for_cropping = cv2.imread(filepath)
         img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
         img_for_cropping = self.undistort_image(img_for_cropping)
 
-        img_for_circle_detection = cv2.imread("%s/%s" %(images_folder, filename),0)
+        img_for_circle_detection = cv2.imread(filepath,0)
         img_for_circle_detection = cv2.resize(img_for_circle_detection, (800,450), cv2.INTER_AREA)
         img_for_circle_detection = self.undistort_image(img_for_circle_detection)
         # cv2.imshow('dst', img_for_circle_detection)
