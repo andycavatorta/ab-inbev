@@ -1,20 +1,27 @@
 import sys
 sys.path.append('/usr/local/lib/python2.7/site-packages')
+
 import cv2
+import datetime
+import json
 import numpy as np
 import os
-import zipfile
-import json
-from os.path import join, dirname
 from os import environ
-#from watson_developer_cloud import VisualRecognitionV3
-import time
-import datetime
-import RPi.GPIO as GPIO
-
-from classifier import Classifier
 from os import walk
-image_classifier = Classifier()
+from os.path import join, dirname
+import RPi.GPIO as GPIO
+import tensorflow as tf
+import time
+#import zipfile
+
+
+
+#image_classifier = Classifier()
+#from watson_developer_cloud import VisualRecognitionV3
+#from classifier import Classifier
+
+
+
 
 
 
@@ -102,6 +109,9 @@ class ImageParser(): # class not necessary.  used for organization
         self.foldername = ("%s/cropped/%s") %(dir_path, realnow)
         os.makedirs(self.foldername)
 
+    def get_parsed_images(self):
+        return self.parsedCaptures
+
     def undistort_image(self, image):
         width = image.shape[1]
         height = image.shape[0]
@@ -147,10 +157,10 @@ class ImageParser(): # class not necessary.  used for organization
         margin = 30
         for x, y, radius in circles[0,:]:
 
-            leftEdge = x-radius-margin if int(x)-int(radius)-margin >= 0 else 0
-            rightEdge = int(x)+int(radius)+margin if int(x)+int(radius)+margin <= width else width
-            topEdge = int(y)-int(radius)-margin if int(y)-int(radius)-margin >=0 else 0
-            bottomEdge = int(y)+int(radius)+margin if int(y)+int(radius)+margin <= height else height
+            leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
+            rightEdge = x+radius+margin if x+radius+margin <= width else width
+            topEdge = y-radius-margin if y-radius-margin >=0 else 0
+            bottomEdge = y+radius+margin if y+radius+margin <= height else height
 
             crop_img = img_for_cropping[topEdge:bottomEdge, leftEdge:rightEdge]
 
@@ -187,6 +197,49 @@ class ImageParser(): # class not necessary.  used for organization
             self.process_image(cap_metadata[0],index)
 
 
+class Classifier():
+    def __init__(self):
+        # Loads label file, strips off carriage return
+        self.label_lines = [line.rstrip() for line 
+                           in tf.gfile.GFile("image_classifier/tf_files/retrained_labels.txt")]
+
+    def guess_image(self, foldername):
+        files = []
+        results = []
+        for (dirpath, dirnames, filenames) in walk(foldername):
+            files.extend(filenames)
+            break
+        print("Found " + str(len(files)) + " files")            
+        # change this as you see fit
+        # image_path = sys.argv[1]
+        # image_path = img
+        # Unpersists graph from file
+        with tf.gfile.FastGFile("image_classifier/tf_files/retrained_graph.pb", 'rb') as f:
+            graph_def = tf.GraphDef()
+            graph_def.ParseFromString(f.read())
+            _ = tf.import_graph_def(graph_def, name='')
+        with tf.Session() as sess:
+            for image in files:
+                # Read in the image_data
+                image_data = tf.gfile.FastGFile(foldername + "/" + image, 'rb').read()
+                # Feed the image_data as input to the graph and get first prediction
+                softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
+                predictions = sess.run(softmax_tensor, \
+                         {'DecodeJpeg/contents:0': image_data})
+                # Sort to show labels of first prediction in order of confidence
+                top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]
+                for node_id in top_k:
+                    human_string = self.label_lines[node_id]
+                    score = predictions[0][node_id]
+                    print('%s (score = %.5f)' % (human_string, score))
+                # print(self.label_lines[top_k[0]])
+                results.append(self.label_lines[top_k[0]])
+            return results
+
+
+
+
+
 cameras = Cameras()
 imageparser = ImageParser()
 
@@ -197,9 +250,9 @@ capture_list = cameras.get_capture_data()
 imageparser = ImageParser()
 imageparser.processImages(capture_list)
 
+parsed_images = imageparser.get_parsed_images()
 
-
-
+print parsed_images
 
 """
 cam = 1
@@ -216,38 +269,6 @@ run_tensorflow()
 
 ##################################################################################################################
 
-
-##############################
-####### PROCESS IMAGE ########
-##############################
-
-
-##############################
-###### SEND TO WATSON ########
-##############################
-
-def run_nn():
-    #  michelle: 0ba27a1a79d9d2f600ad71cc3c32fada1499a3a2
-    #  joao: 24f5aba0d5d54d4ecc619de28e71ddfca61c7559
-    #  andy: e7b1ac2095bb25f8a919bb29c2c60af78701477c
-    #  andy paid: 753a741d6f32d80e1935503b40a8a00f317e85c6 
-    visual_recognition = VisualRecognitionV3('2016-05-20', api_key='753a741d6f32d80e1935503b40a8a00f317e85c6')
-
-    "Uploading to the Neural Network..."
-    # with open("%s.zip"%(foldername), 'rb') as image_file:
-    results = []
-    for root, dirs, filenames in os.walk(foldername):
-        print filenames
-        for file in filenames:
-            with open(os.path.join(root, file), 'rb') as image_file:
-                result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
-                results.append(result)
-
-    global results_json
-    results_json = results
-
-    # with open('output.json', 'w') as file_:
-    #     file_.write(results)
 
 ##############################
 #### SEND TO TENSORFLOW ######
