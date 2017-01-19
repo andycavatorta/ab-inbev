@@ -140,10 +140,10 @@ class ImageParser(): # class not necessary.  used for organization
         for x, y, radius in circles[0,:]:
 
 
-            leftEdge = x-radius-margin
-            rightEdge = x+radius+margin
-            topEdge = y-radius-margin
-            bottomEdge = y+radius+margin
+            leftEdge = int(x)-int(radius)-int(margin)
+            rightEdge = int(x)+int(radius)+int(margin)
+            topEdge = int(y)-int(radius)-int(margin)
+            bottomEdge = int(y)+int(radius)+int(margin)
 
             if leftEdge < 0 or  rightEdge > width or topEdge < 0 or bottomEdge > height:
                 continue
