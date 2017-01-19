@@ -66,6 +66,7 @@ class Camera():
                   print "Oops! something went wrong %s" % (e)
             finally:
                  GPIO.output(self.pin, GPIO.LOW)
+            return [filename, self.x_offset, self.y_offset]
 
 class Cameras():
         def __init__(self):
@@ -76,20 +77,24 @@ class Cameras():
             self.images_folder_name = ("%s/camera_capture_images/%s") % (os.path.dirname(os.path.realpath(__file__)), now.strftime("%Y-%m-%d-%H-%M-%S"))
             os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
+            self.lastImages = []
         def take_all_photos(self):
             self.set_all_pins_low() # just in case
             for cam in self.cameras:
-                cam.take_photo()
+                metadata = cam.take_photo()
+                self.lastImages.append(metadata)
         def set_all_pins_low(self):
             for pin in self.pins:
                 GPIO.output(pin, GPIO.LOW)
         def get_images_folder(self):
             return self.images_folder_name
+        def get_capture_data(self):
+            return self.lastImages
  
 
 class ImageParser(): # class not necessary.  used for organization
     def __init__(self):
-        pass
+        self.parsedCaptures = [] # 2D list of capture:
     def undistort_image(self, image):
         width = image.shape[1]
         height = image.shape[0]
@@ -158,19 +163,21 @@ class ImageParser(): # class not necessary.  used for organization
         print caps_positions
         print "Processing image done"
 
+    def processImages(self, captureLIst):
+        for cap in captureLIst:
+            print cap
+
+
 cameras = Cameras()
 imageparser = ImageParser()
 
 cameras.take_all_photos()
 time.sleep(1)
 
-capture_folder =  cameras.get_images_folder()
+capture_list = cameras.get_capture_data()
+imageparser = ImageParser()
 
-print capture_folder
-
-for filename in os.listdir("%s/" % (capture_folder)):
-    if filename.endswith(".png"):
-        print filename
+imageparser.processImages(capture_list)
 
 
 """
