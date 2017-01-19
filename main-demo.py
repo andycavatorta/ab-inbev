@@ -313,4 +313,4 @@ classifier.classify_images(parsed_images)
 
 print parsed_images
 
-data_viz(imageparser.parsedImageMetadata)
+data_viz(parsed_images)
