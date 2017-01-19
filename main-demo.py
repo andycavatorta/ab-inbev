@@ -283,7 +283,7 @@ class Classifier():
 def data_viz(img_metadata):
     canvas = np.zeros((1800,2400,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    for cap_images in img_medata:
+    for cap_images in img_metadata:
         offsets = cameras.get_offset_from_id(cap_images['capture'])
         x_plus_offset = cap_images['x']+offsets[0]
         y_plus_offset = cap_images['y']+offsets[1]
