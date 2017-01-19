@@ -119,8 +119,8 @@ class ImageParser(): # class not necessary.  used for organization
 
     def process_image(self, filepath, camera_id):
         print "Processing image...", camera_id, filepath
-        parsedImageMetadata = self.parsedCaptures.append([]) # images are introduce in order of cap_id, so list index == cap_id
-
+        parsedImageMetadata = [] 
+        self.parsedCaptures.append(parsedImageMetadata)# images are introduce in order of cap_id, so list index == cap_id
         img_for_cropping = cv2.imread(filepath)
         img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
         img_for_cropping = self.undistort_image(img_for_cropping)
@@ -138,37 +138,29 @@ class ImageParser(): # class not necessary.  used for organization
         print "Detecting circles..."
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
         circles = np.uint16(np.around(circles))
+        margin = 30
         for x, y, radius in circles[0,:]:
-            print "detected circle:", repr(x), repr(y), repr(radius)
-            parsedImageMetadata.append( {'capture':camera_id,'x':x,'y':y,'radius':radius} )
+
+            leftEdge = int(x)-int(radius)-margin if int(x)-int(radius)-margin >= 0 else 0
+            rightEdge = int(x)+int(radius)+margin if int(x)+int(radius)+margin <= width else width
+            topEdge = int(y)-int(radius)-margin if int(y)-int(radius)-margin >=0 else 0
+            bottomEdge = int(y)+int(radius)+margin if int(y)+int(radius)+margin <= height else height
 
 
-
+            print "detected circle:", repr(x), repr(y), repr(radius), leftEdge, rightEdge, topEdge, bottomEdge
 
             continue
-            #global caps_positions
-            #caps_positions.append((i[0],i[1]))
-            margin = 30
-            originX = int(i[0])-int(i[2])-margin
-            originY = int(i[1])-int(i[2])-margin
-            endPointH = int(i[1])+int(i[2])+margin
-            endPointW = int(i[0])+int(i[2])+margin
-
-            if originX <= 0:
-                originX = 0
-            if originY <= 0: 
-                originY = 0
-            if endPointH >= height:
-                endPointH = height
-            if endPointW >= width:
-                endPointW = width
             crop_img = img_for_cropping[originY:endPointH, originX:endPointW]
-            cv2.imwrite('%s/image_%s_%s_%s.jpg'%(foldername, camera_id,i[0], i[1]),crop_img)
+            cv2.imwrite('%s/image_%s_%s_%s.jpg'%(foldername, camera_id,x, y),crop_img)
             # draw the outer circle
-            cv2.circle(img_for_cropping,(i[0],i[1]),i[2],(0,255,0),2)
+            cv2.circle(img_for_cropping,(x,y),radius,(0,255,0),2)
             # draw the center of the circle
-            cv2.circle(img_for_cropping,(i[0],i[1]),2,(0,0,255),3)
+            cv2.circle(img_for_cropping,(x,y),2,(0,0,255),3)
             print len(circles)
+
+
+            parsedImageMetadata.append( {'capture':camera_id,'x':x,'y':y,'radius':radius} )
+
         # cv2.imshow('detected circles',img_for_cropping)
 
         cv2.destroyAllWindows()
