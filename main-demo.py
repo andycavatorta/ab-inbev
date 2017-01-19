@@ -260,7 +260,7 @@ def data_viz(img_metadata):
             cv2.imwrite('results.png',canvas)
             cv2.destroyAllWindows()
 
-def ProcessInventory():
+class ProcessInventory():
     def __init__(self):
         self.data_raw = None
         self.data_processed = None
@@ -330,9 +330,9 @@ def main():
         parsed_images = imageparser.get_parsed_images()
         parsed_folder_name = imageparser.get_foldername()
         classifier.classify_images(parsed_images)
+        print "inventory=", repr(inventory)
         processinventory.process_inventory_data(parsed_images)
         inventory = processinventory.collate_inventory()
-        print "inventory=", repr(inventory)
         #print parsed_images
         data_viz(parsed_images)
 
