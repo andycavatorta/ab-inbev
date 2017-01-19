@@ -117,7 +117,7 @@ class ImageParser(): # class not necessary.  used for organization
         return cv2.undistort(image,cam,distCoeff)
 
     def process_image(self, filename, camera_id):
-        print "Processing image...", camera_id
+        print "Processing image...", camera_id, filename
         parsedImageMetadata = self.parsedCaptures.append([]) # images are introduce in order of cap_id, so list index == cap_id
 
         img_for_cropping = cv2.imread("%s/%s" %(images_folder, filename))
