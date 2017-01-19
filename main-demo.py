@@ -251,7 +251,7 @@ class Classifier():
                     imageMetadata["confidence"] = predictions[0][top_k[0]]
 
 def data_viz(img_metadata):
-    canvas = np.zeros((1800,2400,3), np.uint8)
+    canvas = np.zeros((2400,1800,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
     for camera in img_metadata:
         for imageMetadata in camera:
