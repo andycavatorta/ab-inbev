@@ -47,7 +47,7 @@ class Camera():
             print  'Camera {} taking picture'.format(self.cam_id)
 
             GPIO.output(self.pin, GPIO.HIGH)
-            time.sleep()
+            time.sleep(1)
             #filename = '{}/image_{}.png'.format(self.images_folder,self.cam_id)
             filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
             
