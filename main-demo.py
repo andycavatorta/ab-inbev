@@ -139,22 +139,21 @@ class ImageParser(): # class not necessary.  used for organization
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
         circles = np.uint16(np.around(circles))
         for x, y, radius in circles[0,:]:
-            print "detected circle:", repr(x, y, radius)
-
-
+            print "detected circle:", repr(x), repr(y), repr(radius)
             parsedImageMetadata.append( {'capture':camera_id,'x':x,'y':y,'radius':radius} )
 
 
 
 
             continue
-            global caps_positions
-            caps_positions.append((i[0],i[1]))
+            #global caps_positions
+            #caps_positions.append((i[0],i[1]))
             margin = 30
             originX = int(i[0])-int(i[2])-margin
             originY = int(i[1])-int(i[2])-margin
             endPointH = int(i[1])+int(i[2])+margin
             endPointW = int(i[0])+int(i[2])+margin
+
             if originX <= 0:
                 originX = 0
             if originY <= 0: 
