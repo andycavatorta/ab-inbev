@@ -118,24 +118,29 @@ class ImageParser(): # class not necessary.  used for organization
 
     def process_image(self, filename, camera_id):
         print "Processing image...", camera_id
+        parsedImageMetadata = self.parsedCaptures.append([]) # images are introduce in order of cap_id, so list index == cap_id
+
         img_for_cropping = cv2.imread("%s/%s" %(images_folder, filename))
         img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
         img_for_cropping = self.undistort_image(img_for_cropping)
-        img = cv2.imread("%s/%s" %(images_folder, filename),0)
-        img = cv2.resize(img, (800,450), cv2.INTER_AREA)
-        img = self.undistort_image(img)
-        # cv2.imshow('dst', img)
-        height, width = img.shape
-        img = cv2.medianBlur(img,21)
-        img = cv2.blur(img,(1,1))
-        img = cv2.Canny(img, 0, 23, True)
-        img = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
+
+        img_for_circle_detection = cv2.imread("%s/%s" %(images_folder, filename),0)
+        img_for_circle_detection = cv2.resize(img_for_circle_detection, (800,450), cv2.INTER_AREA)
+        img_for_circle_detection = self.undistort_image(img_for_circle_detection)
+        # cv2.imshow('dst', img_for_circle_detection)
+        height, width = img_for_circle_detection.shape
+        img_for_circle_detection = cv2.medianBlur(img_for_circle_detection,21)
+        img_for_circle_detection = cv2.blur(img_for_circle_detection,(1,1))
+        img_for_circle_detection = cv2.Canny(img_for_circle_detection, 0, 23, True)
+        img_for_circle_detection = cv2.adaptiveThreshold(img_for_circle_detection,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
 
         print "Detecting circles..."
-        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
+        circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
         circles = np.uint16(np.around(circles))
         for i in circles[0,:]:
             # crop cap
+            print "detected circle:", repr(i)
+            continue
             global caps_positions
             caps_positions.append((i[0],i[1]))
             margin = 30
@@ -164,8 +169,8 @@ class ImageParser(): # class not necessary.  used for organization
         print "Processing image done"
 
     def processImages(self, captureLIst):
-        for cap in captureLIst:
-            print cap
+        for index, cap_metadata in enumerate(S)
+            self.process_image(cap_metadata[0],index)
 
 
 cameras = Cameras()
@@ -176,8 +181,10 @@ time.sleep(1)
 
 capture_list = cameras.get_capture_data()
 imageparser = ImageParser()
-
 imageparser.processImages(capture_list)
+
+
+
 
 
 """
