@@ -256,7 +256,7 @@ def data_viz(img_metadata):
     for camera in img_metadata:
         for imageMetadata in camera:
             canvas = cv2.circle(canvas, (imageMetadata['totalY'],imageMetadata['totalX']),40, (200,200,200), -1)
-            cv2.putText(canvas, "%s - %s" & (imageMetadata['label'],imageMetadata['capture']), (imageMetadata['totalY']-30,imageMetadata['totalX']+50), font, 0.5,(100,100,100),2,cv2.LINE_AA)
+            cv2.putText(canvas, "%s - %s" % (imageMetadata['label'],imageMetadata['capture']), (imageMetadata['totalY']-30,imageMetadata['totalX']+50), font, 0.5,(100,100,100),2,cv2.LINE_AA)
             cv2.imwrite('results.png',canvas)
             cv2.destroyAllWindows()
 
