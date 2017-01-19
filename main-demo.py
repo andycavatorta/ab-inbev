@@ -264,8 +264,8 @@ def data_viz(img_metadata):
 def processInventory():
     def __init__(self):
         pass
-    def updateInventoryData
-
+    def updateInventoryData(self):
+        pass
 
 
 class Report():
