@@ -259,10 +259,10 @@ def data_viz(img_metadata):
     font = cv2.FONT_HERSHEY_SIMPLEX
     for camera in img_metadata:
         for imageMetadata in camera:
-            canvas = cv2.circle(canvas, (imageMetadata['totalX'],imageMetadata['totalY']),40, (200,200,200), -1)
+            cv2.circle(canvas, (imageMetadata['totalX'],imageMetadata['totalY']),40, (200,200,200), -1)
             cv2.putText(canvas, "%s - %s" % (imageMetadata['label'],imageMetadata['capture']), (imageMetadata['totalX']-30,imageMetadata['totalY']+50), font, 0.5,(100,100,100),2,cv2.LINE_AA)
-            cv2.imwrite('results.png',canvas)
-            cv2.destroyAllWindows()
+    cv2.imwrite('results.png',canvas)
+    cv2.destroyAllWindows()
 
 class ProcessInventory():
     def __init__(self):
@@ -270,7 +270,7 @@ class ProcessInventory():
         self.data_processed = None
         self.inventory_template = {
             "budlight":0,
-            "budwiser":0,
+            "budweiser":0,
             "corona":0,
             "hoegaarden":0,
             "platinum":0,
