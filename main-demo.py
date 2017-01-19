@@ -24,8 +24,8 @@ realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
 foldername = ("%s/cropped/%s") %(dir_path, realnow)
 caps_positions = []
 results_json = []
-images_folder = "%s" % (realnow)
-os.makedirs(images_folder)
+#images_folder = "%s" % (realnow)
+#os.makedirs(images_folder)
 os.makedirs(foldername)
 
 
@@ -138,9 +138,15 @@ class ImageParser(): # class not necessary.  used for organization
         print "Detecting circles..."
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
         circles = np.uint16(np.around(circles))
-        for i in circles[0,:]:
-            # crop cap
-            print "detected circle:", repr(i)
+        for x, y, radius in circles[0,:]:
+            print "detected circle:", repr(x, y, radius)
+
+
+            parsedImageMetadata.append( {'capture':camera_id,'x':,'y':,'radius':,} )
+
+
+
+
             continue
             global caps_positions
             caps_positions.append((i[0],i[1]))
