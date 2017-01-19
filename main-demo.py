@@ -251,12 +251,12 @@ class Classifier():
                     imageMetadata["confidence"] = predictions[0][top_k[0]]
 
 def data_viz(img_metadata):
-    canvas = np.zeros((2400,1800,3), np.uint8)
+    canvas = np.zeros((1800,2400,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
     for camera in img_metadata:
         for imageMetadata in camera:
-            canvas = cv2.circle(canvas, (imageMetadata['totalX'],imageMetadata['totalY']),40, (200,200,200), -1)
-            cv2.putText(canvas, imageMetadata['label'], (imageMetadata['totalX']-30,imageMetadata['totalY']+50), font, 0.5,(100,100,100),2,cv2.LINE_AA)
+            canvas = cv2.circle(canvas, (imageMetadata['totalY'],imageMetadata['totalX']),40, (200,200,200), -1)
+            cv2.putText(canvas, "%s - %s" & (imageMetadata['label'],imageMetadata['capture']), (imageMetadata['totalY']-30,imageMetadata['totalX']+50), font, 0.5,(100,100,100),2,cv2.LINE_AA)
             cv2.imwrite('results.png',canvas)
             cv2.destroyAllWindows()
 
