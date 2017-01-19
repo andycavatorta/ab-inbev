@@ -142,7 +142,7 @@ class ImageParser(): # class not necessary.  used for organization
             print "detected circle:", repr(x, y, radius)
 
 
-            parsedImageMetadata.append( {'capture':camera_id,'x':x,'y':y,'radius':,radius} )
+            parsedImageMetadata.append( {'capture':camera_id,'x':x,'y':y,'radius':radius} )
 
 
 
