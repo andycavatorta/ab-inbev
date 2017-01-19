@@ -15,28 +15,6 @@ import time
 #import zipfile
 
 
-
-#image_classifier = Classifier()
-#from watson_developer_cloud import VisualRecognitionV3
-#from classifier import Classifier
-
-
-
-
-
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-now = datetime.datetime.now()
-realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
-foldername = ("%s/cropped/%s") %(dir_path, realnow)
-caps_positions = []
-results_json = []
-#images_folder = "%s" % (realnow)
-#os.makedirs(images_folder)
-#os.makedirs(foldername)
-
-
-
 class Camera():
         def __init__(self, images_folder, cam_id, pin, x_offset, y_offset):
             self.images_folder = images_folder
@@ -108,6 +86,9 @@ class ImageParser(): # class not necessary.  used for organization
         realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
         self.foldername = ("%s/cropped/%s") %(dir_path, realnow)
         os.makedirs(self.foldername)
+
+    def get_foldername(self):
+        return self.foldername
 
     def get_parsed_images(self):
         return self.parsedCaptures
@@ -201,9 +182,9 @@ class Classifier():
     def __init__(self):
         # Loads label file, strips off carriage return
         self.label_lines = [line.rstrip() for line 
-                           in tf.gfile.GFile("image_classifier/tf_files/retrained_labels.txt")]
+            in tf.gfile.GFile("image_classifier/tf_files/retrained_labels.txt")]
 
-    def guess_image(self, foldername):
+    def guess_images(self, foldername):
         files = []
         results = []
         for (dirpath, dirnames, filenames) in walk(foldername):
@@ -237,20 +218,22 @@ class Classifier():
             return results
 
 
-
-
-
 cameras = Cameras()
-imageparser = ImageParser()
 
 cameras.take_all_photos()
 time.sleep(1)
 
 capture_list = cameras.get_capture_data()
+
 imageparser = ImageParser()
 imageparser.processImages(capture_list)
 
 parsed_images = imageparser.get_parsed_images()
+parsed_folder_name = imageparser.get_foldername()
+
+classifier = Classifier()
+
+print classifier.guess_images(parsed_folder_name)
 
 print parsed_images
 
