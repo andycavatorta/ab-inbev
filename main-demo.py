@@ -26,7 +26,7 @@ caps_positions = []
 results_json = []
 #images_folder = "%s" % (realnow)
 #os.makedirs(images_folder)
-os.makedirs(foldername)
+#os.makedirs(foldername)
 
 
 
