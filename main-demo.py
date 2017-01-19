@@ -47,10 +47,10 @@ class Camera():
             print  'Camera {} taking picture'.format(self.cam_id)
 
             GPIO.output(self.pin, GPIO.HIGH)
+            #filename = '{}/image_{}.png'.format(self.images_folder,self.cam_id)
+            filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
+            
             try: 
-                print self.images_folder,self.cam_id
-                filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
-                print filename
                 cap = cv2.VideoCapture(0)
                 cap.set(3,1280)
                 cap.set(4,720)
@@ -60,6 +60,7 @@ class Camera():
                         cap.open()
                         time.sleep(1)
                 else:
+                    print filename
                     ret, frame = cap.read()
                     cv2.imwrite(filename,frame)
                     cap.release()
