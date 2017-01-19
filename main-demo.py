@@ -1,3 +1,27 @@
+"""
+todo:
+
+old:
+    return more contextual data from classifier
+      confidence values
+      parsed image id
+
+    create new images for feedback
+
+new features:
+
+    detect / fix overlap
+    periodic inventory
+    email report
+        slick formatting
+        inventory
+        map
+        strangers
+        changes / patterns
+
+
+
+"""
 import sys
 sys.path.append('/usr/local/lib/python2.7/site-packages')
 
@@ -173,14 +197,16 @@ class ImageParser(): # class not necessary.  used for organization
                 'leftEdge':leftEdge,
                 'rightEdge':rightEdge,
                 'topEdge':topEdge,
-                'bottomEdge':bottomEdge
+                'bottomEdge':bottomEdge,
+                'label':"",
+                'confidence':0
             } )
-            print "detected circle:", repr(x), repr(y), repr(radius), leftEdge, rightEdge, topEdge, bottomEdge
+            #print "detected circle:", repr(x), repr(y), repr(radius), leftEdge, rightEdge, topEdge, bottomEdge
 
         # cv2.imshow('detected circles',img_for_cropping)
 
         cv2.destroyAllWindows()
-        print parsedImageMetadata
+        #print parsedImageMetadata
         print "Processing image done"
 
     def processImages(self, captureLIst):
@@ -193,6 +219,30 @@ class Classifier():
         # Loads label file, strips off carriage return
         self.label_lines = [line.rstrip() for line 
             in tf.gfile.GFile("image_classifier/tf_files/retrained_labels.txt")]
+
+    def classify_images(self, imageMetadataList):
+        with tf.gfile.FastGFile("image_classifier/tf_files/retrained_graph.pb", 'rb') as f:
+            graph_def = tf.GraphDef()
+            graph_def.ParseFromString(f.read())
+            _ = tf.import_graph_def(graph_def, name='')
+        with tf.Session() as sess:
+            for imageMetadata in imageMetadataList:
+    
+                image_data = tf.gfile.FastGFile(imageMetadata["pathName"], 'rb').read()
+                
+                softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')# Feed the image_data as input to the graph and get first prediction
+                predictions = sess.run(softmax_tensor, \
+                         {'DecodeJpeg/contents:0': image_data})
+                top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]# Sort to show labels of first prediction in order of confidence
+                print "top_k=", repr(top_k)
+                for node_id in top_k:
+                    human_string = self.label_lines[node_id]
+                    score = predictions[0][node_id]
+                    print('%s (score = %.5f)' % (human_string, score))
+                # print(self.label_lines[top_k[0]])
+                results.append(self.label_lines[top_k[0]])
+            return results
+
 
     def guess_images(self, foldername):
         files = []
@@ -227,7 +277,6 @@ class Classifier():
                 results.append(self.label_lines[top_k[0]])
             return results
 
-
 cameras = Cameras()
 
 cameras.take_all_photos()
@@ -243,9 +292,9 @@ parsed_folder_name = imageparser.get_foldername()
 
 classifier = Classifier()
 
-print classifier.guess_images(parsed_folder_name)
+print classifier.classify_images(parsed_images)
 
-print parsed_images
+#print parsed_images
 
 ##################################################################################################################
 
