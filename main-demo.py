@@ -440,10 +440,10 @@ class ProcessInventory():
                     for product_inner in cam_inner:
                         if product_inner['duplicate']:
                             continue
-                            distance = math.sqrt(math.pow((product_outer['totalX']-product_inner['totalX']) ,2) + math.pow((product_outer['totalY']-product_inner['totalY']) ,2))
-                            print distance
-                            if distance < self.overlap_threshold:
-                                product_inner['duplicate'] = True
+                        distance = math.sqrt(math.pow((product_outer['totalX']-product_inner['totalX']) ,2) + math.pow((product_outer['totalY']-product_inner['totalY']) ,2))
+                        print distance
+                        if distance < self.overlap_threshold:
+                            product_inner['duplicate'] = True
         return data
 
 
@@ -451,6 +451,8 @@ class ProcessInventory():
         inventory = dict(self.inventory_template)
         for cam in self.data_processed:
             for product in cam:
+                if product['duplicate']:
+                    continue
                 productName = product["label"]
                 if productName in inventory.keys():
                     inventory[productName] += 1
