@@ -109,8 +109,6 @@ class Cameras():
                 except Exception as e:
                     print(e)
 
- 
-
 class ImageParser(): # class not necessary.  used for organization
     def __init__(self):
         self.parsedCaptures = [] # 2D list of capture:
@@ -305,11 +303,11 @@ class ProcessInventory():
         self.data_raw = data
         data_filtered = self.filter_low_confidence(self.data_raw)
         self.data_processed =self.detect_overlaps(data_filtered)
-        print self.data_processed
+        return self.data_processed
         #return self.collate_inventory()
     def filter_low_confidence(self, data):
         data_new = []
-        for cam in self.data:
+        for cam in self.data_raw:
             cam_new = []
             data_new.append(cam_new)
             for product in cam:
@@ -370,13 +368,10 @@ def main():
         parsed_folder_name = imageparser.get_foldername()
         classifier.classify_images(parsed_images)
         print parsed_images
-        processinventory.process_inventory_data(parsed_images)
+        parsed_images_processed = processinventory.process_inventory_data(parsed_images)
         inventory = processinventory.collate_inventory()
         print "inventory=", repr(inventory)
-        data_viz(parsed_images)
-        cameras.empty_directory()
-        imageparser.empty_directory()
-
+        print parsed_images_processed
+        data_viz(parsed_images_processed)
         time.sleep(60)
-
 main()
