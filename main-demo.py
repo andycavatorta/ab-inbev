@@ -80,8 +80,10 @@ class Cameras():
         def __init__(self):
             GPIO.setmode(GPIO.BCM)
             self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
-            self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
-            self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
+            #self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
+            #self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
+            #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
+            #self.y_offsets = [1350,1350,1350, 900,900,900,450,450,450,0,0,0  ]
             self.images_folder_name = ("%s/camera_capture_images") % (os.path.dirname(os.path.realpath(__file__)))
             #os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
@@ -276,6 +278,8 @@ class Classifier():
                     imageMetadata["label"] = self.label_lines[top_k[0]]
                     imageMetadata["confidence"] = predictions[0][top_k[0]]
 
+
+
 def data_viz(img_metadata):
     canvas = np.zeros((2400,2400,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -290,7 +294,7 @@ def data_viz(img_metadata):
 
 class ProcessInventory():
     def __init__(self):
-        self.confidence_threshold = 0.6
+        self.confidence_threshold = 0.5
         self.data_raw = None
         self.data_processed = None
         self.inventory_template = {
@@ -332,7 +336,11 @@ class ProcessInventory():
 
 class Report():
     def __init__(self):
-        pass
+        self.to_field = "andycavatorta@gmail.com"
+        self.from_field = "simurghnodes@gmail.com"
+        self.password_field = "5ed0n6rum15"
+        self.SMTP_server = "smtp.gmail.com"
+        self.SMTP_port = 587
 
     def collect_inventory_data(self):
 
@@ -348,16 +356,14 @@ class Report():
         }
 
     def generate_email(self):         
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login("YOUR EMAIL ADDRESS", "YOUR PASSWORD")
-         
-        msg = "YOUR MESSAGE!"
-        server.sendmail("YOUR EMAIL ADDRESS", "THE EMAIL ADDRESS TO SEND TO", msg)
-        server.quit()
-
+        pass 
     def send_email(self):
-        pass
+        msg = "asdf"
+        server = smtplib.SMTP(self.SMTP_server, self.SMTP_port)
+        server.starttls()
+        server.login(self.from_field, self.password_field)
+        server.sendmail(self.from_field, self.to_field, msg)
+        server.quit()
 
 
 def main():
@@ -382,5 +388,6 @@ def main():
         print "inventory=", repr(inventory)
         print parsed_images_processed
         data_viz(parsed_images_processed)
+        report.send_email()
         time.sleep(60)
 main()
