@@ -499,7 +499,30 @@ class Report():
         pass 
 
     def send_email(self, inventory):
-        msg = "asdf"
+
+        import smtplib
+        from email.mime.image import MIMEImage
+        from email.mime.multipart import MIMEMultipart
+
+        # Create the container (outer) email message.
+        msg = MIMEMultipart()
+        msg['Subject'] = 'AB-InBev nventory Report'
+        # me == the sender's email address
+        # family = the list of all recipients' email addresses
+        msg['From'] = self.from_field
+        msg['To'] = self.to_field
+        msg.preamble = 'Inventory on {}'.format(time.strftime('%A, %B %d %Y at %H:%M:%S'))
+
+        # Assume we know that the image files are all in PNG format
+        for file in ["inventory_raw.png","inventory_no_dupes.png"]:
+            # Open the files in binary mode.  Let the MIMEImage class automatically
+            # guess the specific image type.
+            fp = open(file, 'rb')
+            img = MIMEImage(fp.read())
+            fp.close()
+            msg.attach(img)
+
+        # Send the email via our own SMTP server.
         server = smtplib.SMTP(self.SMTP_server, self.SMTP_port)
         server.starttls()
         server.login(self.from_field, self.password_field)
