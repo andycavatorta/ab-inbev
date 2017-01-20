@@ -80,8 +80,7 @@ class Cameras():
             self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
             self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
             self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
-            now = datetime.datetime.now()
-            self.images_folder_name = ("%s/camera_capture_images/%s") % (os.path.dirname(os.path.realpath(__file__)), now.strftime("%Y-%m-%d-%H-%M-%S"))
+            self.images_folder_name = ("%s/camera_capture_images") % (os.path.dirname(os.path.realpath(__file__)))
             os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
             self.lastImages = []
@@ -100,16 +99,34 @@ class Cameras():
         def get_offset_from_id(self, id):
             return [self.x_offsets[id],self.y_offsets[id]]
 
+        def empty_directory(self):
+            for file in os.listdir(self.images_folder_name):
+                file_path = os.path.join(self.images_folder_name, file)
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path): shutil.rmtree(file_path)
+                except Exception as e:
+                    print(e)
+
  
 
 class ImageParser(): # class not necessary.  used for organization
     def __init__(self):
         self.parsedCaptures = [] # 2D list of capture:
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        now = datetime.datetime.now()
-        realnow = now.strftime("%Y-%m-%d-%H-%M-%S")
-        self.foldername = ("%s/cropped/%s") %(dir_path, realnow)
+        self.foldername = ("%s/cropped") %(dir_path)
         os.makedirs(self.foldername)
+
+    def empty_directory(self):
+        for file in os.listdir(self.foldername):
+            file_path = os.path.join(self.foldername, file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path): shutil.rmtree(file_path)
+            except Exception as e:
+                print(e)
 
     def get_foldername(self):
         return self.foldername
@@ -348,6 +365,8 @@ def main():
         inventory = processinventory.collate_inventory()
         print "inventory=", repr(inventory)
         data_viz(parsed_images)
+        cameras.empty_directory()
+        imageparser.empty_directory()
 
         time.sleep(60)
 
