@@ -194,7 +194,7 @@ class ImageParser(): # class not necessary.  used for organization
         circles = np.uint16(np.around(circles))
         margin = 30
         for x, y, radius in circles[0,:]
-:            x=int(x)
+            x=int(x)
             y=int(y)
             radius=int(radius)
             #leftEdge = x-radius-margin
