@@ -370,7 +370,11 @@ class Classifier():
                     image_count += 1
                     with open(imageMetadata["pathName"], 'rb') as image_file:
                         result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
-                        print result
+                        classifiers = result[u'images'][0][u'classifiers']
+                        print classifiers
+
+
+
 
 
 def data_viz(img_metadata):
