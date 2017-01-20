@@ -452,7 +452,7 @@ class ProcessInventory():
 
     def filter_duplicates(self, data):
         data_new = []
-        for cam in self.data_raw:
+        for cam in data:
             cam_new = []
             data_new.append(cam_new)
             for product in cam:
