@@ -162,18 +162,18 @@ class ImageParser(): # class not necessary.  used for organization
         img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA) # resize image
         img_for_cropping = self.undistort_image(img_for_cropping) # get unbent!
 
-        img_for_circle_detection = cv2.imread(filepath,0) # 
-        img_for_circle_detection = cv2.resize(img_for_circle_detection, (800,450), cv2.INTER_AREA)
-        img_for_circle_detection = self.undistort_image(img_for_circle_detection)
+        img_for_circle_detection = cv2.imread(filepath,0) # read image into memory
+        img_for_circle_detection = cv2.resize(img_for_circle_detection, (800,450), cv2.INTER_AREA) # resize image
+        img_for_circle_detection = self.undistort_image(img_for_circle_detection) # get unbent!
         # cv2.imshow('dst', img_for_circle_detection)
         height, width = img_for_circle_detection.shape
 
-        #img_for_circle_detection = cv2.medianBlur(img_for_circle_detection,21)
+        img_for_circle_detection = cv2.medianBlur(img_for_circle_detection,21)
 
         #testFileName = "{}_1_median.png".format(camera_id)
         #cv2.imwrite(testFileName ,img_for_circle_detection)
 
-        #img_for_circle_detection = cv2.blur(img_for_circle_detection,(1,1))
+        img_for_circle_detection = cv2.blur(img_for_circle_detection,(1,1))
 
         #testFileName = "{}_2_blur.png".format(camera_id)
         #cv2.imwrite(testFileName ,img_for_circle_detection)
@@ -184,10 +184,25 @@ class ImageParser(): # class not necessary.  used for organization
         cv2.imwrite(testFileName ,img_for_circle_detection)
 
 
+        # Read image
+        im = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+        # Set up the detector with default parameters.
+        detector = cv2.SimpleBlobDetector()
+        # Detect blobs.
+        keypoints = detector.detect(im)
+        # Draw detected blobs as red circles.
+        # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
+        im_with_keypoints = cv2.drawKeypoints(im, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        # Show keypoints
+
+        testFileName = "{}_2_blob.png".format(camera_id)
+        cv2.imwrite(testFileName ,img_for_circle_detection)
+
+
         #img_for_circle_detection = cv2.medianBlur(img_for_circle_detection,21)
         #img_for_circle_detection = cv2.blur(img_for_circle_detection,(1,1))
         #img_for_circle_detection = cv2.Canny(img_for_circle_detection, 0, 23, True)
-        #img_for_circle_detection = cv2.adaptiveThreshold(img_for_circle_detection,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
+        img_for_circle_detection = cv2.adaptiveThreshold(img_for_circle_detection,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
 
 
         print "Detecting circles..."
