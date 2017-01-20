@@ -18,7 +18,7 @@ new features:
 """
 import sys
 sys.path.append('/usr/local/lib/python2.7/site-packages')
-sys.path.append('/home/pi/.virtualenvs/cv/lib/python2.7/site-packages/watson_developer_cloud')
+sys.path.append('/home/pi/.virtualenvs/cv/lib/python2.7/site-packages')
 
 import commands
 import cv2
