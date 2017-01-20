@@ -432,13 +432,18 @@ class ProcessInventory():
                     cam_new.append(product)
         return data_new
     def detect_overlaps(self, data):
-        for cam_outer in self.data:
+        for cam_outer in data:
             for product_outer in cam_outer:
-
-                for cam_inner in self.data:
+                if product_outer['duplicate']:
+                    continue
+                for cam_inner in data:
                     for product_inner in cam_inner:
+                    if product_inner['duplicate']:
+                        continue
                         distance = math.sqrt(math.pow((product_outer['totalX']-product_inner['totalX']) ,2) + math.pow((product_outer['totalY']-product_inner['totalY']) ,2))
                         print distance
+                        if distance < self.overlap_threshold:
+                            product_inner['duplicate'] = True
         return data
 
 
