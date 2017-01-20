@@ -80,7 +80,8 @@ class Camera():
 class Cameras():
         def __init__(self):
             GPIO.setmode(GPIO.BCM)
-            self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
+            self.pins = [10,24,23,22,27,18,17,15,14,4,3,2 ]
+            #self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
             self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
             self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
             #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
@@ -366,17 +367,20 @@ class Classifier():
             image_count = 0
             for camera in  imageMetadataList:
                 for imageMetadata in camera:
-                    print "classifying image", image_count
-                    image_count += 1
-                    with open(imageMetadata["pathName"], 'rb') as image_file:
-                        result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
-                        classifiers = result[u'images'][0][u'classifiers']
-                        if len(classifiers) > 0:
-                            imageMetadata["label"] = classifiers[0][u'classes'][0][u'class']
-                            imageMetadata["confidence"] = classifiers[0][u'classes'][0][u'score']
-                            #confidence = classifiers[0][u'classes'][0][u'score']
-                            #label = classifiers[0][u'classes'][0][u'class']
-                            #print confidence, label
+                    try:
+                        print "classifying image", image_count
+                        image_count += 1
+                        with open(imageMetadata["pathName"], 'rb') as image_file:
+                            result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
+                            classifiers = result[u'images'][0][u'classifiers']
+                            if len(classifiers) > 0:
+                                imageMetadata["label"] = classifiers[0][u'classes'][0][u'class']
+                                imageMetadata["confidence"] = classifiers[0][u'classes'][0][u'score']
+                                #confidence = classifiers[0][u'classes'][0][u'score']
+                                #label = classifiers[0][u'classes'][0][u'class']
+                                #print confidence, label
+                    except Exception as e:
+                        print "exception in classify_images_watson, " e
 
 
 def data_viz(img_metadata):
