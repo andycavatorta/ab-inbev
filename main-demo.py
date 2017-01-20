@@ -445,7 +445,7 @@ class ProcessInventory():
                             if product_inner['duplicate']:
                                 continue
                             distance = math.sqrt(math.pow((product_outer['totalX']-product_inner['totalX']) ,2) + math.pow((product_outer['totalY']-product_inner['totalY']) ,2))
-                            print distance, product_inner['label'], product_inner['capture'], , product_outer['capture']
+                            print distance, product_inner['label'], product_inner['capture'], product_outer['capture']
                             if distance < self.overlap_threshold:
                                 product_inner['duplicate'] = True
         return data
