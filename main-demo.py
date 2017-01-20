@@ -30,6 +30,7 @@ from os import walk
 from os.path import join, dirname
 import RPi.GPIO as GPIO
 import smtplib
+import shutil
 import tensorflow as tf
 import time
 #import zipfile
