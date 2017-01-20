@@ -85,6 +85,7 @@ class Cameras():
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
             self.lastImages = []
         def take_all_photos(self):
+            self.empty_directory()
             self.set_all_pins_low() # just in case
             for cam in self.cameras:
                 metadata = cam.take_photo()
@@ -117,7 +118,6 @@ class ImageParser(): # class not necessary.  used for organization
         dir_path = os.path.dirname(os.path.realpath(__file__))
         self.foldername = ("%s/cropped") %(dir_path)
         #os.makedirs(self.foldername)
-
     def empty_directory(self):
         for file in os.listdir(self.foldername):
             file_path = os.path.join(self.foldername, file)
@@ -157,6 +157,7 @@ class ImageParser(): # class not necessary.  used for organization
 
     def process_image(self, filepath, camera_id, offset_x, offset_y):
         print "Processing image...", camera_id, filepath
+        self.empty_directory()
         parsedImageMetadata = [] 
         self.parsedCaptures.append(parsedImageMetadata)# images are introduce in order of cap_id, so list index == cap_id
         img_for_cropping = cv2.imread(filepath)
@@ -374,8 +375,6 @@ def main():
         inventory = processinventory.collate_inventory()
         print "inventory=", repr(inventory)
         data_viz(parsed_images)
-        cameras.empty_directory()
-        imageparser.empty_directory()
 
         time.sleep(60)
 
