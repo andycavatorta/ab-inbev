@@ -180,8 +180,8 @@ class ImageParser(): # class not necessary.  used for organization
 
         img_for_circle_detection = cv2.Canny(img_for_circle_detection, 0, 23, True)
 
-        testFileName = "{}_3_canny.png".format(camera_id)
-        cv2.imwrite(testFileName ,img_for_circle_detection)
+        #testFileName = "{}_3_canny.png".format(camera_id)
+        #cv2.imwrite(testFileName ,img_for_circle_detection)
 
 
         params = cv2.SimpleBlobDetector_Params()
