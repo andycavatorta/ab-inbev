@@ -185,12 +185,12 @@ class ImageParser(): # class not necessary.  used for organization
 
 
         params = cv2.SimpleBlobDetector_Params()
-        params.filterByCircularity = True
-        params.minCircularity = 0.1
+        #params.filterByCircularity = True
+        #params.minCircularity = 0.1
 
         params.filterByArea = True
         params.minArea = 100
-        params.maxArea = 100000
+        params.maxArea = 150000
         #params.maxCircularity = 0
 
         # Read image
