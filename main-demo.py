@@ -272,6 +272,7 @@ def data_viz(img_metadata):
 
 class ProcessInventory():
     def __init__(self):
+        self.confidence_threshold = 0.6
         self.data_raw = None
         self.data_processed = None
         self.inventory_template = {
@@ -285,13 +286,21 @@ class ProcessInventory():
         }
     def process_inventory_data(self, data):
         self.data_raw = data
-        #self.filter_low_confidence()
-        self.detect_overlaps()
-        self.collate_inventory()
-    def filter_low_confidence(self):
-        pass
-    def detect_overlaps(self):
-        self.data_processed = self.data_raw
+        data_filtered = self.filter_low_confidence(self.data_raw)
+        self.data_processed =self.detect_overlaps(data_filtered)
+        print self.data_processed
+        #return self.collate_inventory()
+    def filter_low_confidence(self, data):
+        data_new = []
+        for cam in self.data:
+            cam_new = []
+            data_new.append(cam_new)
+            for product in cam:
+                if product["confidence"] >= self.confidence_threshold:
+                    cam_new.append(product)
+        return data_new
+    def detect_overlaps(self, data):
+        return data
     def collate_inventory(self):
         inventory = dict(self.inventory_template)
         for cam in self.data_processed:
