@@ -189,7 +189,7 @@ class ImageParser(): # class not necessary.  used for organization
         params.minCircularity = 0.1
 
         params.filterByArea = True
-        params.minArea = 1000
+        params.minArea = 100
         #params.maxCircularity = 0
 
         # Read image
@@ -201,7 +201,7 @@ class ImageParser(): # class not necessary.  used for organization
         keypoints = detector.detect(im)
         # Draw detected blobs as red circles.
         # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
-        im_with_keypoints = cv2.drawKeypoints(im, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        im_with_keypoints = cv2.drawKeypoints(im, keypoints, np.array([]), (255,0,0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         # Show keypoints
 
         testFileName = "{}_2_blob.png".format(camera_id)
