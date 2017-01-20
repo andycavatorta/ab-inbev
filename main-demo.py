@@ -526,7 +526,7 @@ class Report():
         server = smtplib.SMTP(self.SMTP_server, self.SMTP_port)
         server.starttls()
         server.login(self.from_field, self.password_field)
-        server.sendmail(self.from_field, self.to_field, msg)
+        server.sendmail(self.from_field, self.to_field, msg.as_string())
         server.quit()
 
 
