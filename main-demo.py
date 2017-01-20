@@ -83,7 +83,7 @@ class Cameras():
             self.pins = [10,24,23,22,27,18,17,15,14,4,3,2 ]
             #self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
             self.x_offsets = [0,750,1400,0,750,1400,0,750,1400,0,750,1400]
-            self.y_offsets = [0,0,0,400,400,400,800,800,800,1200,1200,1200]
+            self.y_offsets = [0,0,0,360,360,360,720,720,720,1080,1080,1080]
             #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
             #self.y_offsets = [1350,1350,1350, 900,900,900,450,450,450,0,0,0  ]
             self.images_folder_name = ("%s/camera_capture_images") % (os.path.dirname(os.path.realpath(__file__)))
@@ -371,7 +371,7 @@ class Classifier():
                         print "classifying image", image_count
                         image_count += 1
                         with open(imageMetadata["pathName"], 'rb') as image_file:
-                            result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
+                            result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.95)
                             classifiers = result[u'images'][0][u'classifiers']
                             if len(classifiers) > 0:
                                 if  classifiers[0][u'classes'][0][u'class'] == 'stella':
@@ -403,6 +403,7 @@ def print_temp():
 class ProcessInventory():
     def __init__(self):
         self.confidence_threshold = 0.5
+        self.overlap_threshold = 100
         self.data_raw = None
         self.data_processed = None
         self.inventory_template = {
@@ -430,7 +431,9 @@ class ProcessInventory():
                     cam_new.append(product)
         return data_new
     def detect_overlaps(self, data):
+
         return data
+
     def collate_inventory(self):
         inventory = dict(self.inventory_template)
         for cam in self.data_processed:
