@@ -82,7 +82,7 @@ class Cameras():
             GPIO.setmode(GPIO.BCM)
             self.pins = [10,24,23,22,27,18,17,15,14,4,3,2 ]
             #self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
-            self.x_offsets = [0,750,1400,0,750,1400,0,750,1400,0,750,1400]
+            self.x_offsets = [0,700,1400,0,700,1400,0,700,1400,0,700,1400]
             self.y_offsets = [0,0,0,380,380,380,760,760,760,1140,1140,1140]
             #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
             #self.y_offsets = [1350,1350,1350, 900,900,900,450,450,450,0,0,0  ]
@@ -432,6 +432,13 @@ class ProcessInventory():
                     cam_new.append(product)
         return data_new
     def detect_overlaps(self, data):
+        for cam_outer in self.data:
+            for product_outer in cam_outer:
+
+                for cam_inner in self.data:
+                    for product_inner in cam_inner:
+                        distance = math.sqrt(math.pow((product_outer['totalX']-product_inner['totalX']) ,2) + math.pow((product_outer['totalY']-product_inner['totalY']) ,2))
+                        print distance
         return data
 
 
