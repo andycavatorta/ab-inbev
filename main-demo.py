@@ -405,7 +405,7 @@ def print_temp():
 class ProcessInventory():
     def __init__(self):
         self.confidence_threshold = 0.5
-        self.overlap_threshold = 100
+        self.overlap_threshold = 200
         self.data_raw = None
         self.data_processed = None
         self.inventory_template = {
@@ -439,12 +439,15 @@ class ProcessInventory():
                     continue
                 for cam_inner in data:
                     for product_inner in cam_inner:
-                        if product_inner['duplicate']:
-                            continue
-                        distance = math.sqrt(math.pow((product_outer['totalX']-product_inner['totalX']) ,2) + math.pow((product_outer['totalY']-product_inner['totalY']) ,2))
-                        print distance
-                        if distance < self.overlap_threshold:
-                            product_inner['duplicate'] = True
+                        if product_inner['label'] == product_outer['label']:
+                            if product_inner['pathName'] == product_outer['pathName']:
+                                continue
+                            if product_inner['duplicate']:
+                                continue
+                            distance = math.sqrt(math.pow((product_outer['totalX']-product_inner['totalX']) ,2) + math.pow((product_outer['totalY']-product_inner['totalY']) ,2))
+                            print distance, product_inner['label'], product_inner['capture'], , product_outer['capture']
+                            if distance < self.overlap_threshold:
+                                product_inner['duplicate'] = True
         return data
 
 
