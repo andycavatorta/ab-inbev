@@ -32,6 +32,8 @@ from os import walk
 from os.path import join, dirname
 import RPi.GPIO as GPIO
 import smtplib
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
 import shutil
 import tensorflow as tf
 import time
@@ -376,8 +378,8 @@ class Classifier():
                             result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
                             classifiers = result[u'images'][0][u'classifiers']
                             if len(classifiers) > 0:
-                                if  classifiers[0][u'classes'][0][u'class'] == 'stella':
-                                    continue
+                                #if  classifiers[0][u'classes'][0][u'class'] == 'stella':
+                                #    continue
                                 imageMetadata["label"] = classifiers[0][u'classes'][0][u'class']
                                 imageMetadata["confidence"] = classifiers[0][u'classes'][0][u'score']
                                 #confidence = classifiers[0][u'classes'][0][u'score']
@@ -477,7 +479,7 @@ class ProcessInventory():
 
 class Report():
     def __init__(self):
-        self.to_field = "andycavatorta@gmail.com, joaopedrocosta@me.com"
+        self.to_list = ["andycavatorta@gmail.com", "joaopedrocosta@me.com"]
         self.from_field = "simurghnodes@gmail.com"
         self.password_field = "5ed0n6rum15"
         self.SMTP_server = "smtp.gmail.com"
@@ -499,18 +501,15 @@ class Report():
         pass 
 
     def send_email(self, inventory):
-
-        import smtplib
-        from email.mime.image import MIMEImage
-        from email.mime.multipart import MIMEMultipart
-
+        COMMASPACE = ', '
         # Create the container (outer) email message.
         msg = MIMEMultipart()
-        msg['Subject'] = 'AB-InBev nventory Report'
+        msg['Subject'] = 'AB-InBev Inventory Report'
         # me == the sender's email address
         # family = the list of all recipients' email addresses
         msg['From'] = self.from_field
-        msg['To'] = self.to_field
+        msg['To'] = COMMASPACE.join(self.to_list)
+        msg['Body'] = "asdfasdfasdfasdf"
         msg.preamble = 'Inventory on {}'.format(time.strftime('%A, %B %d %Y at %H:%M:%S'))
 
         # Assume we know that the image files are all in PNG format
