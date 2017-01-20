@@ -172,7 +172,8 @@ class ImageParser(): # class not necessary.  used for organization
         img_for_circle_detection = cv2.Canny(img_for_circle_detection, 0, 23, True)
         img_for_circle_detection = cv2.adaptiveThreshold(img_for_circle_detection,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
         print "Detecting circles..."
-        circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
+        circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=60,maxRadius=140)
+        #circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
 
         testFileName = "circleDetectionTest_{}.png".format(camera_id)
         cv2.imwrite(testFileName ,img_for_circle_detection) 
