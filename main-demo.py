@@ -531,13 +531,13 @@ class Report():
         msg.attach(part1)
 
         # Assume we know that the image files are all in PNG format
-        for file in ["inventory_raw.png","inventory_no_dupes.png"]:
-            # Open the files in binary mode.  Let the MIMEImage class automatically
-            # guess the specific image type.
-            fp = open(file, 'rb')
-            img = MIMEImage(fp.read())
-            fp.close()
-            msg.attach(img)
+        file = "inventory_no_dupes.png"
+        # Open the files in binary mode.  Let the MIMEImage class automatically
+        # guess the specific image type.
+        fp = open(file, 'rb')
+        img = MIMEImage(fp.read())
+        fp.close()
+        msg.attach(img)
 
         # Send the email via our own SMTP server.
         server = smtplib.SMTP(self.SMTP_server, self.SMTP_port)
