@@ -247,7 +247,7 @@ class ImageParser(): # class not necessary.  used for organization
             for (x, y, r) in _circles:
                 # draw the circle in the output image, then draw a rectangle
                 # corresponding to the center of the circle
-                cv2.circle(img_for_circle_detection, (x, y), r, (0, 255, 0), 4)
+                cv2.circle(img_for_circle_detection, (x, y), r, (255, 0, 0), 10)
                 cv2.rectangle(img_for_circle_detection, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
          
 
