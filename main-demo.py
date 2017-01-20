@@ -208,7 +208,7 @@ class ImageParser(): # class not necessary.  used for organization
         #im = cv2.resize(im, (800,450), cv2.INTER_AREA) # resize image
 
         im = self.undistort_image(im) # get unbent!
-        im = self.adjust_gamma(im, 0.9)
+        im = self.adjust_gamma(im, 1.5)
         # Set up the detector with default parameters.
         detector = cv2.SimpleBlobDetector_create(params)
 
