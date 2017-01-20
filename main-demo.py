@@ -187,7 +187,7 @@ class ImageParser(): # class not necessary.  used for organization
         # Read image
         im = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
         # Set up the detector with default parameters.
-        detector = cv2.SimpleBlobDetector()
+        detector = cv2.SimpleBlobDetector_create()
         # Detect blobs.
         keypoints = detector.detect(im)
         # Draw detected blobs as red circles.
