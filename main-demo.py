@@ -168,8 +168,20 @@ class ImageParser(): # class not necessary.  used for organization
         # cv2.imshow('dst', img_for_circle_detection)
         height, width = img_for_circle_detection.shape
         img_for_circle_detection = cv2.medianBlur(img_for_circle_detection,21)
+
+        testFileName = "median_{}.png".format(camera_id)
+        cv2.imwrite(testFileName ,img_for_circle_detection)
+
         img_for_circle_detection = cv2.blur(img_for_circle_detection,(1,1))
+
+        testFileName = "blur_{}.png".format(camera_id)
+        cv2.imwrite(testFileName ,img_for_circle_detection)
+
         img_for_circle_detection = cv2.Canny(img_for_circle_detection, 0, 23, True)
+
+        testFileName = "canny_{}.png".format(camera_id)
+        cv2.imwrite(testFileName ,img_for_circle_detection)
+
         img_for_circle_detection = cv2.adaptiveThreshold(img_for_circle_detection,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
         print "Detecting circles..."
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
@@ -181,8 +193,8 @@ class ImageParser(): # class not necessary.  used for organization
 
         circles = np.uint16(np.around(circles))
         margin = 30
-        for x, y, radius in circles[0,:]:
-            x=int(x)
+        for x, y, radius in circles[0,:]
+:            x=int(x)
             y=int(y)
             radius=int(radius)
             #leftEdge = x-radius-margin
