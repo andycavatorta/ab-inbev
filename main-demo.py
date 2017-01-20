@@ -374,6 +374,8 @@ class Classifier():
                             result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
                             classifiers = result[u'images'][0][u'classifiers']
                             if len(classifiers) > 0:
+                                if  classifiers[0][u'classes'][0][u'class'] == 'stella':
+                                    continue
                                 imageMetadata["label"] = classifiers[0][u'classes'][0][u'class']
                                 imageMetadata["confidence"] = classifiers[0][u'classes'][0][u'score']
                                 #confidence = classifiers[0][u'classes'][0][u'score']
