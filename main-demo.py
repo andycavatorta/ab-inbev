@@ -83,7 +83,7 @@ class Cameras():
             self.pins = [10,24,23,22,27,18,17,15,14,4,3,2 ]
             #self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
             self.x_offsets = [0,750,1400,0,750,1400,0,750,1400,0,750,1400]
-            self.y_offsets = [0,0,0,360,360,360,720,720,720,1080,1080,1080]
+            self.y_offsets = [0,0,0,380,380,380,760,760,760,1140,1140,1140]
             #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
             #self.y_offsets = [1350,1350,1350, 900,900,900,450,450,450,0,0,0  ]
             self.images_folder_name = ("%s/camera_capture_images") % (os.path.dirname(os.path.realpath(__file__)))
@@ -307,7 +307,8 @@ class ImageParser(): # class not necessary.  used for organization
                 'topEdge':topEdge,
                 'bottomEdge':bottomEdge,
                 'label':"",
-                'confidence':0
+                'confidence':0,
+                'duplicate':False
             } )
             #print "detected circle:", repr(x), repr(y), repr(radius), leftEdge, rightEdge, topEdge, bottomEdge
         # cv2.imshow('detected circles',img_for_cropping)
@@ -431,8 +432,8 @@ class ProcessInventory():
                     cam_new.append(product)
         return data_new
     def detect_overlaps(self, data):
-
         return data
+
 
     def collate_inventory(self):
         inventory = dict(self.inventory_template)
