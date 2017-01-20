@@ -248,7 +248,7 @@ class ImageParser(): # class not necessary.  used for organization
                 # draw the circle in the output image, then draw a rectangle
                 # corresponding to the center of the circle
                 cv2.circle(img_for_circle_detection, (x, y), r, (255, 0, 0), 10)
-                cv2.rectangle(img_for_circle_detection, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+                cv2.rectangle(img_for_circle_detection, (x - 40, y - 40), (x + 40, y + 40), (0, 128, 255), -1)
          
 
                 testFileName = "{}_4_with_circles.png".format(camera_id)
