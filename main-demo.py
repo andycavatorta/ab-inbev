@@ -154,7 +154,7 @@ class ImageParser(): # class not necessary.  used for organization
         # here the undistortion will be computed
         return cv2.undistort(image,cam,distCoeff)
 
-    def adjust_gamma(image, gamma=1.0):
+    def adjust_gamma(self, image, gamma=1.0):
         # build a lookup table mapping the pixel values [0, 255] to
         # their adjusted gamma values
         invGamma = 1.0 / gamma
@@ -208,7 +208,7 @@ class ImageParser(): # class not necessary.  used for organization
         #im = cv2.resize(im, (800,450), cv2.INTER_AREA) # resize image
 
         im = self.undistort_image(im) # get unbent!
-        im = adjust_gamma(im, 1.5)
+        im = self.adjust_gamma(im, 1.5)
         # Set up the detector with default parameters.
         detector = cv2.SimpleBlobDetector_create(params)
 
