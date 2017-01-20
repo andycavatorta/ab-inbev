@@ -210,7 +210,7 @@ class ImageParser(): # class not necessary.  used for organization
         im = self.undistort_image(im) # get unbent!
         im = self.adjust_gamma(im, 1.5)
 
-        im = cv2.medianBlur(im,21)
+        im = cv2.medianBlur(im,5)
 
         # Set up the detector with default parameters.
         detector = cv2.SimpleBlobDetector_create(params)
