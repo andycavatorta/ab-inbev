@@ -520,7 +520,7 @@ class Report():
         # me == the sender's email address
         # family = the list of all recipients' email addresses
         msg['From'] = self.from_field
-        to_field = COMMASPACE.join(self.to_list)
+        msg["To"] = COMMASPACE.join(self.to_list)
         msg['Body'] = "asdfasdfasdfasdf"
         msg.preamble = 'Inventory on {}'.format(time.strftime('%A, %B %d %Y at %H:%M:%S'))
 
@@ -537,7 +537,7 @@ class Report():
         server = smtplib.SMTP(self.SMTP_server, self.SMTP_port)
         server.starttls()
         server.login(self.from_field, self.password_field)
-        server.sendmail(self.from_field, to_field, msg.as_string())
+        server.sendmail(self.from_field, self.to_list msg.as_string())
         server.quit()
 
 
