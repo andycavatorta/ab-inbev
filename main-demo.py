@@ -194,6 +194,9 @@ class ImageParser(): # class not necessary.  used for organization
 
         # Read image
         im = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+        im = cv2.resize(im, (800,450), cv2.INTER_AREA) # resize image
+        
+        im = self.undistort_image(im) # get unbent!
         # Set up the detector with default parameters.
         detector = cv2.SimpleBlobDetector_create(params)
 
