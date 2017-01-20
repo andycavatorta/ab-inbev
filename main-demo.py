@@ -5,7 +5,7 @@ old:
     create new images for feedback
 
 new features:
-    detect / fix overlap
+    x detect / fix overlap
     email report
         slick formatting
         inventory
@@ -83,7 +83,7 @@ class Cameras():
             GPIO.setmode(GPIO.BCM)
             self.pins = [10,24,23,22,27,18,17,15,14,4,3,2 ]
             #self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
-            self.x_offsets = [0,700,1400,0,700,1400,0,700,1400,0,700,1400]
+            self.x_offsets = [0,700,1375,0,700,1375,0,700,1375,0,700,1375]
             self.y_offsets = [0,0,0,380,380,380,760,760,760,1140,1140,1140]
             #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
             #self.y_offsets = [1350,1350,1350, 900,900,900,450,450,450,0,0,0  ]
