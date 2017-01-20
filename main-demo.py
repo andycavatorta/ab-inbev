@@ -33,6 +33,8 @@ import smtplib
 import shutil
 import tensorflow as tf
 import time
+
+from watson_developer_cloud import VisualRecognitionV3
 #import zipfile
 
 PATH_FOR_THIS_FILE = os.path.dirname(os.path.realpath(__file__))
@@ -356,6 +358,20 @@ class Classifier():
                     imageMetadata["confidence"] = predictions[0][top_k[0]]
 
 
+    def classify_images_watson(self, imageMetadataList):
+        visual_recognition = VisualRecognitionV3('2016-05-20', api_key='753a741d6f32d80e1935503b40a8a00f317e85c6')
+
+        with tf.Session() as sess:
+            image_count = 0
+            for camera in  imageMetadataList:
+                for imageMetadata in camera:
+                    print "classifying image", image_count
+                    image_count += 1
+                    with open(imageMetadata["pathName"], 'rb') as image_file:
+                        result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
+                        print result
+
+
 def data_viz(img_metadata):
     canvas = np.zeros((2400,2400,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -467,9 +483,12 @@ def main():
     parsed_images = imageparser.get_parsed_images()
     parsed_folder_name = imageparser.get_foldername()
     print_temp()
-    classifier.classify_images(parsed_images)
+    #classifier.classify_images(parsed_images)
+    classifier.classify_images_watson(parsed_images)
+
     print_temp()
     print parsed_images
+    return
     parsed_images_processed = processinventory.process_inventory_data(parsed_images)
     print_temp()
     inventory = processinventory.collate_inventory()
