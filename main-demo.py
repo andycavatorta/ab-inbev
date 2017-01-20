@@ -83,7 +83,7 @@ class Cameras():
             self.pins = [10,24,23,22,27,18,17,15,14,4,3,2 ]
             #self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
             self.x_offsets = [0,750,1400,0,750,1400,0,750,1400,0,750,1400]
-            self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
+            self.y_offsets = [0,0,0,400,400,400,800,800,800,1200,1200,1200]
             #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
             #self.y_offsets = [1350,1350,1350, 900,900,900,450,450,450,0,0,0  ]
             self.images_folder_name = ("%s/camera_capture_images") % (os.path.dirname(os.path.realpath(__file__)))
@@ -510,6 +510,6 @@ def main():
     data_viz(parsed_images_processed)
     print_temp()
     report.send_email(inventory)
-    time.sleep(60)
+    #time.sleep(60)
     print_temp()
 main()
