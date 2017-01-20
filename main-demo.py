@@ -410,7 +410,7 @@ def print_temp():
 class ProcessInventory():
     def __init__(self):
         self.confidence_threshold = 0.5
-        self.overlap_threshold = 200
+        self.overlap_threshold = 150
         self.data_raw = None
         self.data_processed = None
         self.inventory_template = {
@@ -584,6 +584,6 @@ def main():
 
         print_temp()
         report.send_email(inventory)
-        #time.sleep(60)
+        time.sleep(60)
         print_temp()
 main()
