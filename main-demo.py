@@ -196,7 +196,7 @@ class ImageParser(): # class not necessary.  used for organization
         # Show keypoints
 
         testFileName = "{}_2_blob.png".format(camera_id)
-        cv2.imwrite(testFileName ,img_for_circle_detection)
+        cv2.imwrite(testFileName ,im_with_keypoints)
 
 
         #img_for_circle_detection = cv2.medianBlur(img_for_circle_detection,21)
