@@ -245,7 +245,7 @@ class ImageParser(): # class not necessary.  used for organization
             _circles = np.round(circles[0, :]).astype("int")
          
             # loop over the (x, y) coordinates and radius of the circles
-            for (x, y, r) in _circles:
+            for (x, y, radius) in _circles:
                 # draw the circle in the output image, then draw a rectangle
                     # corresponding to the center of the circle
                 leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
@@ -253,7 +253,7 @@ class ImageParser(): # class not necessary.  used for organization
                 topEdge = y-radius-margin if y-radius-margin >=0 else 0
                 bottomEdge = y+radius+margin if y+radius+margin <= height else height
 
-                #cv2.circle(img_for_circle_detection, (x, y), r, (255, 0, 0), 10)
+                #cv2.circle(img_for_circle_detection, (x, y), radius, (255, 0, 0), 10)
                 cv2.rectangle(img_for_circle_detection, (leftEdge, topEdge), (rightEdge, bottomEdge), (0, 128, 255), -1)
          
 
