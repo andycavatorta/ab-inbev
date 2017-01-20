@@ -387,14 +387,14 @@ class Classifier():
                         print "exception in classify_images_watson ", e
 
 
-def data_viz(img_metadata):
+def data_viz(img_metadata, filename):
     canvas = np.zeros((2400,2400,3), np.uint8)
     font = cv2.FONT_HERSHEY_SIMPLEX
     for camera in img_metadata:
         for imageMetadata in camera:
             cv2.circle(canvas, (imageMetadata['totalX'],imageMetadata['totalY']),40, (200,200,200), -1)
             cv2.putText(canvas, "%s - %s" % (imageMetadata['label'],imageMetadata['capture']), (imageMetadata['totalX']-30,imageMetadata['totalY']+50), font, 0.5,(100,100,100),2,cv2.LINE_AA)
-    cv2.imwrite('results.png',canvas)
+    cv2.imwrite('{}.png'.format(filename),canvas)
     cv2.destroyAllWindows()
 
 
@@ -449,6 +449,16 @@ class ProcessInventory():
                             if distance < self.overlap_threshold:
                                 product_inner['duplicate'] = True
         return data
+
+    def filter_duplicates(self, data):
+        data_new = []
+        for cam in self.data_raw:
+            cam_new = []
+            data_new.append(cam_new)
+            for product in cam:
+                if not product["duplicate"] :
+                    cam_new.append(product)
+        return data_new
 
 
     def collate_inventory(self):
@@ -529,7 +539,9 @@ def main():
     print "inventory=", repr(inventory)
     print parsed_images_processed
     print_temp()
-    data_viz(parsed_images_processed)
+    data_viz(parsed_images_processed, "inventory_raw")
+    data_viz(processinventory.filter_duplicates(parsed_images_processed), "inventory_no_dupes")
+
     print_temp()
     report.send_email(inventory)
     #time.sleep(60)
