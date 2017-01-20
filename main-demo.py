@@ -380,7 +380,7 @@ class Classifier():
                                 #label = classifiers[0][u'classes'][0][u'class']
                                 #print confidence, label
                     except Exception as e:
-                        print "exception in classify_images_watson, " e
+                        print "exception in classify_images_watson ", e
 
 
 def data_viz(img_metadata):
