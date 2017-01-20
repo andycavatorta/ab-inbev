@@ -94,6 +94,7 @@ class Cameras():
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
             self.lastImages = []
         def take_all_photos(self):
+            self.lastImages = []
             self.empty_directory()
             self.set_all_pins_low() # just in case
             for cam in self.cameras:
@@ -320,6 +321,7 @@ class ImageParser(): # class not necessary.  used for organization
         print "Processing image done"
 
     def processImages(self, captureLIst):
+        self.parsedCaptures = [] # 2D list of capture:
         self.empty_directory()
         for index, cap_metadata in enumerate(captureLIst):
             self.process_image(cap_metadata[0],index, cap_metadata[1], cap_metadata[2])
