@@ -239,6 +239,7 @@ class ImageParser(): # class not necessary.  used for organization
 
         #im_with_keypoints = cv2.drawKeypoints(img_for_circle_detection, circles, np.array([]), (255,0,0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         # ensure at least some circles were found
+        margin = 30
         if circles is not None:
             # convert the (x, y) coordinates and radius of the circles to integers
             _circles = np.round(circles[0, :]).astype("int")
@@ -246,9 +247,14 @@ class ImageParser(): # class not necessary.  used for organization
             # loop over the (x, y) coordinates and radius of the circles
             for (x, y, r) in _circles:
                 # draw the circle in the output image, then draw a rectangle
-                # corresponding to the center of the circle
-                cv2.circle(img_for_circle_detection, (x, y), r, (255, 0, 0), 10)
-                cv2.rectangle(img_for_circle_detection, (x - 40, y - 40), (x + 40, y + 40), (0, 128, 255), -1)
+                    # corresponding to the center of the circle
+                leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
+                rightEdge = x+radius+margin if x+radius+margin <= width else width
+                topEdge = y-radius-margin if y-radius-margin >=0 else 0
+                bottomEdge = y+radius+margin if y+radius+margin <= height else height
+
+                #cv2.circle(img_for_circle_detection, (x, y), r, (255, 0, 0), 10)
+                cv2.rectangle(img_for_circle_detection, (leftEdge, topEdge), (rightEdge, bottomEdge), (0, 128, 255), -1)
          
 
                 testFileName = "{}_4_with_circles.png".format(camera_id)
