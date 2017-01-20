@@ -494,7 +494,7 @@ class ProcessInventory():
 
 class Report():
     def __init__(self):
-        self.to_list = ["andycavatorta@gmail.com", "hellyeah@media.mit.edu", "joaopedrocosta@me.com"]
+        self.to_list = ["andycavatorta@gmail.com", "hellyeah@media.mit.edu", "joaopedrocosta@me.com","maisie.devine@zx-ventures.com"]
         self.from_field = "simurghnodes@gmail.com"
         self.password_field = "5ed0n6rum15"
         self.SMTP_server = "smtp.gmail.com"
