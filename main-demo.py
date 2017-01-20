@@ -29,6 +29,7 @@ from os import environ
 from os import walk
 from os.path import join, dirname
 import RPi.GPIO as GPIO
+import shutil
 import tensorflow as tf
 import time
 #import zipfile
