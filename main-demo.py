@@ -372,10 +372,11 @@ class Classifier():
                         result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
                         classifiers = result[u'images'][0][u'classifiers']
                         if len(classifiers) > 0:
-                            confidence = classifiers[0][u'classes'][0][u'score']
-                            label = classifiers[0][u'classes'][0][u'class']
-                            print confidence, label
-
+                            imageMetadata["label"] = classifiers[0][u'classes'][0][u'class']
+                            imageMetadata["confidence"] = classifiers[0][u'classes'][0][u'score']
+                            #confidence = classifiers[0][u'classes'][0][u'score']
+                            #label = classifiers[0][u'classes'][0][u'class']
+                            #print confidence, label
 
 
 def data_viz(img_metadata):
@@ -494,7 +495,6 @@ def main():
 
     print_temp()
     print parsed_images
-    return
     parsed_images_processed = processinventory.process_inventory_data(parsed_images)
     print_temp()
     inventory = processinventory.collate_inventory()
