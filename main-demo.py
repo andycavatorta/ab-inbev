@@ -80,8 +80,8 @@ class Cameras():
         def __init__(self):
             GPIO.setmode(GPIO.BCM)
             self.pins = [2,3,4,14,15,17,18,27,22,23,24,10]
-            #self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
-            #self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
+            self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
+            self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
             #self.x_offsets = [1600,800,0,1600,800,0,1600,800,0,1600,800,0,]
             #self.y_offsets = [1350,1350,1350, 900,900,900,450,450,450,0,0,0  ]
             self.images_folder_name = ("%s/camera_capture_images") % (os.path.dirname(os.path.realpath(__file__)))
