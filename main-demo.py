@@ -184,10 +184,19 @@ class ImageParser(): # class not necessary.  used for organization
         cv2.imwrite(testFileName ,img_for_circle_detection)
 
 
+        params = cv2.SimpleBlobDetector_Params()
+        params.filterByCircularity = True
+        params.minCircularity = 0.1
+
+        #params.filterByArea = True
+        #params.minArea = 15
+        #params.maxCircularity = 0
+
         # Read image
         im = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
         # Set up the detector with default parameters.
         detector = cv2.SimpleBlobDetector_create()
+
         # Detect blobs.
         keypoints = detector.detect(im)
         # Draw detected blobs as red circles.
