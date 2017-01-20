@@ -29,6 +29,7 @@ from os import environ
 from os import walk
 from os.path import join, dirname
 import RPi.GPIO as GPIO
+import smtplib
 import tensorflow as tf
 import time
 #import zipfile
@@ -155,7 +156,6 @@ class ImageParser(): # class not necessary.  used for organization
 
     def process_image(self, filepath, camera_id, offset_x, offset_y):
         print "Processing image...", camera_id, filepath
-        self.empty_directory()
         parsedImageMetadata = [] 
         self.parsedCaptures.append(parsedImageMetadata)# images are introduce in order of cap_id, so list index == cap_id
         img_for_cropping = cv2.imread(filepath)
@@ -232,6 +232,7 @@ class ImageParser(): # class not necessary.  used for organization
         print "Processing image done"
 
     def processImages(self, captureLIst):
+        self.empty_directory()
         for index, cap_metadata in enumerate(captureLIst):
             self.process_image(cap_metadata[0],index, cap_metadata[1], cap_metadata[2])
 
@@ -345,8 +346,14 @@ class Report():
             'mapImagePath':""
         }
 
-    def generate_email(self):
-        pass
+    def generate_email(self):         
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login("YOUR EMAIL ADDRESS", "YOUR PASSWORD")
+         
+        msg = "YOUR MESSAGE!"
+        server.sendmail("YOUR EMAIL ADDRESS", "THE EMAIL ADDRESS TO SEND TO", msg)
+        server.quit()
 
     def send_email(self):
         pass
@@ -374,6 +381,5 @@ def main():
         print "inventory=", repr(inventory)
         print parsed_images_processed
         data_viz(parsed_images_processed)
-
         time.sleep(60)
 main()
