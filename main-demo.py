@@ -241,10 +241,10 @@ class ImageParser(): # class not necessary.  used for organization
         # ensure at least some circles were found
         if circles is not None:
             # convert the (x, y) coordinates and radius of the circles to integers
-            circles = np.round(circles[0, :]).astype("int")
+            _circles = np.round(circles[0, :]).astype("int")
          
             # loop over the (x, y) coordinates and radius of the circles
-            for (x, y, r) in circles:
+            for (x, y, r) in _circles:
                 # draw the circle in the output image, then draw a rectangle
                 # corresponding to the center of the circle
                 cv2.circle(img_for_circle_detection, (x, y), r, (0, 255, 0), 4)
