@@ -373,7 +373,7 @@ class Classifier():
                         print "classifying image", image_count
                         image_count += 1
                         with open(imageMetadata["pathName"], 'rb') as image_file:
-                            result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.95)
+                            result = visual_recognition.classify(images_file=image_file,  classifier_ids=['beercaps_697951100'], threshold=0.99)
                             classifiers = result[u'images'][0][u'classifiers']
                             if len(classifiers) > 0:
                                 if  classifiers[0][u'classes'][0][u'class'] == 'stella':
@@ -477,7 +477,7 @@ class ProcessInventory():
 
 class Report():
     def __init__(self):
-        self.to_field = "andycavatorta@gmail.com"
+        self.to_field = "andycavatorta@gmail.com, joaopedrocosta@me.com"
         self.from_field = "simurghnodes@gmail.com"
         self.password_field = "5ed0n6rum15"
         self.SMTP_server = "smtp.gmail.com"
