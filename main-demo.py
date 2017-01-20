@@ -34,6 +34,7 @@ import RPi.GPIO as GPIO
 import smtplib
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import shutil
 import tensorflow as tf
 import time
@@ -525,6 +526,9 @@ class Report():
         msg["To"] = COMMASPACE.join(self.to_list)
         msg['Body'] = "asdfasdfasdfasdf"
         msg.preamble = 'Inventory on {}'.format(time.strftime('%A, %B %d %Y at %H:%M:%S'))
+        text = repr(inventory)
+        part1 = MIMEText(text, 'plain')
+        msg.attach(part1)
 
         # Assume we know that the image files are all in PNG format
         for file in ["inventory_raw.png","inventory_no_dupes.png"]:
