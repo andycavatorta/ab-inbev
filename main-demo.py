@@ -48,12 +48,10 @@ class Camera():
             GPIO.output(pin, GPIO.LOW)
         def take_photo(self):
             print  'Camera {} taking picture'.format(self.cam_id)
-
             GPIO.output(self.pin, GPIO.HIGH)
             time.sleep(1)
             #filename = '{}/image_{}.png'.format(self.images_folder,self.cam_id)
             filename = '%s/image_%s.png' % (self.images_folder,self.cam_id)
-            
             try: 
                 cap = cv2.VideoCapture(0)
                 cap.set(3,1280)
@@ -103,7 +101,6 @@ class Cameras():
             return self.lastImages
         def get_offset_from_id(self, id):
             return [self.x_offsets[id],self.y_offsets[id]]
-
         def empty_directory(self):
             for file in os.listdir(self.images_folder_name):
                 file_path = os.path.join(self.images_folder_name, file)
@@ -161,11 +158,11 @@ class ImageParser(): # class not necessary.  used for organization
         print "Processing image...", camera_id, filepath
         parsedImageMetadata = [] 
         self.parsedCaptures.append(parsedImageMetadata)# images are introduce in order of cap_id, so list index == cap_id
-        img_for_cropping = cv2.imread(filepath)
-        img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA)
-        img_for_cropping = self.undistort_image(img_for_cropping)
+        img_for_cropping = cv2.imread(filepath) # read image into memory
+        img_for_cropping = cv2.resize(img_for_cropping, (800,450), cv2.INTER_AREA) # resize image
+        img_for_cropping = self.undistort_image(img_for_cropping) # get unbent!
 
-        img_for_circle_detection = cv2.imread(filepath,0)
+        img_for_circle_detection = cv2.imread(filepath,0) # 
         img_for_circle_detection = cv2.resize(img_for_circle_detection, (800,450), cv2.INTER_AREA)
         img_for_circle_detection = self.undistort_image(img_for_circle_detection)
         # cv2.imshow('dst', img_for_circle_detection)
@@ -174,31 +171,28 @@ class ImageParser(): # class not necessary.  used for organization
         img_for_circle_detection = cv2.blur(img_for_circle_detection,(1,1))
         img_for_circle_detection = cv2.Canny(img_for_circle_detection, 0, 23, True)
         img_for_circle_detection = cv2.adaptiveThreshold(img_for_circle_detection,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,17,2)
-
         print "Detecting circles..."
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
+
+        cv2.imwrite("circleDetectionTest.png",img_for_circle_detection) 
+
         circles = np.uint16(np.around(circles))
         margin = 30
         for x, y, radius in circles[0,:]:
             x=int(x)
             y=int(y)
             radius=int(radius)
-
             #leftEdge = x-radius-margin
             #rightEdge = x+radius+margin
             #topEdge = y-radius-margin
             #bottomEdge = y+radius+margin
-
             #if leftEdge < 0 or  rightEdge > width or topEdge < 0 or bottomEdge > height:
             #   continue
-
             leftEdge = x-radius-margin if x-radius-margin >= 0 else 0
             rightEdge = x+radius+margin if x+radius+margin <= width else width
             topEdge = y-radius-margin if y-radius-margin >=0 else 0
             bottomEdge = y+radius+margin if y+radius+margin <= height else height
-
             crop_img = img_for_cropping[topEdge:bottomEdge, leftEdge:rightEdge]
-
             imageName = 'image_%s_%s_%s.jpg'%(camera_id,x, y)
             pathName = '%s/%s'%(self.foldername, imageName)
             cv2.imwrite(pathName,crop_img)
@@ -209,7 +203,6 @@ class ImageParser(): # class not necessary.  used for organization
             #print len(circles)
             totalX = x + offset_x
             totalY = y + offset_y
-
             parsedImageMetadata.append( {
                 'capture':camera_id,
                 'imageName':imageName,
@@ -227,9 +220,7 @@ class ImageParser(): # class not necessary.  used for organization
                 'confidence':0
             } )
             #print "detected circle:", repr(x), repr(y), repr(radius), leftEdge, rightEdge, topEdge, bottomEdge
-
         # cv2.imshow('detected circles',img_for_cropping)
-
         cv2.destroyAllWindows()
         #print parsedImageMetadata
         print "Processing image done"
@@ -269,7 +260,7 @@ class Classifier():
                     top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]# Sort to show labels of first prediction in order of confidence
                     #print "top_k=", repr(top_k)
                     self.check_temp()
-                    time.sleep(5)
+                    time.sleep(2)
                     for node_id in top_k:
                         human_string = self.label_lines[node_id]
                         score = predictions[0][node_id]
@@ -277,7 +268,6 @@ class Classifier():
                     # print(self.label_lines[top_k[0]])
                     imageMetadata["label"] = self.label_lines[top_k[0]]
                     imageMetadata["confidence"] = predictions[0][top_k[0]]
-
 
 
 def data_viz(img_metadata):
@@ -290,6 +280,9 @@ def data_viz(img_metadata):
     cv2.imwrite('results.png',canvas)
     cv2.destroyAllWindows()
 
+
+def print_temp():
+    print "temperature=", commands.getstatusoutput("/opt/vc/bin/vcgencmd measure_temp")
 
 
 class ProcessInventory():
@@ -334,6 +327,7 @@ class ProcessInventory():
                     print "ProcessInventory.collate_inventory: product name not found:", repr(product)
         return inventory
 
+
 class Report():
     def __init__(self):
         self.to_field = "andycavatorta@gmail.com"
@@ -343,7 +337,6 @@ class Report():
         self.SMTP_port = 587
 
     def collect_inventory_data(self):
-
         #PATH_FOR_THIS_FILE
         d = {
             'cooler_id':0,
@@ -355,9 +348,10 @@ class Report():
             'mapImagePath':""
         }
 
-    def generate_email(self):         
+    def generate_email(self):  
         pass 
-    def send_email(self):
+
+    def send_email(self, inventory):
         msg = "asdf"
         server = smtplib.SMTP(self.SMTP_server, self.SMTP_port)
         server.starttls()
@@ -368,26 +362,32 @@ class Report():
 
 def main():
     # create instances
+    print_temp()
     cameras = Cameras()
+    print_temp()
     imageparser = ImageParser()
+    print_temp()
     classifier = Classifier()
+    print_temp()
     processinventory = ProcessInventory()
+    print_temp()
     report = Report()
-    while True:
-        print "starting main inventory loop"
-        cameras.take_all_photos()
-        time.sleep(1)
-        capture_list = cameras.get_capture_data()
-        imageparser.processImages(capture_list)
-        parsed_images = imageparser.get_parsed_images()
-        parsed_folder_name = imageparser.get_foldername()
-        classifier.classify_images(parsed_images)
-        print parsed_images
-        parsed_images_processed = processinventory.process_inventory_data(parsed_images)
-        inventory = processinventory.collate_inventory()
-        print "inventory=", repr(inventory)
-        print parsed_images_processed
-        data_viz(parsed_images_processed)
-        report.send_email()
-        time.sleep(60)
+    print_temp()
+    #while True:
+    print "starting main inventory loop"
+    cameras.take_all_photos()
+    time.sleep(1)
+    capture_list = cameras.get_capture_data()
+    imageparser.processImages(capture_list)
+    parsed_images = imageparser.get_parsed_images()
+    parsed_folder_name = imageparser.get_foldername()
+    classifier.classify_images(parsed_images)
+    print parsed_images
+    parsed_images_processed = processinventory.process_inventory_data(parsed_images)
+    inventory = processinventory.collate_inventory()
+    print "inventory=", repr(inventory)
+    print parsed_images_processed
+    data_viz(parsed_images_processed)
+    report.send_email(inventory)
+    time.sleep(60)
 main()
