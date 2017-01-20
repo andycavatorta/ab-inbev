@@ -174,7 +174,8 @@ class ImageParser(): # class not necessary.  used for organization
         print "Detecting circles..."
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
 
-        cv2.imwrite("circleDetectionTest.png",img_for_circle_detection) 
+        testFileName = "circleDetectionTest_{}.png".format(camera_id)
+        cv2.imwrite(testFileName ,img_for_circle_detection) 
 
         circles = np.uint16(np.around(circles))
         margin = 30
