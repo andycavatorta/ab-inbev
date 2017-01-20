@@ -419,6 +419,16 @@ class ProcessInventory():
             "stella":0,
             "ultra":0
         }
+        self.confidence_threshold_by_product = {
+            "budlight":0.90,
+            "budweiser":0.90,
+            "corona":0.90,
+            "hoegaarden":0.90,
+            "platinum":0.90,
+            "stella":0.90,
+            "ultra":0.90
+        }
+
     def process_inventory_data(self, data):
         self.data_raw = data
         data_filtered = self.filter_low_confidence(self.data_raw)
@@ -431,7 +441,9 @@ class ProcessInventory():
             cam_new = []
             data_new.append(cam_new)
             for product in cam:
-                if product["confidence"] >= self.confidence_threshold:
+                if product["label"] == "":
+                    continue
+                if product["confidence"] >= self.confidence_threshold_by_product[product["label"]]:
                     cam_new.append(product)
         return data_new
     def detect_overlaps(self, data):
@@ -525,7 +537,7 @@ class Report():
         server = smtplib.SMTP(self.SMTP_server, self.SMTP_port)
         server.starttls()
         server.login(self.from_field, self.password_field)
-        server.sendmail(self.from_field, self.to_field, msg.as_string())
+        server.sendmail(self.from_field, msg['To'], msg.as_string())
         server.quit()
 
 
