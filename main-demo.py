@@ -199,7 +199,7 @@ class ImageParser(): # class not necessary.  used for organization
         params.minCircularity = 0.1
 
         params.filterByArea = True
-        params.minArea =  10000
+        params.minArea =  8000
         params.maxArea = 200000
         #params.maxCircularity = 0
 
@@ -209,6 +209,9 @@ class ImageParser(): # class not necessary.  used for organization
 
         im = self.undistort_image(im) # get unbent!
         im = self.adjust_gamma(im, 0.5)
+        
+        im = cv2.medianBlur(im,21)
+
         # Set up the detector with default parameters.
         detector = cv2.SimpleBlobDetector_create(params)
 
