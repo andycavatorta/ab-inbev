@@ -194,13 +194,13 @@ class ImageParser(): # class not necessary.  used for organization
         #cv2.imwrite(testFileName ,img_for_circle_detection)
 
 
-        params = cv2.SimpleBlobDetector_Params()
-        params.filterByCircularity = True
-        params.minCircularity = 0.1
+        #params = cv2.SimpleBlobDetector_Params()
+        #params.filterByCircularity = True
+        #params.minCircularity = 0.1
 
-        params.filterByArea = True
-        params.minArea =  5000
-        params.maxArea = 200000
+        #params.filterByArea = True
+        #params.minArea =  5000
+        #params.maxArea = 200000
         #params.maxCircularity = 0
 
         # Read image
@@ -237,11 +237,22 @@ class ImageParser(): # class not necessary.  used for organization
         print "Detecting circles..."
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
 
-        im_with_keypoints = cv2.drawKeypoints(img_for_circle_detection, circles, np.array([]), (255,0,0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        #im_with_keypoints = cv2.drawKeypoints(img_for_circle_detection, circles, np.array([]), (255,0,0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        # ensure at least some circles were found
+        if circles is not None:
+            # convert the (x, y) coordinates and radius of the circles to integers
+            circles = np.round(circles[0, :]).astype("int")
+         
+            # loop over the (x, y) coordinates and radius of the circles
+            for (x, y, r) in circles:
+                # draw the circle in the output image, then draw a rectangle
+                # corresponding to the center of the circle
+                cv2.circle(img_for_circle_detection, (x, y), r, (0, 255, 0), 4)
+                cv2.rectangle(img_for_circle_detection, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+         
 
-
-        testFileName = "{}_4_im_with_keypoints.png".format(camera_id)
-        cv2.imwrite(testFileName ,im_with_keypoints)
+                testFileName = "{}_4_with_circles.png".format(camera_id)
+                cv2.imwrite(testFileName ,img_for_circle_detection)
         testFileName = "{}_0_croppingTest.png".format(camera_id)
         cv2.imwrite(testFileName ,img_for_cropping) 
 
