@@ -81,7 +81,7 @@ class Cameras():
             self.x_offsets = [0,800,1600,0,800,1600,0,800,1600,0,800,1600]
             self.y_offsets = [0,0,0,450,450,450,900,900,900,1350,1350,1350]
             self.images_folder_name = ("%s/camera_capture_images") % (os.path.dirname(os.path.realpath(__file__)))
-            os.makedirs(self.images_folder_name)
+            #os.makedirs(self.images_folder_name)
             self.cameras = [Camera(self.images_folder_name, c, self.pins[c], self.x_offsets[c], self.y_offsets[c]) for c in range(12)]
             self.lastImages = []
         def take_all_photos(self):
@@ -116,7 +116,7 @@ class ImageParser(): # class not necessary.  used for organization
         self.parsedCaptures = [] # 2D list of capture:
         dir_path = os.path.dirname(os.path.realpath(__file__))
         self.foldername = ("%s/cropped") %(dir_path)
-        os.makedirs(self.foldername)
+        #os.makedirs(self.foldername)
 
     def empty_directory(self):
         for file in os.listdir(self.foldername):
