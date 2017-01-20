@@ -175,7 +175,9 @@ class ImageParser(): # class not necessary.  used for organization
         circles = cv2.HoughCircles(img_for_circle_detection,cv2.HOUGH_GRADIENT,1,150, param1=70,param2=28,minRadius=30,maxRadius=80)
 
         testFileName = "circleDetectionTest_{}.png".format(camera_id)
-        cv2.imwrite(testFileName ,circles) 
+        cv2.imwrite(testFileName ,img_for_circle_detection)
+        testFileName = "croppingTest_{}.png".format(camera_id)
+        cv2.imwrite(testFileName ,img_for_cropping) 
 
         circles = np.uint16(np.around(circles))
         margin = 30
@@ -365,30 +367,35 @@ def main():
     # create instances
     print_temp()
     cameras = Cameras()
-    print_temp()
     imageparser = ImageParser()
-    print_temp()
     classifier = Classifier()
-    print_temp()
     processinventory = ProcessInventory()
-    print_temp()
     report = Report()
-    print_temp()
     #while True:
     print "starting main inventory loop"
+    print_temp()
     cameras.take_all_photos()
+    print_temp()
     time.sleep(1)
     capture_list = cameras.get_capture_data()
+    print_temp()
     imageparser.processImages(capture_list)
+    print_temp()
     parsed_images = imageparser.get_parsed_images()
     parsed_folder_name = imageparser.get_foldername()
+    print_temp()
     classifier.classify_images(parsed_images)
+    print_temp()
     print parsed_images
     parsed_images_processed = processinventory.process_inventory_data(parsed_images)
+    print_temp()
     inventory = processinventory.collate_inventory()
     print "inventory=", repr(inventory)
     print parsed_images_processed
+    print_temp()
     data_viz(parsed_images_processed)
+    print_temp()
     report.send_email(inventory)
     time.sleep(60)
+    print_temp()
 main()
