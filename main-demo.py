@@ -188,8 +188,8 @@ class ImageParser(): # class not necessary.  used for organization
         params.filterByCircularity = True
         params.minCircularity = 0.1
 
-        #params.filterByArea = True
-        #params.minArea = 15
+        params.filterByArea = True
+        params.minArea = 100
         #params.maxCircularity = 0
 
         # Read image
