@@ -256,15 +256,15 @@ for pin in camera_pins:
 	time.sleep(1)
 	number = number + 1
 
-for filename in os.listdir("%s/" % (images_folder)):
-	if filename.endswith(".png"):
-		filename = str(filename)
-		print filename
-		process_image(filename)
+# for filename in os.listdir("%s/" % (images_folder)):
+# 	if filename.endswith(".png"):
+# 		filename = str(filename)
+# 		print filename
+# 		process_image(filename)
 
-compress_folder()
-run_nn()
-process_data()
+# compress_folder()
+# run_nn()
+# process_data()
 
 
 
