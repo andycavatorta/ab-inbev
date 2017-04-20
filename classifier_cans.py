@@ -1,6 +1,6 @@
 import sys
 import tensorflow as tf
-from os import walk
+import os
 
 class Classifier():
 
@@ -11,19 +11,12 @@ class Classifier():
 						   in tf.gfile.GFile("image_classifier_cans/tf_files/retrained_labels.txt")]
 
 
-	def guess_image(self, foldername):
+	def guess_image(self, test_images_dir="image_classifier_cans/test_images"):
 	
-		files = [("i%02d.jpg" % i) for i in range(26)]
+		files = sorted([f for f in os.listdir(test_images_dir) if f.endswith(".jpg")])
 		results = []
-                
-		#for (dirpath, dirnames, filenames) in walk(foldername):
-		#	files.extend(filenames)
-		#	break
-		print("Found " + str(len(files)) + " files")			
 
-		# change this as you see fit
-		# image_path = sys.argv[1]
-		# image_path = img
+		print("Found " + str(len(files)) + " files")
 
 		# Unpersists graph from file
 		with tf.gfile.FastGFile("image_classifier_cans/tf_files/retrained_graph.pb", 'rb') as f:
@@ -36,8 +29,8 @@ class Classifier():
 			for image in files:
 
 				# Read in the image_data
-				image_data = tf.gfile.FastGFile(foldername + "/" + image, 'rb').read()
-				print(foldername + "/" + image)
+				image_data = tf.gfile.FastGFile(test_images_dir + "/" + image, 'rb').read()
+				print(test_images_dir + "/" + image)
 
 				# Feed the image_data as input to the graph and get first prediction
 				softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
