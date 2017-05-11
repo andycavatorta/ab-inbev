@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import os
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
@@ -21,9 +22,8 @@ def continuedraw():
     cv2.destroyAllWindows()  # add ellipse pattern recognization
 
 
-def crop(minr, maxr, index):
-    imgpath = './UnShelfB/bottles_B' + str(index) + '.png'
-    print(imgpath)
+def crop(minr, maxr, img_in_dir, img_in_name, img_out_dir, tmp_dir):
+    imgpath = os.path.join(img_in_dir, img_in_name)
     img = cv2.imread(imgpath)
     tmpimg = cv2.imread(imgpath)
     row, col, rgb = img.shape
@@ -37,6 +37,7 @@ def crop(minr, maxr, index):
     # hough transform
     circles1 = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1,
                                 60, param1=90, param2=30, minRadius=minr, maxRadius=maxr)
+
 
     if circles1 is not None:
         circles = circles1[0, :, :]
@@ -61,8 +62,10 @@ def crop(minr, maxr, index):
                     'width and height : ', max(i[0] - i[2], 0), min(i[0] + i[2], col), max(i[1] - i[2], 0),
                     min(i[1] + i[2], row))
 
-                imgpath = './ShelfBCrop/' + str(index) + '_' + str(step) + '.png'
-                cv2.imwrite(imgpath, tmpcrop)
+                img_in_name_base = '.'.join(img_in_name.split('.')[:-1]) # just strip off extension
+                img_out_path = os.path.join(img_out_dir, img_in_name_base
+                        + '_' + str(step) + '.png')
+                cv2.imwrite(img_out_path, tmpcrop)
                 step = step + 1
 
             else:
@@ -76,12 +79,19 @@ def crop(minr, maxr, index):
     plt.imshow(img)
     plt.title('Cropped')
 
-    tmpimgpath = './ShelfBWhole/image_' + str(index) + '.png'
+    tmpimgpath = os.path.join(tmp_dir, img_in_name)
     plt.savefig(tmpimgpath)
     plt.show()
 
     continuedraw()
 
+
+def crop_orig(minr, maxr, index):
+    imgpath = './UnShelfB/bottles_B' + str(index) + '.png'
+    print(imgpath)
+    img_out_dir = './ShelfBCrop'# + str(index) + '_' + str(step) + '.png'
+    crop(minr, maxr, "./UnShelfB", "bottles_B" + str(index)
+            + '.png', img_out_dir, "./ShelfBWhole")
 
 def cropbottle():
     raduis = [[75, 100], [75, 100], [75, 100], [75, 90], [75, 95], [75, 95], [70, 90], [70, 100], [70, 90], [75, 90],
@@ -91,7 +101,7 @@ def cropbottle():
     for tmp in raduis:
         minr = tmp[0]
         maxr = tmp[1]
-        crop(minr, maxr, index)
+        crop_orig(minr, maxr, index)
         index = index + 1
 
 
@@ -100,4 +110,4 @@ def cropbc():
     cropcan()
 
 
-cropbottle()
+#cropbottle()
