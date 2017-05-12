@@ -81,7 +81,7 @@ def crop(minr, maxr, img_in_dir, img_in_name, img_out_dir, tmp_dir):
 
     tmpimgpath = os.path.join(tmp_dir, img_in_name)
     plt.savefig(tmpimgpath)
-    plt.show()
+    #plt.show()
 
     continuedraw()
 
