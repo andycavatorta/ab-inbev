@@ -1,5 +1,6 @@
 import cv2
 import os
+import sys
 
 import CropBC
 import UnWrapImage
@@ -34,3 +35,9 @@ def crop_images(in_dir, out_dir, tmp_dir):
         img_files = [f for f in files if f.endswith("png")]
         for img_file in img_files:
             CropBC.crop(minr, maxr, in_dir, img_file, out_dir, tmp_dir)
+
+if __name__== '__main__':
+    if len(sys.argv) == 4:
+        crop_images(sys.argv[1], sys.argv[2], sys.argv[3])
+    else:
+        print('usage: "%s <in_dir> <out_dir> <tmp_dir>"')
