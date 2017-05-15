@@ -25,7 +25,9 @@ def continuedraw():
 def crop(minr, maxr, img_in_dir, img_in_name, img_out_dir, tmp_dir):
     imgpath = os.path.join(img_in_dir, img_in_name)
     img = cv2.imread(imgpath)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     tmpimg = cv2.imread(imgpath)
+    tmpimg = cv2.cvtColor(tmpimg, cv2.COLOR_BGR2RGB)
     row, col, rgb = img.shape
 
     # img = img[row / 10:(row * 9 / 10), (col / 4):(col * 3) / 4, :]
