@@ -25,7 +25,6 @@ class Classifier():
 
                 # Read in the image_data
                 image_data = tf.gfile.FastGFile(test_images_dir + "/" + image, 'rb').read()
-                #print(test_images_dir + "/" + image)
 
                 # Feed the image_data as input to the graph and get first prediction
                 softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
@@ -41,7 +40,7 @@ class Classifier():
                 #    human_string = self.label_lines[node_id]
                 #    score = predictions[0][node_id]
                 #    scores += score
-                scores = [predictions[0][node_id] for node_id in top_k]
+                scores = [(self.label_lines[node_id], predictions[0][node_id]) for node_id in top_k]
                 
-                results.append((self.label_lines[top_k[0]], scores))
+                results.append(scores)
             return results
