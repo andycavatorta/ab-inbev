@@ -48,6 +48,9 @@ def crop(minr, maxr, img_in_dir, img_in_name, img_out_dir, tmp_dir):
         num, dim = circles.shape
 
         cnt = int(num * 0.8)
+        # at junwei's suggestion, cap instances at 20
+        #XXX are we actually taking the best 20, or just an arbitrary "first 20"?
+        cnt = min(cnt, 20)
 
         step = 0
         for i in circles[:]:
@@ -106,6 +109,17 @@ def cropbottle():
         crop_orig(minr, maxr, index)
         index = index + 1
 
+
+def cropbottlecans():
+    raduis = [[65, 100], [65, 100], [65, 100], [65, 90], [65, 95], [65, 95], [65, 90], [65, 100], [65,95], [65, 90],
+              [65, 95], [65, 110]]
+    index = 0
+
+    for tmp in raduis:
+        minr = tmp[0]
+        maxr = tmp[1]
+        crop(minr, maxr, index)
+        index = index + 1
 
 def cropbc():
     cropbottle()
