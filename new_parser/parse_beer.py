@@ -23,17 +23,23 @@ def undistort_image(img):
 
     return cv2.undistort(img, cam, distCoeff)
 
+""" Correct for variable illumination
+Based on tutorial by Regis Clouard:
+https://clouard.users.greyc.fr/Pantheon/experiments/illumination-correction/index-en.html
+"""
+def correct_illumination(img, dark, bright):
+    tmp = (img-dark) / (bright-dark)
+    c1  = cv2.mean(tmp)[:3]
+
+    result = cv2.mean(img)[:3] * (c1/tmp)
+    return cv2.convertScaleAbs(result) # return an 8-bit image
+
 def find_beers(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     vis  = img.copy()
 
-    # normalize illumination
-    # TODO: replace with dark/bright correction
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-    equalized = clahe.apply(gray)
-
     # threshold
-    blur = cv2.GaussianBlur(equalized, (5,5), 0)
+    blur = cv2.GaussianBlur(gray, (5,5), 0)
     _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
 
     # detect blobs
@@ -100,35 +106,52 @@ def crop_beers(img, beer_bounds):
         cropped = img[y:y+h, x:x+w].copy()
         result.append(cropped)
 
-        cv2.imshow('result', cropped)
-        cv2.waitKey()
-
     return result
 
 if __name__== '__main__':
     
-    in_dir  = './_data/ShelfB_Test_Images/'
-    out_dir = './out/'
+    data_dir = './_data/illumination/'
+    in_dir   = './_data/ShelfB_Test_Images/'
+    out_dir  = './out/'
 
     if len(sys.argv) >= 2:
-        in_dir = sys.argv[1] + '/'
+        in_dir   = sys.argv[1] + '/'
         
-    print 'reading images from %s' % (in_dir)
+    if len(sys.argv) >= 3:
+        data_dir = sys.argv[2] + '/'
+
+    dark_dir   = data_dir + 'dark/'
+    bright_dir = data_dir + 'bright/'
+
+    print 'reading dark images from %s'   % (dark_dir)
+    dark_images   = { int(os.path.splitext(f)[0]) : cv2.imread(dark_dir   + f) 
+        for f in os.listdir(dark_dir)   if f.endswith('jpg') | f.endswith('png') }
+
+    print 'reading bright images from %s' % (bright_dir)
+    bright_images = { int(os.path.splitext(f)[0]) : cv2.imread(bright_dir + f) 
+        for f in os.listdir(bright_dir) if f.endswith('jpg') | f.endswith('png') }
+
+    print 'reading input from %s' % (in_dir)
     files = [f for f in os.listdir(in_dir) if f.endswith('jpg') | f.endswith('png')]
 
     if not os.path.isdir(out_dir):
         os.mkdir(out_dir)
 
     for f in files:
-        img         = undistort_image(cv2.imread(in_dir + f))
+        name = os.path.splitext(f)[0]
+
+        shelf  = name[0]
+        camera = int(name[1:])
+
+        img = undistort_image(cv2.imread(in_dir + f))
+        corrected = correct_illumination(img, dark_images[camera], bright_images[camera])
         
-        beer_bounds = find_beers(img)
+        beer_bounds = find_beers(corrected)
         beer_images = crop_beers(img, beer_bounds)
 
         count = 0
         for cropped in beer_images:
             
-            name = '.'.join(f.split('.')[:-1])
             path = os.path.join(out_dir, '%s_%d.png' % (name, count))
             
             print 'writing %s' % (path)
