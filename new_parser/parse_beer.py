@@ -170,7 +170,7 @@ if __name__== '__main__':
         name = os.path.splitext(f)[0]
 
         shelf  = name[0]
-        camera = int(name[1:])
+        camera = int(name[:3][1:])
 
         img         = cv2.imread(os.path.join(in_dir, f))
 
