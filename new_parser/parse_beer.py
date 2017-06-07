@@ -1,10 +1,12 @@
 import math
+import collections
 
 import os
 import sys
 
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 """ Compensate for lens distortion
 Adapted from Junwei's code:
@@ -27,19 +29,23 @@ def undistort_image(img):
 Based on tutorial by Regis Clouard:
 https://clouard.users.greyc.fr/Pantheon/experiments/illumination-correction/index-en.html
 """
-def correct_illumination(img, dark, bright):
-    tmp = (img-dark) / (bright-dark)
-    c1  = cv2.mean(tmp)[:3]
+def correct_illumination(img, dark):
+    img    = np.float64(img) /255.0
+    dark   = np.float64(dark)/255.0
 
-    result = cv2.mean(img)[:3] * (c1/tmp)
-    return cv2.convertScaleAbs(result) # return an 8-bit image
+    result = (img - dark) + cv2.mean(dark)[:3]
+    return cv2.convertScaleAbs(result, alpha=(255)) # return 8-bit image
 
 def find_beers(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     vis  = img.copy()
 
+    # equalize histogram
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    equalized = clahe.apply(gray)
+
     # threshold
-    blur = cv2.GaussianBlur(gray, (5,5), 0)
+    blur = cv2.GaussianBlur(equalized, (5,5), 0)
     _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
 
     # detect blobs
@@ -49,7 +55,7 @@ def find_beers(img):
     # find circles
 
     img_width, img_height = gray.shape
-    mask = np.zeros((img_width, img_height, 1), dtype = "uint8")
+    mask = np.zeros((img_width, img_height, 1), dtype = 'uint8')
 
     for blob in blobs:
         hull = cv2.convexHull(blob.reshape(-1, 1, 2))
@@ -110,7 +116,7 @@ def crop_beers(img, beer_bounds):
 
 if __name__== '__main__':
     
-    data_dir = './_data/illumination/'
+    data_dir = './_data/illumination/dark/'
     in_dir   = './_data/ShelfB_Test_Images/'
     out_dir  = './out/'
 
@@ -120,16 +126,13 @@ if __name__== '__main__':
     if len(sys.argv) >= 3:
         data_dir = sys.argv[2] + '/'
 
-    dark_dir   = data_dir + 'dark/'
-    bright_dir = data_dir + 'bright/'
+    print 'reading dark images from %s'   % (data_dir)
 
-    print 'reading dark images from %s'   % (dark_dir)
-    dark_images   = { int(os.path.splitext(f)[0]) : cv2.imread(dark_dir   + f) 
-        for f in os.listdir(dark_dir)   if f.endswith('jpg') | f.endswith('png') }
+    dark_images = collections.defaultdict(dict)
+    for f in os.listdir(data_dir):
 
-    print 'reading bright images from %s' % (bright_dir)
-    bright_images = { int(os.path.splitext(f)[0]) : cv2.imread(bright_dir + f) 
-        for f in os.listdir(bright_dir) if f.endswith('jpg') | f.endswith('png') }
+        name = os.path.splitext(f)[0]
+        dark_images[name[0]][int(name[1:])] = cv2.imread(data_dir + f)
 
     print 'reading input from %s' % (in_dir)
     files = [f for f in os.listdir(in_dir) if f.endswith('jpg') | f.endswith('png')]
@@ -143,10 +146,12 @@ if __name__== '__main__':
         shelf  = name[0]
         camera = int(name[1:])
 
-        img = undistort_image(cv2.imread(in_dir + f))
-        corrected = correct_illumination(img, dark_images[camera], bright_images[camera])
+        img         = cv2.imread(in_dir + f)
+
+        corrected   = correct_illumination(img, dark_images[shelf][camera])
+        undistorted = undistort_image(corrected)
         
-        beer_bounds = find_beers(corrected)
+        beer_bounds = find_beers(undistorted)
         beer_images = crop_beers(img, beer_bounds)
 
         count = 0
