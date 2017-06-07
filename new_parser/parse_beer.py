@@ -8,6 +8,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+INTERACTIVE = True
+
 """ Compensate for lens distortion
 Adapted from Junwei's code:
 https://github.com/andycavatorta/ab-inbev/blob/bd5cdd94e55ede948598a7d74e950424c8ec08e4/cropping_code/UnWrapImage.py
@@ -38,7 +40,6 @@ def correct_illumination(img, dark):
 
 def find_beers(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    vis  = img.copy()
 
     # equalize histogram
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
@@ -71,29 +72,29 @@ def find_beers(img):
     _, filled, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     result = []
+    if INTERACTIVE: vis = img.copy()
 
     for contour in filled:
-        cv2.polylines(vis, [contour], 0, (0,0,255), 1)
-
-        (x,y), radius = cv2.minEnclosingCircle(contour)
-        center = (int(x),int(y))
-        radius = int(radius)
-
-        cv2.circle(vis, center, radius, (0,255,0), 2)
-
         x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(vis, (x,y), (x+w,y+h), (0,255,0), 2)
         result.append((x, y, w, h))
 
-        # compare shapes with CONTOURS_MATCH_I1
-        circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
-        confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
-        
-        cv2.putText(vis, '%.3f' % confidence, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,255), 2)
-    
-    cv2.imshow('result', vis)
-    cv2.waitKey()
+        if INTERACTIVE:
+            cv2.polylines(vis, [contour], 0, (0,0,255), 1)
+            cv2.rectangle(vis, (x,y), (x+w,y+h), (0,255,0), 2)
 
+            (x,y), radius = cv2.minEnclosingCircle(contour)
+            center = (int(x),int(y))
+            radius = int(radius)
+
+            cv2.circle(vis, center, radius, (0,255,0), 2)      
+
+            # compare shapes with CONTOURS_MATCH_I1
+            circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
+            confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
+            
+            cv2.putText(vis, '%.3f' % confidence, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,255), 2)
+    
+    if INTERACTIVE: plt.imshow(vis), plt.show()
     return result
 
 def crop_beers(img, beer_bounds):
@@ -102,43 +103,68 @@ def crop_beers(img, beer_bounds):
 
     for rect in beer_bounds:
         x, y, w, h = rect
+        size = max(w, h)
 
-        x = max(x - w/6,         0)
-        w = min(w + w/3, img_width)
+        x = max(x    - size/8,         0)
+        w = min(size + size/4, img_width)
 
-        y = max(y - h/6,         0)
-        h = min(h + h/3, img_height)
+        y = max(y    - size/8,          0)
+        h = min(size + size/4, img_height)
 
         cropped = img[y:y+h, x:x+w].copy()
         result.append(cropped)
 
     return result
 
+def print_usage():
+    print 'usage: %s [options]\n' \
+          '  options:\n'          \
+          '    -i <path> of fridge images\n'     \
+          '    -c <path> of dark calibration images\n'      \
+          '    -o <path> to save cropped images\n'         \
+          '    -b run in batch mode' % (sys.argv[0])
+
 if __name__== '__main__':
-    
-    data_dir = './_data/illumination/dark/'
-    in_dir   = './_data/ShelfB_Test_Images/'
-    out_dir  = './out/'
+    d = os.path.dirname(__file__)
 
-    if len(sys.argv) >= 2:
-        in_dir   = sys.argv[1] + '/'
+    data_dir = os.path.join(d, '_data', 'illumination', 'dark')
+    in_dir   = os.path.join(d, '_data', 'ShelfB_Test_Images')
+    out_dir  = os.path.join(d, 'out')
+
+    if len(sys.argv) < 2: print_usage()
+    else:
         
-    if len(sys.argv) >= 3:
-        data_dir = sys.argv[2] + '/'
+        it = iter(range (1, len(sys.argv)))
+        for i in it:
 
-    print 'reading dark images from %s'   % (data_dir)
+            if sys.argv[i] == '-b': INTERACTIVE = False
+
+            elif sys.argv[i] == '-i':
+                try: in_dir = sys.argv[it.next()]
+                except StopIteration: print_usage(), sys.exit()
+
+            elif sys.argv[i] == '-o':
+                try: out_dir = sys.argv[it.next()]
+                except StopIteration: print_usage(), sys.exit()
+
+            elif sys.argv[i] == '-c':
+                try: data_dir = sys.argv[it.next()]
+                except StopIteration: print_usage(), sys.exit()
+
+            else: print_usage(), sys.exit()
+
+    print 'reading dark images from %s' % (data_dir)
 
     dark_images = collections.defaultdict(dict)
     for f in os.listdir(data_dir):
 
         name = os.path.splitext(f)[0]
-        dark_images[name[0]][int(name[1:])] = cv2.imread(data_dir + f)
+        dark_images[name[0]][int(name[1:])] = cv2.imread(os.path.join(data_dir, f))
 
-    print 'reading input from %s' % (in_dir)
+    print 'reading input images from %s' % (in_dir)
     files = [f for f in os.listdir(in_dir) if f.endswith('jpg') | f.endswith('png')]
 
-    if not os.path.isdir(out_dir):
-        os.mkdir(out_dir)
+    if not os.path.isdir(out_dir): os.mkdir(out_dir)
 
     for f in files:
         name = os.path.splitext(f)[0]
@@ -146,13 +172,13 @@ if __name__== '__main__':
         shelf  = name[0]
         camera = int(name[1:])
 
-        img         = cv2.imread(in_dir + f)
+        img         = cv2.imread(os.path.join(in_dir, f))
 
         corrected   = correct_illumination(img, dark_images[shelf][camera])
         undistorted = undistort_image(corrected)
         
         beer_bounds = find_beers(undistorted)
-        beer_images = crop_beers(img, beer_bounds)
+        beer_images = crop_beers(undistorted, beer_bounds)
 
         count = 0
         for cropped in beer_images:
