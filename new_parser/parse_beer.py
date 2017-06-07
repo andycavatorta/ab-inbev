@@ -15,7 +15,7 @@ Adapted from Junwei's code:
 https://github.com/andycavatorta/ab-inbev/blob/bd5cdd94e55ede948598a7d74e950424c8ec08e4/cropping_code/UnWrapImage.py
 """
 def undistort_image(img):
-    height, width, _ = img.shape
+    (height, width) = img.shape[:2]
 
     distCoeff = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
     cam = np.eye(3, dtype=np.float32) # assume unit matrix for camera
@@ -31,31 +31,36 @@ def undistort_image(img):
 Based on tutorial by Regis Clouard:
 https://clouard.users.greyc.fr/Pantheon/experiments/illumination-correction/index-en.html
 """
-def correct_illumination(img, dark):
-    img    = np.float64(img) /255.0
-    dark   = np.float64(dark)/255.0
+def correct_illumination(img, dark, bright):
+    tmp = (img-dark) / (bright-dark)
+    c1  = cv2.mean(tmp)[:1]
 
-    result = (img - dark) + cv2.mean(dark)[:3]
+    result = cv2.mean(img)[:1] * (c1/tmp)
     return cv2.convertScaleAbs(result, alpha=(255)) # return 8-bit image
 
-def find_beers(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+def equalize_histogram(img):
 
-    # equalize histogram
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-    equalized = clahe.apply(gray)
+    equalized = clahe.apply(img)
 
     # threshold
     blur = cv2.GaussianBlur(equalized, (5,5), 0)
     _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
 
+    return thresh
+
+
+def find_beers(img, orig):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    equalized = equalize_histogram(gray)
+
     # detect blobs
     mser = cv2.MSER_create(_delta=4, _min_area=800, _max_area=14400, _max_variation=1.0)
-    blobs, _ = mser.detectRegions(thresh)
+    blobs, _ = mser.detectRegions(equalized)
 
     # find circles
 
-    img_width, img_height = gray.shape
+    (img_width, img_height) = gray.shape[:2]
     mask = np.zeros((img_width, img_height, 1), dtype = 'uint8')
 
     for blob in blobs:
@@ -72,7 +77,7 @@ def find_beers(img):
     _, filled, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     result = []
-    if INTERACTIVE: vis = img.copy()
+    if INTERACTIVE: vis = orig.copy()
 
     for contour in filled:
         x, y, w, h = cv2.boundingRect(contour)
@@ -98,7 +103,7 @@ def find_beers(img):
     return result
 
 def crop_beers(img, beer_bounds):
-    img_width, img_height, _ = img.shape
+    (img_width, img_height) = img.shape[:2]
     result = []
 
     for rect in beer_bounds:
@@ -127,9 +132,10 @@ def print_usage():
 if __name__== '__main__':
     d = os.path.dirname(__file__)
 
-    data_dir = os.path.join(d, '_data', 'illumination', 'dark')
-    in_dir   = os.path.join(d, '_data', 'ShelfB_Test_Images')
-    out_dir  = os.path.join(d, 'out')
+    dark_dir   = os.path.join(d, '_data', 'illumination', 'dark')
+    bright_dir = os.path.join(d, '_data', 'illumination', 'bright')
+    in_dir     = os.path.join(d, '_data', 'ShelfB_Test_Images')
+    out_dir    = os.path.join(d, 'out')
 
     if len(sys.argv) < 2: print_usage()
     else:
@@ -148,18 +154,28 @@ if __name__== '__main__':
                 except StopIteration: print_usage(), sys.exit()
 
             elif sys.argv[i] == '-c':
-                try: data_dir = sys.argv[it.next()]
+                try: dark_dir = sys.argv[it.next()]
                 except StopIteration: print_usage(), sys.exit()
 
             else: print_usage(), sys.exit()
 
-    print 'reading dark images from %s' % (data_dir)
+    print 'reading dark images from %s' % (dark_dir)
 
     dark_images = collections.defaultdict(dict)
-    for f in os.listdir(data_dir):
+    for f in os.listdir(dark_dir):
 
         name = os.path.splitext(f)[0]
-        dark_images[name[0]][int(name[1:])] = cv2.imread(os.path.join(data_dir, f))
+        img = cv2.imread(os.path.join(dark_dir, f))
+        dark_images[name[0]][int(name[1:])] = img
+
+    print 'reading bright images from %s' % (bright_dir)
+
+    bright_images = collections.defaultdict(dict)
+    for f in os.listdir(bright_dir):
+
+        name = os.path.splitext(f)[0]
+        img = cv2.imread(os.path.join(bright_dir, f))
+        bright_images[name[0]][int(name[1:])] = img
 
     print 'reading input images from %s' % (in_dir)
     files = [f for f in os.listdir(in_dir) if f.endswith('jpg') | f.endswith('png')]
@@ -168,17 +184,17 @@ if __name__== '__main__':
 
     for f in files:
         name = os.path.splitext(f)[0].split('_')[0]
-        
+
         shelf  = name[0]
         camera = int(name[1:])
 
         img         = cv2.imread(os.path.join(in_dir, f))
 
-        corrected   = correct_illumination(img, dark_images[shelf][camera])
+        corrected   = correct_illumination(img, dark_images[shelf][camera], bright_images[shelf][camera])
         undistorted = undistort_image(corrected)
         
-        beer_bounds = find_beers(undistorted)
-        beer_images = crop_beers(undistorted, beer_bounds)
+        beer_bounds = find_beers(corrected, undistort_image(img))
+        beer_images = crop_beers(undistort_image(img), beer_bounds)
 
         count = 0
         for cropped in beer_images:
