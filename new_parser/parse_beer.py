@@ -167,10 +167,10 @@ if __name__== '__main__':
     if not os.path.isdir(out_dir): os.mkdir(out_dir)
 
     for f in files:
-        name = os.path.splitext(f)[0]
-
+        name = os.path.splitext(f)[0].split('_')[0]
+        
         shelf  = name[0]
-        camera = int(name[:3][1:])
+        camera = int(name[1:])
 
         img         = cv2.imread(os.path.join(in_dir, f))
 
