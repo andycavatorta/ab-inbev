@@ -48,7 +48,26 @@ def equalize_histogram(img):
 
     return thresh
 
-def mask_beers(gray, mask):
+def process_split(img):      
+
+    canny = cv2.Canny(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 100, 200)
+    return cv2.GaussianBlur(canny, (7,7), 0)
+    
+def mask_circles(img):
+    circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 60, param1=90, param2=30, minRadius=65, maxRadius=110)
+
+    if circles is not None:
+        circles = np.uint16(np.around(circles))
+        tmp = img.copy()
+
+        for i in circles[0,:]:
+            cv2.circle(tmp, (i[0],i[1]), i[2], (0,255,0), 2)
+            cv2.circle(tmp, (i[0],i[1]), 2, (0,0,255), 3)
+
+        cv2.imshow('sdf', tmp)
+        cv2.waitKey()
+
+def mask_blobs(gray, mask):
     # detect blobs
 
     mser = cv2.MSER_create(_delta=4, _min_area=800, _max_area=14400, _max_variation=1.0)
@@ -209,28 +228,15 @@ if __name__== '__main__':
         
         # first pass: prospective illumination correction
         corrected = correct_illumination(img_in, dark_images[shelf][camera], bright_images[shelf][camera])
-        mask = mask_beers(undistort_image(corrected), mask)
+        mask = mask_blobs(undistort_image(corrected), mask)
 
         # second pass: CLAHE and Otsu threshhold
         equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
-        mask = mask_beers(equalized, mask)
+        mask = mask_blobs(equalized, mask)
 
         # third pass: Hough circles
-        canny = cv2.Canny(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY), 100, 200)
-        blur = cv2.GaussianBlur(canny, (7,7), 0)
-        
-        circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, 1, 60, param1=90, param2=30, minRadius=65, maxRadius=110)
-        if circles is not None:
-            circles = np.uint16(np.around(circles))
-
-            tmp = img_out.copy()
-
-            for i in circles[0,:]:
-                cv2.circle(tmp, (i[0],i[1]), i[2], (0,255,0), 2)
-                cv2.circle(tmp, (i[0],i[1]), 2, (0,0,255), 3)
-
-            cv2.imshow('sdf', tmp)
-            cv2.waitKey()
+        processed = process_split(img_out)
+        mask_circles(processed)
 
         beer_bounds, vis = find_beers(mask, img_out.copy())
         beer_images      = crop_beers(img_out, beer_bounds)
