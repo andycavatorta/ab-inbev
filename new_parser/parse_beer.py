@@ -48,7 +48,6 @@ def equalize_histogram(img):
 
     return thresh
 
-
 def mask_beers(gray, mask):
     # detect blobs
 
@@ -202,6 +201,8 @@ if __name__== '__main__':
         img_in  = cv2.imread(os.path.join(in_dir, f))
         img_out = undistort_image(img_in)
 
+        print 'processing %s' % (file_name)
+
         # create mask to accumulate blobs detected by each pass
         (height, width) = img_in.shape[:2]
         mask = np.zeros((height, width, 1), dtype = 'uint8')
@@ -213,6 +214,23 @@ if __name__== '__main__':
         # second pass: CLAHE and Otsu threshhold
         equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
         mask = mask_beers(equalized, mask)
+
+        # third pass: Hough circles
+        canny = cv2.Canny(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY), 100, 200)
+        blur = cv2.GaussianBlur(canny, (7,7), 0)
+        
+        circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, 1, 60, param1=90, param2=30, minRadius=65, maxRadius=110)
+        if circles is not None:
+            circles = np.uint16(np.around(circles))
+
+            tmp = img_out.copy()
+
+            for i in circles[0,:]:
+                cv2.circle(tmp, (i[0],i[1]), i[2], (0,255,0), 2)
+                cv2.circle(tmp, (i[0],i[1]), 2, (0,0,255), 3)
+
+            cv2.imshow('sdf', tmp)
+            cv2.waitKey()
 
         beer_bounds, vis = find_beers(mask, img_out.copy())
         beer_images      = crop_beers(img_out, beer_bounds)
