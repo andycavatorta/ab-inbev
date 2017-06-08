@@ -8,7 +8,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-INTERACTIVE = True
+INTERACTIVE  = True
+SAVE_VISUALS = False
 
 """ Compensate for lens distortion
 Adapted from Junwei's code:
@@ -79,7 +80,7 @@ def find_beers(mask, vis):
         x, y, w, h = cv2.boundingRect(contour)
         result.append((x, y, w, h))
 
-        if INTERACTIVE:
+        if INTERACTIVE | SAVE_VISUALS:
             cv2.polylines(vis, [contour], 0, (0,0,255), 1)
             cv2.rectangle(vis, (x,y), (x+w,y+h), (0,255,0), 2)
 
@@ -96,7 +97,7 @@ def find_beers(mask, vis):
             cv2.putText(vis, '%.3f' % confidence, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,255), 2)
     
     if INTERACTIVE: plt.imshow(vis), plt.show()
-    return result
+    return (result, vis)
 
 def crop_beers(img, beer_bounds):
     (img_height, img_width) = img.shape[:2]
@@ -123,6 +124,7 @@ def print_usage():
           '    -i <path> of fridge images. format: A11[_?].png|jpg\n'       \
           '    -c <path> of "dark" and "bright" calibration directories\n'  \
           '    -o <path> to save cropped images\n'                          \
+          '    -v <path> to (optionally) save visualizations\n'             \
           '    -b run in batch mode' % (sys.argv[0])
 
 if __name__== '__main__':
@@ -131,6 +133,7 @@ if __name__== '__main__':
     data_dir = os.path.join(d, '_data', 'illumination')
     in_dir   = os.path.join(d, '_data', 'ShelfB_Test_Images')
     out_dir  = os.path.join(d, 'out')
+    vis_dir  = None
 
     if len(sys.argv) < 2: print_usage()
     else:
@@ -150,6 +153,12 @@ if __name__== '__main__':
 
             elif sys.argv[i] == '-c':
                 try: data_dir = sys.argv[it.next()]
+                except StopIteration: print_usage(), sys.exit()
+            
+            elif sys.argv[i] == '-v':
+                try: 
+                    vis_dir = sys.argv[it.next()]
+                    SAVE_VISUALS = True
                 except StopIteration: print_usage(), sys.exit()
 
             else: print_usage(), sys.exit()
@@ -177,10 +186,12 @@ if __name__== '__main__':
     print 'reading input images from %s' % (in_dir)
     files = [f for f in os.listdir(in_dir) if f.endswith('jpg') | f.endswith('png')]
 
-    if not os.path.isdir(out_dir): os.mkdir(out_dir)
+    if                  not os.path.isdir(out_dir): os.mkdir(out_dir)
+    if SAVE_VISUALS and not os.path.isdir(vis_dir): os.mkdir(vis_dir)
 
     for f in files:
-        names = os.path.splitext(f)[0].split('_')
+        file_name = os.path.splitext(f)[0]
+        names     = file_name.split('_')
 
         name    =       names[0]
         postfix = '_' + names[1] if len(names) > 1 else ''
@@ -191,6 +202,7 @@ if __name__== '__main__':
         img_in  = cv2.imread(os.path.join(in_dir, f))
         img_out = undistort_image(img_in)
 
+        # create mask to accumulate blobs detected by each pass
         (height, width) = img_in.shape[:2]
         mask = np.zeros((height, width, 1), dtype = 'uint8')
         
@@ -202,15 +214,21 @@ if __name__== '__main__':
         equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
         mask = mask_beers(equalized, mask)
 
-        beer_bounds = find_beers(mask, img_out.copy())
-        beer_images = crop_beers(img_out, beer_bounds)
+        beer_bounds, vis = find_beers(mask, img_out.copy())
+        beer_images      = crop_beers(img_out, beer_bounds)
+
+        if SAVE_VISUALS:
+             path = os.path.join(vis_dir, "%s_vis.png" % file_name)
+
+             print 'writing visualization %s' % (path)
+             cv2.imwrite(path, vis)
 
         count = 0
         for cropped in beer_images:
             
             path = os.path.join(out_dir, '%s%s_%d.png' % (name, postfix, count))
             
-            print 'writing %s' % (path)
+            print 'writing cropped %s' % (path)
             cv2.imwrite(path, cropped)
             
             count += 1
