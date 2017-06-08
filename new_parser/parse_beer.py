@@ -77,30 +77,29 @@ def find_beers(img, orig):
     _, filled, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     result = []
-    if INTERACTIVE: vis = orig.copy()
+    vis = orig.copy()
 
     for contour in filled:
         x, y, w, h = cv2.boundingRect(contour)
         result.append((x, y, w, h))
 
-        if INTERACTIVE:
-            cv2.polylines(vis, [contour], 0, (0,0,255), 1)
-            cv2.rectangle(vis, (x,y), (x+w,y+h), (0,255,0), 2)
+        cv2.polylines(vis, [contour], 0, (0,0,255), 1)
+        cv2.rectangle(vis, (x,y), (x+w,y+h), (0,255,0), 2)
 
-            (x,y), radius = cv2.minEnclosingCircle(contour)
-            center = (int(x),int(y))
-            radius = int(radius)
+        (x,y), radius = cv2.minEnclosingCircle(contour)
+        center = (int(x),int(y))
+        radius = int(radius)
 
-            cv2.circle(vis, center, radius, (0,255,0), 2)      
+        cv2.circle(vis, center, radius, (0,255,0), 2)
 
-            # compare shapes with CONTOURS_MATCH_I1
-            circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
-            confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
-            
-            cv2.putText(vis, '%.3f' % confidence, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,255), 2)
+        # compare shapes with CONTOURS_MATCH_I1
+        circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
+        confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
+
+        cv2.putText(vis, '%.3f' % confidence, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,255), 2)
     
     if INTERACTIVE: plt.imshow(vis), plt.show()
-    return result
+    return (result, vis)
 
 def crop_beers(img, beer_bounds):
     (img_width, img_height) = img.shape[:2]
@@ -127,7 +126,9 @@ def print_usage():
           '    -i <path> of fridge images\n'     \
           '    -c <path> of dark calibration images\n'      \
           '    -o <path> to save cropped images\n'         \
-          '    -b run in batch mode' % (sys.argv[0])
+          '    -b run in batch mode\n' \
+          '    -v <path> to (optionally) save visualizations\n' \
+          % (sys.argv[0])
 
 if __name__== '__main__':
     d = os.path.dirname(__file__)
@@ -136,6 +137,7 @@ if __name__== '__main__':
     bright_dir = os.path.join(d, '_data', 'illumination', 'bright')
     in_dir     = os.path.join(d, '_data', 'ShelfB_Test_Images')
     out_dir    = os.path.join(d, 'out')
+    vis_dir    = None
 
     if len(sys.argv) < 2: print_usage()
     else:
@@ -155,6 +157,10 @@ if __name__== '__main__':
 
             elif sys.argv[i] == '-c':
                 try: dark_dir = sys.argv[it.next()]
+                except StopIteration: print_usage(), sys.exit()
+
+            elif sys.argv[i] == '-v':
+                try: vis_dir = sys.argv[it.next()]
                 except StopIteration: print_usage(), sys.exit()
 
             else: print_usage(), sys.exit()
@@ -193,7 +199,12 @@ if __name__== '__main__':
         corrected   = correct_illumination(img, dark_images[shelf][camera], bright_images[shelf][camera])
         undistorted = undistort_image(corrected)
         
-        beer_bounds = find_beers(corrected, undistort_image(img))
+        beer_bounds, vis = find_beers(corrected, undistort_image(img))
+        if vis_dir is not None:
+            vis_path = os.path.join(vis_dir, "%s_vis.png" % os.path.splitext(f)[0])
+            print 'writing %s' % (vis_path)
+            cv2.imwrite(vis_path, vis)
+
         beer_images = crop_beers(undistort_image(img), beer_bounds)
 
         count = 0
