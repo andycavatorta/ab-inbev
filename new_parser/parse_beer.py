@@ -120,7 +120,7 @@ def crop_beers(img, beer_bounds):
 def print_usage():
     print 'usage: %s [options]\n'                                           \
           '  options:\n'                                                    \
-          '    -i <path> of fridge images. format: [A-D][0-11].[png|jpg]\n' \
+          '    -i <path> of fridge images. format: A11[_?].png|jpg\n'       \
           '    -c <path> of "dark" and "bright" calibration directories\n'  \
           '    -o <path> to save cropped images\n'                          \
           '    -b run in batch mode' % (sys.argv[0])
@@ -180,10 +180,13 @@ if __name__== '__main__':
     if not os.path.isdir(out_dir): os.mkdir(out_dir)
 
     for f in files:
-        name = os.path.splitext(f)[0].split('_')[0]
+        names = os.path.splitext(f)[0].split('_')
 
-        shelf  = name[0]
-        camera = int(name[1:])
+        name    =       names[0]
+        postfix = '_' + names[1] if len(names) > 1 else ''
+
+        shelf   = name[0]
+        camera  = int(name[1:])
 
         img_in  = cv2.imread(os.path.join(in_dir, f))
         img_out = undistort_image(img_in)
@@ -205,7 +208,7 @@ if __name__== '__main__':
         count = 0
         for cropped in beer_images:
             
-            path = os.path.join(out_dir, '%s_%d.png' % (name, count))
+            path = os.path.join(out_dir, '%s%s_%d.png' % (name, postfix, count))
             
             print 'writing %s' % (path)
             cv2.imwrite(path, cropped)
