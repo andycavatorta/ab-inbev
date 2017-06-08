@@ -106,11 +106,11 @@ def crop_beers(img, beer_bounds):
         x, y, w, h = rect
         size = max(w, h)
 
-        x = max(x    - size/8,         0)
-        w = min(size + size/4, img_width)
+        x = max(x    - size/4,          0)
+        w = min(size + size/2, img_width)
 
-        y = max(y    - size/8,          0)
-        h = min(size + size/4, img_height)
+        y = max(y    - size/4,          0)
+        h = min(size + size/2, img_height)
 
         cropped = img[y:y+h, x:x+w].copy()
         result.append(cropped)
