@@ -39,29 +39,22 @@ def correct_illumination(img, dark, bright):
     return cv2.convertScaleAbs(result, alpha=(255)) # return 8-bit image
 
 def equalize_histogram(img):
-
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
     equalized = clahe.apply(img)
 
-    # threshold
     blur = cv2.GaussianBlur(equalized, (5,5), 0)
     _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
 
     return thresh
 
 
-def find_beers(img, orig):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    equalized = equalize_histogram(gray)
-
+def mask_beers(gray, mask):
     # detect blobs
+
     mser = cv2.MSER_create(_delta=4, _min_area=800, _max_area=14400, _max_variation=1.0)
-    blobs, _ = mser.detectRegions(equalized)
+    blobs, _ = mser.detectRegions(gray)
 
     # find circles
-
-    (img_width, img_height) = gray.shape[:2]
-    mask = np.zeros((img_width, img_height, 1), dtype = 'uint8')
 
     for blob in blobs:
         hull = cv2.convexHull(blob.reshape(-1, 1, 2))
@@ -72,12 +65,15 @@ def find_beers(img, orig):
         # select polygons with more than 9 vertices
         if len(poly) > 9: 
             cv2.polylines(mask, [blob], 1, 255, 2)
+
+    return mask
     
+def find_beers(mask, vis):
     # merge overlapping regions
+
     _, filled, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     result = []
-    if INTERACTIVE: vis = orig.copy()
 
     for contour in filled:
         x, y, w, h = cv2.boundingRect(contour)
@@ -103,7 +99,7 @@ def find_beers(img, orig):
     return result
 
 def crop_beers(img, beer_bounds):
-    (img_width, img_height) = img.shape[:2]
+    (img_height, img_width) = img.shape[:2]
     result = []
 
     for rect in beer_bounds:
@@ -188,13 +184,22 @@ if __name__== '__main__':
         shelf  = name[0]
         camera = int(name[1:])
 
-        img         = cv2.imread(os.path.join(in_dir, f))
+        img_in  = cv2.imread(os.path.join(in_dir, f))
+        img_out = undistort_image(img_in)
 
-        corrected   = correct_illumination(img, dark_images[shelf][camera], bright_images[shelf][camera])
-        undistorted = undistort_image(corrected)
+        (height, width) = img_in.shape[:2]
+        mask = np.zeros((height, width, 1), dtype = 'uint8')
         
-        beer_bounds = find_beers(corrected, undistort_image(img))
-        beer_images = crop_beers(undistort_image(img), beer_bounds)
+        # first pass: prospective illumination correction
+        corrected = correct_illumination(img_in, dark_images[shelf][camera], bright_images[shelf][camera])
+        mask = mask_beers(undistort_image(corrected), mask)
+
+        # second pass: CLAHE and Otsu threshhold
+        equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
+        mask = mask_beers(equalized, mask)
+
+        beer_bounds = find_beers(mask, img_out.copy())
+        beer_images = crop_beers(img_out, beer_bounds)
 
         count = 0
         for cropped in beer_images:
