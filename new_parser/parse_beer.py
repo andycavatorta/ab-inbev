@@ -118,20 +118,19 @@ def crop_beers(img, beer_bounds):
     return result
 
 def print_usage():
-    print 'usage: %s [options]\n' \
-          '  options:\n'          \
-          '    -i <path> of fridge images\n'     \
-          '    -c <path> of dark calibration images\n'      \
-          '    -o <path> to save cropped images\n'         \
+    print 'usage: %s [options]\n'                                           \
+          '  options:\n'                                                    \
+          '    -i <path> of fridge images. format: [A-D][0-11].[png|jpg]\n' \
+          '    -c <path> of "dark" and "bright" calibration directories\n'  \
+          '    -o <path> to save cropped images\n'                          \
           '    -b run in batch mode' % (sys.argv[0])
 
 if __name__== '__main__':
     d = os.path.dirname(__file__)
 
-    dark_dir   = os.path.join(d, '_data', 'illumination', 'dark')
-    bright_dir = os.path.join(d, '_data', 'illumination', 'bright')
-    in_dir     = os.path.join(d, '_data', 'ShelfB_Test_Images')
-    out_dir    = os.path.join(d, 'out')
+    data_dir = os.path.join(d, '_data', 'illumination')
+    in_dir   = os.path.join(d, '_data', 'ShelfB_Test_Images')
+    out_dir  = os.path.join(d, 'out')
 
     if len(sys.argv) < 2: print_usage()
     else:
@@ -150,11 +149,12 @@ if __name__== '__main__':
                 except StopIteration: print_usage(), sys.exit()
 
             elif sys.argv[i] == '-c':
-                try: dark_dir = sys.argv[it.next()]
+                try: data_dir = sys.argv[it.next()]
                 except StopIteration: print_usage(), sys.exit()
 
             else: print_usage(), sys.exit()
 
+    dark_dir = os.path.join(data_dir, 'dark')
     print 'reading dark images from %s' % (dark_dir)
 
     dark_images = collections.defaultdict(dict)
@@ -164,6 +164,7 @@ if __name__== '__main__':
         img = cv2.imread(os.path.join(dark_dir, f))
         dark_images[name[0]][int(name[1:])] = img
 
+    bright_dir = os.path.join(data_dir, 'bright')
     print 'reading bright images from %s' % (bright_dir)
 
     bright_images = collections.defaultdict(dict)
