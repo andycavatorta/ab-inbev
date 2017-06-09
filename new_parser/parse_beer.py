@@ -11,14 +11,13 @@ import matplotlib.pyplot as plt
 INTERACTIVE  = True
 SAVE_VISUALS = False
 
-""" Compensate for lens distortion
+DISTORTION = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
+
+""" Calculate camera matrix used to compensate for lens distortion
 Adapted from Junwei's code:
 https://github.com/andycavatorta/ab-inbev/blob/bd5cdd94e55ede948598a7d74e950424c8ec08e4/cropping_code/UnWrapImage.py
 """
-def undistort_image(img):
-    (height, width) = img.shape[:2]
-
-    distCoeff = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
+def calc_camera_matrix(width, height):
     cam = np.eye(3, dtype=np.float32) # assume unit matrix for camera
 
     cam[0, 2] = width  / 2.0  # center x
@@ -26,7 +25,7 @@ def undistort_image(img):
     cam[0, 0] = 10.0          # focal length x
     cam[1, 1] = 10.0          # focal length y
 
-    return cv2.undistort(img, cam, distCoeff)
+    return cam
 
 """ Correct for variable illumination
 Based on tutorial by Regis Clouard:
@@ -50,22 +49,16 @@ def equalize_histogram(img):
 
 def process_split(img):      
 
-    canny = cv2.Canny(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 100, 200)
-    return cv2.GaussianBlur(canny, (7,7), 0)
-    
-def mask_circles(img):
-    circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 60, param1=90, param2=30, minRadius=65, maxRadius=110)
+    def process_channel(img):
+        thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 55, 7)
+        dilation = cv2.dilate(thresh, None, 1)
+        return cv2.erode(dilation, None, 1)
 
-    if circles is not None:
-        circles = np.uint16(np.around(circles))
-        tmp = img.copy()
+    b, g, r = map(process_channel, cv2.split(img))
+    cv2.bitwise_and(b, g, b)
 
-        for i in circles[0,:]:
-            cv2.circle(tmp, (i[0],i[1]), i[2], (0,255,0), 2)
-            cv2.circle(tmp, (i[0],i[1]), 2, (0,0,255), 3)
-
-        cv2.imshow('sdf', tmp)
-        cv2.waitKey()
+    processed = cv2.bitwise_and(b, r)
+    return cv2.GaussianBlur(processed, (7,7), 0)
 
 def mask_blobs(gray, mask):
     # detect blobs
@@ -88,13 +81,10 @@ def mask_blobs(gray, mask):
     return mask
     
 def find_beers(mask, vis):
-    # merge overlapping regions
-
-    _, filled, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
+    _, contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     result = []
 
-    for contour in filled:
+    for contour in contours:
         x, y, w, h = cv2.boundingRect(contour)
         result.append((x, y, w, h))
 
@@ -217,28 +207,45 @@ if __name__== '__main__':
         shelf   = name[0]
         camera  = int(name[1:])
 
-        img_in  = cv2.imread(os.path.join(in_dir, f))
-        img_out = undistort_image(img_in)
-
         print 'processing %s' % (file_name)
-
-        # create mask to accumulate blobs detected by each pass
+        img_in  = cv2.imread(os.path.join(in_dir, f))
+        
         (height, width) = img_in.shape[:2]
-        mask = np.zeros((height, width, 1), dtype = 'uint8')
+        cam = calc_camera_matrix(width, height)
+
+        img_out = cv2.undistort(img_in, cam, DISTORTION)
+
+        # create masks to accumulate blobs detected by each pass
+        mask           = np.zeros((height, width), dtype = 'uint8')
+        mask_distorted = np.zeros((height, width), dtype = 'uint8')
         
         # first pass: prospective illumination correction
         corrected = correct_illumination(img_in, dark_images[shelf][camera], bright_images[shelf][camera])
-        mask = mask_blobs(undistort_image(corrected), mask)
+        mask = mask_blobs(cv2.undistort(corrected, cam, DISTORTION), mask)
 
-        # second pass: CLAHE and Otsu threshhold
+        # second pass: CLAHE and Otsu threshold
         equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
         mask = mask_blobs(equalized, mask)
 
-        # third pass: Hough circles
+        # third pass: Adaptive threshold
         processed = process_split(img_out)
-        mask_circles(processed)
+        mask = mask_blobs(processed, mask)
 
-        beer_bounds, vis = find_beers(mask, img_out.copy())
+        # repeat each pass on distorted images
+
+        corrected = correct_illumination(img_in, dark_images[shelf][camera], bright_images[shelf][camera])
+        mask_distorted = mask_blobs(corrected, mask_distorted)
+
+        equalized = equalize_histogram(cv2.cvtColor(img_in, cv2.COLOR_BGR2GRAY))
+        mask_distorted = mask_blobs(equalized, mask_distorted)
+
+        processed = process_split(img_in)
+        mask_distorted = mask_blobs(processed, mask_distorted)
+
+        # undistort results from distorted image; sum with undistorted results
+        mask_final = mask + cv2.undistort(mask_distorted, cam, DISTORTION)
+
+        beer_bounds, vis = find_beers(mask_final, img_out.copy())
         beer_images      = crop_beers(img_out, beer_bounds)
 
         if SAVE_VISUALS:
