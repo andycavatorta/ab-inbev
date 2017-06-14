@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 DISTORTION = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
-MIN_SIZE = 65
 
 """ Calculate camera matrix used to compensate for lens distortion
 Adapted from Junwei's code:
@@ -97,7 +96,7 @@ class Parser():
             img = cv2.imread(os.path.join(bright_dir, f))
             self.bright_images[name[0]][int(name[1:])] = img
 
-    def find_beers(self, mask, vis):
+    def find_beers(self, mask, vis, min_size):
         _, contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         result = []
 
@@ -105,7 +104,7 @@ class Parser():
             x, y, w, h = cv2.boundingRect(contour)
 
             size = max(w, h)
-            if (size < MIN_SIZE):
+            if (size < min_size):
                 continue
 
             result.append((x, y, w, h))
@@ -129,7 +128,7 @@ class Parser():
         if self.interactive: plt.imshow(vis), plt.show()
         return (result, vis)
 
-    def parse(self, filename, shelf, camera):
+    def parse(self, filename, shelf, camera, min_size):
         img_in  = cv2.imread(filename)
         
         (height, width) = img_in.shape[:2]
@@ -167,5 +166,5 @@ class Parser():
         # undistort results from distorted image; sum with undistorted results
         mask_final = mask + cv2.undistort(mask_distorted, cam, DISTORTION)
 
-        beer_bounds, vis = self.find_beers(mask_final, img_out.copy())
+        beer_bounds, vis = self.find_beers(mask_final, img_out.copy(), min_size)
         return beer_bounds, vis, img_out

@@ -28,6 +28,7 @@ def print_usage():
           '  options:\n'                                                    \
           '    -i <path> of fridge images. format: A11[_?].png|jpg\n'       \
           '    -c <path> of "dark" and "bright" calibration directories\n'  \
+          '    -m <int> minimum size of an output image\n'                  \
           '    -o <path> to save cropped images\n'                          \
           '    -v <path> to (optionally) save visualizations\n'             \
           '    -b run in batch mode' % (sys.argv[0])
@@ -39,6 +40,7 @@ if __name__== '__main__':
     in_dir   = os.path.join(d, '_data', 'ShelfB_Test_Images')
     out_dir  = os.path.join(d, 'out')
     vis_dir  = None
+    min_size = 0
 
     interactive  = True
     save_visuals = False
@@ -63,6 +65,10 @@ if __name__== '__main__':
                 try: data_dir = sys.argv[it.next()]
                 except StopIteration: print_usage(), sys.exit()
             
+            elif sys.argv[i] == '-m':
+                try: min_size = int(sys.argv[it.next()])
+                except StopIteration: print_usage(), sys.exit()
+
             elif sys.argv[i] == '-v':
                 try: 
                     vis_dir = sys.argv[it.next()]
@@ -96,7 +102,7 @@ if __name__== '__main__':
 
         beer_bounds, vis, img_out = parser.parse(
             os.path.join(in_dir, f), 
-            shelf, camera)
+            shelf, camera, min_size)
 
         beer_images = crop_beers(img_out, beer_bounds)
 
