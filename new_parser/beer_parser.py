@@ -96,6 +96,45 @@ class Parser():
             img = cv2.imread(os.path.join(bright_dir, f))
             self.bright_images[name[0]][int(name[1:])] = img
 
+    def mask_beers(self, img, shelf, camera):
+        # create masks to accumulate blobs detected by each pass
+        mask_distorted = np.zeros((self.height, self.width), dtype = 'uint8')
+        mask           = np.zeros((self.height, self.width), dtype = 'uint8')
+        
+        # distorted:
+
+        # prospective illumination correction
+        corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
+        mask_distorted = mask_blobs(corrected, mask_distorted)
+
+        # CLAHE and Otsu threshold
+        equalized = equalize_histogram(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
+        mask_distorted = mask_blobs(equalized, mask_distorted)
+
+        # adaptive threshold
+        processed = process_split(img)
+        mask_distorted = mask_blobs(processed, mask_distorted)
+
+        # undistorted:
+
+        img_out = cv2.undistort(img, self.cam, DISTORTION)
+
+        # prospective illumination correction
+        corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
+        mask = mask_blobs(cv2.undistort(corrected, self.cam, DISTORTION), mask)
+
+        # CLAHE and Otsu threshold
+        equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
+        mask = mask_blobs(equalized, mask)
+
+        # adaptive threshold
+        processed = process_split(img_out)
+        mask = mask_blobs(processed, mask)
+
+        # undistort results from distorted image; sum with undistorted results
+        mask_final = mask + cv2.undistort(mask_distorted, self.cam, DISTORTION)
+        return mask_final
+
     def find_beers(self, mask, vis):
         _, contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         result = []
@@ -123,43 +162,25 @@ class Parser():
         if self.interactive: plt.imshow(vis), plt.show()
         return (result, vis)
 
-    def parse(self, filename, shelf, camera):
-        img_in  = cv2.imread(filename)
+    def parse(self, shelf, camera, filename, filename_50=None, filename_0=None):
+        img = cv2.imread(filename)
+
+        '''if filename_50 is not None: 
+            img = cv2.addWeighted(img, 0.5, cv2.imread(filename_50), 0.5, 0)
+        if filename_0  is not None:
+            img = cv2.addWeighted(img, 0.5, cv2.imread(filename_0 ), 0.5, 0)'''
         
-        (height, width) = img_in.shape[:2]
-        cam = calc_camera_matrix(width, height)
+        (self.height, self.width) = img.shape[:2]
+        self.cam = calc_camera_matrix(self.width, self.height)
 
-        img_out = cv2.undistort(img_in, cam, DISTORTION)
+        mask_final = self.mask_beers(img, shelf, camera)
 
-        # create masks to accumulate blobs detected by each pass
-        mask           = np.zeros((height, width), dtype = 'uint8')
-        mask_distorted = np.zeros((height, width), dtype = 'uint8')
-        
-        # first pass: prospective illumination correction
-        corrected = correct_illumination(img_in, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        mask = mask_blobs(cv2.undistort(corrected, cam, DISTORTION), mask)
+        if filename_50 is not None: 
+            mask_final += self.mask_beers(cv2.imread(filename_50), shelf, camera)
+        if filename_0  is not None:
+            mask_final += self.mask_beers(cv2.imread(filename_0 ), shelf, camera)
 
-        # second pass: CLAHE and Otsu threshold
-        equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
-        mask = mask_blobs(equalized, mask)
-
-        # third pass: Adaptive threshold
-        processed = process_split(img_out)
-        mask = mask_blobs(processed, mask)
-
-        # repeat each pass on distorted images
-
-        corrected = correct_illumination(img_in, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        mask_distorted = mask_blobs(corrected, mask_distorted)
-
-        equalized = equalize_histogram(cv2.cvtColor(img_in, cv2.COLOR_BGR2GRAY))
-        mask_distorted = mask_blobs(equalized, mask_distorted)
-
-        processed = process_split(img_in)
-        mask_distorted = mask_blobs(processed, mask_distorted)
-
-        # undistort results from distorted image; sum with undistorted results
-        mask_final = mask + cv2.undistort(mask_distorted, cam, DISTORTION)
-
+        img_out = cv2.undistort(img, self.cam, DISTORTION)
         beer_bounds, vis = self.find_beers(mask_final, img_out.copy())
+
         return beer_bounds, vis, img_out
