@@ -13,7 +13,7 @@ MAX_CONFIDENCE = 1.0
 Adapted from Junwei's code:
 https://github.com/andycavatorta/ab-inbev/blob/bd5cdd94e55ede948598a7d74e950424c8ec08e4/cropping_code/UnWrapImage.py
 """
-def calc_camera_matrix(width, height):
+def calc_camera_matrix((height,width)):
     cam = np.eye(3, dtype=np.float32) # assume unit matrix for camera
 
     cam[0, 2] = width  / 2.0  # center x
@@ -52,28 +52,29 @@ def process_split(img):
     b, g, r = map(process_channel, cv2.split(img))
     cv2.bitwise_and(b, g, b)
 
-    processed = cv2.bitwise_and(b, r)
-    return processed
+    return cv2.bitwise_and(b, r)
 
-def mask_circles(img, mask):
+def mask_circles(img):
+    mask = np.zeros(img.shape[:2], dtype='uint8')
+
+    # detect circles
     img = cv2.Canny(img, 100, 200)
     circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 60, param1=90, param2=30, minRadius=65, maxRadius=110)
 
-    if circles is not None:
+    if circles is not None: 
         circles = np.uint16(np.around(circles))
-
-        for i in circles[0, :]:
-            cv2.circle(mask, (i[0],i[1]), i[2]/2, 255, -1)
+        for i in circles[0, :]: cv2.circle(mask, (i[0],i[1]), i[2]/2, 255, -1)
 
     return mask
 
-def mask_blobs(gray, mask):
-    # detect blobs
+def mask_blobs(gray):
+    mask = np.zeros(gray.shape[:2], dtype='uint8')
 
+    # detect blobs
     mser = cv2.MSER_create(_delta=4, _min_area=800, _max_area=14400, _max_variation=1.0)
     blobs, _ = mser.detectRegions(gray)
 
-    # find circles
+    # find circular blobs
 
     for blob in blobs:
         hull = cv2.convexHull(blob.reshape(-1, 1, 2))
@@ -111,46 +112,42 @@ class Parser():
 
     def mask_beers(self, img, shelf, camera):
         # create masks to accumulate blobs detected by each pass
-        mask_distorted = np.zeros((self.height, self.width), dtype = 'uint8')
-        mask           = np.zeros((self.height, self.width), dtype = 'uint8')
+        mask_distorted = np.zeros(img.shape[:2], dtype = 'uint8')
+        mask           = np.zeros(img.shape[:2], dtype = 'uint8')
         
         # distorted:
 
-        # prospective illumination correction
-        #corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        #mask_distorted = mask_blobs(corrected, mask_distorted)
-
         # CLAHE and Otsu threshold
         equalized = equalize_histogram(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
-        mask_distorted = mask_blobs  (equalized, mask_distorted)
-        #mask_distorted = mask_circles(equalized, mask_distorted)
+        mask_distorted += mask_blobs(equalized)
+        #mask_distorted += mask_circles(equalized)
 
         # adaptive threshold
         processed = process_split(img)
-        mask_distorted = mask_blobs(processed, mask_distorted)
-        #mask_distorted = mask_circles(processed, mask_distorted)
+        mask_distorted += mask_blobs(processed)
+        #mask_distorted += mask_circles(processed)
 
         # undistorted:
 
         img_out = cv2.undistort(img, self.cam, DISTORTION)
 
-        # prospective illumination correction
-        #corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        #mask = mask_blobs(cv2.undistort(corrected, self.cam, DISTORTION), mask)
-
         # CLAHE and Otsu threshold
         equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
-        mask = mask_blobs  (equalized, mask)
-        #mask = mask_circles(equalized, mask)
+        mask += mask_blobs(equalized)
+        #mask += mask_circles(equalized)
 
         # adaptive threshold
         processed = process_split(img_out)
-        mask = mask_circles(processed, mask)
-        mask = mask_blobs  (processed, mask)
+        mask += mask_blobs  (processed)
+        #mask += mask_circles(processed)
         
         # undistort results from distorted image; sum with undistorted results
-        mask_final = mask + cv2.undistort(mask_distorted, self.cam, DISTORTION)
-        return mask_final
+        mask += cv2.undistort(mask_distorted, self.cam, DISTORTION)
+
+        #dist_transform = cv2.distanceTransform(mask, cv2.DIST_L2, 5)
+        #_, mask_final = cv2.threshold(dist_transform, 0.1*dist_transform.max(), 255, 0)
+
+        return mask # np.uint8(mask_final)
 
     def find_beers(self, mask, vis):
         _, contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -185,10 +182,8 @@ class Parser():
         img = cv2.imread(filename)
         img_weighted = img.copy()
         
-        (self.height, self.width) = img.shape[:2]
-        self.cam = calc_camera_matrix(self.width, self.height)
-
-        mask_final = np.zeros((self.height, self.width), dtype = 'uint8')# self.mask_beers(img, shelf, camera)
+        self.cam = calc_camera_matrix(img.shape[:2])
+        mask_final = np.zeros(img.shape[:2], dtype='uint8') # self.mask_beers(img, shelf, camera)
 
         if filename_50 is not None: 
             img_weighted = cv2.addWeighted(img_weighted, 0.5, cv2.imread(filename_50), 0.5, 0)
