@@ -5,7 +5,9 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-DISTORTION = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
+DISTORTION     = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
+MIN_SIZE       = 65
+MAX_CONFIDENCE = 1.0
 
 """ Calculate camera matrix used to compensate for lens distortion
 Adapted from Junwei's code:
@@ -36,8 +38,7 @@ def equalize_histogram(img):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
     equalized = clahe.apply(img)
 
-    blur = cv2.GaussianBlur(equalized, (5,5), 0)
-    _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
+    _, thresh = cv2.threshold(equalized, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
 
     return thresh
 
@@ -52,7 +53,19 @@ def process_split(img):
     cv2.bitwise_and(b, g, b)
 
     processed = cv2.bitwise_and(b, r)
-    return cv2.GaussianBlur(processed, (7,7), 0)
+    return processed
+
+def mask_circles(img, mask):
+    img = cv2.Canny(img, 100, 200)
+    circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 60, param1=90, param2=30, minRadius=65, maxRadius=110)
+
+    if circles is not None:
+        circles = np.uint16(np.around(circles))
+
+        for i in circles[0, :]:
+            cv2.circle(mask, (i[0],i[1]), i[2]/2, 255, -1)
+
+    return mask
 
 def mask_blobs(gray, mask):
     # detect blobs
@@ -70,7 +83,7 @@ def mask_blobs(gray, mask):
 
         # select polygons with more than 9 vertices
         if len(poly) > 9: 
-            cv2.polylines(mask, [blob], 1, 255, 2)
+            cv2.polylines(mask, [blob], 1, 255, 1)
 
     return mask
 
@@ -104,33 +117,37 @@ class Parser():
         # distorted:
 
         # prospective illumination correction
-        corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        mask_distorted = mask_blobs(corrected, mask_distorted)
+        #corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
+        #mask_distorted = mask_blobs(corrected, mask_distorted)
 
         # CLAHE and Otsu threshold
         equalized = equalize_histogram(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
-        mask_distorted = mask_blobs(equalized, mask_distorted)
+        mask_distorted = mask_blobs  (equalized, mask_distorted)
+        #mask_distorted = mask_circles(equalized, mask_distorted)
 
         # adaptive threshold
         processed = process_split(img)
         mask_distorted = mask_blobs(processed, mask_distorted)
+        #mask_distorted = mask_circles(processed, mask_distorted)
 
         # undistorted:
 
         img_out = cv2.undistort(img, self.cam, DISTORTION)
 
         # prospective illumination correction
-        corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        mask = mask_blobs(cv2.undistort(corrected, self.cam, DISTORTION), mask)
+        #corrected = correct_illumination(img, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
+        #mask = mask_blobs(cv2.undistort(corrected, self.cam, DISTORTION), mask)
 
         # CLAHE and Otsu threshold
         equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
-        mask = mask_blobs(equalized, mask)
+        mask = mask_blobs  (equalized, mask)
+        #mask = mask_circles(equalized, mask)
 
         # adaptive threshold
         processed = process_split(img_out)
-        mask = mask_blobs(processed, mask)
-
+        mask = mask_circles(processed, mask)
+        mask = mask_blobs  (processed, mask)
+        
         # undistort results from distorted image; sum with undistorted results
         mask_final = mask + cv2.undistort(mask_distorted, self.cam, DISTORTION)
         return mask_final
@@ -141,22 +158,24 @@ class Parser():
 
         for contour in contours:
             x, y, w, h = cv2.boundingRect(contour)
+
+            if max(w, h) < MIN_SIZE: continue
+
+            (cx,cy), radius = cv2.minEnclosingCircle(contour)
+            center = (int(cx),int(cy))
+            radius = int(radius)
+
+            circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
+            confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
+
+            if confidence > MAX_CONFIDENCE: continue
+                
             result.append((x, y, w, h))
 
             if self.interactive | self.save_visuals:
                 cv2.polylines(vis, [contour], 0, (0,0,255), 1)
                 cv2.rectangle(vis, (x,y), (x+w,y+h), (0,255,0), 2)
-
-                (x,y), radius = cv2.minEnclosingCircle(contour)
-                center = (int(x),int(y))
-                radius = int(radius)
-
-                cv2.circle(vis, center, radius, (0,255,0), 2)      
-
-                # compare shapes with CONTOURS_MATCH_I1
-                circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
-                confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
-                
+                cv2.circle(vis, center, radius, (0,255,0), 2)                      
                 cv2.putText(vis, '%.3f' % confidence, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,255), 2)
         
         if self.interactive: plt.imshow(vis), plt.show()
@@ -164,21 +183,22 @@ class Parser():
 
     def parse(self, shelf, camera, filename, filename_50=None, filename_0=None):
         img = cv2.imread(filename)
-
-        '''if filename_50 is not None: 
-            img = cv2.addWeighted(img, 0.5, cv2.imread(filename_50), 0.5, 0)
-        if filename_0  is not None:
-            img = cv2.addWeighted(img, 0.5, cv2.imread(filename_0 ), 0.5, 0)'''
+        img_weighted = img.copy()
         
         (self.height, self.width) = img.shape[:2]
         self.cam = calc_camera_matrix(self.width, self.height)
 
-        mask_final = self.mask_beers(img, shelf, camera)
+        mask_final = np.zeros((self.height, self.width), dtype = 'uint8')# self.mask_beers(img, shelf, camera)
 
         if filename_50 is not None: 
+            img_weighted = cv2.addWeighted(img_weighted, 0.5, cv2.imread(filename_50), 0.5, 0)
             mask_final += self.mask_beers(cv2.imread(filename_50), shelf, camera)
         if filename_0  is not None:
+            img_weighted = cv2.addWeighted(img_weighted, 0.5, cv2.imread(filename_0 ), 0.5, 0)
             mask_final += self.mask_beers(cv2.imread(filename_0 ), shelf, camera)
+
+        if filename_50 is not None or filename_0 is not None:
+            mask_final += self.mask_beers(img_weighted, shelf, camera)
 
         img_out = cv2.undistort(img, self.cam, DISTORTION)
         beer_bounds, vis = self.find_beers(mask_final, img_out.copy())
