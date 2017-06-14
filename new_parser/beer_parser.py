@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 DISTORTION = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
+MIN_SIZE = 65
 
 """ Calculate camera matrix used to compensate for lens distortion
 Adapted from Junwei's code:
@@ -102,6 +103,11 @@ class Parser():
 
         for contour in contours:
             x, y, w, h = cv2.boundingRect(contour)
+
+            size = max(w, h)
+            if (size < MIN_SIZE):
+                continue
+
             result.append((x, y, w, h))
 
             if self.interactive | self.save_visuals:
