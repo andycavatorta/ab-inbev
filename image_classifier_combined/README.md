@@ -31,4 +31,5 @@ $ sudo python3 retrain.py \
 
 ### Classification
 
-todo
+* the basic classification code is in `classifier_combined.py`.  the function `guess_image` takes a tensorflow session and an image as an argument, and returns a list of `(guess, confidence)` in descending order; i.e. the first guess is the best.
+* you can see `guess_image` in action in `classify_images.py`.  this code takes a directory full of images and a threshold confidence value, and for all images classified above the threshold, it sorts them into directories (this is useful for sorting more images to iteratively build the training set.)
