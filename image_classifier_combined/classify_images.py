@@ -4,6 +4,8 @@ import sys
 import tensorflow as tf
 
 def classify_stuff(input_dir, output_dir, confidence_threshold):
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
     classifier = Classifier()
     input_images = sorted([f for f in os.listdir(input_dir) if f.endswith(".jpg")])
     with tf.Session() as sess:
@@ -19,7 +21,10 @@ def classify_stuff(input_dir, output_dir, confidence_threshold):
                 # move the thing.
                 beer_dir = best_guess.replace(" ", "_")
                 from_path = os.path.join(input_dir, image)
-                to_path = os.path.join(output_dir, beer_dir, image)
+                to_dir = os.path.join(output_dir, beer_dir)
+                if not os.path.isdir(to_dir):
+                    os.mkdir(to_dir)
+                to_path = os.path.join(to_dir, image)
                 print("move %s to %s" % (from_path, to_path))
                 os.rename(from_path, to_path)
             i += 1
@@ -28,7 +33,8 @@ def print_usage():
     print 'usage: %s [options]\n'                                               \
           '  options:\n'                                                        \
           '    -t <integer> percentage confidence threshold to move an image\n' \
-          '    -i <path> of input directory\n' % (sys.argv[0])
+          '    -i <path> of input directory\n' \
+          '    -o <path> of output directory\n' % (sys.argv[0])
 
 if __name__ == "__main__":
     in_dir = "classifier_input"
@@ -43,6 +49,10 @@ if __name__ == "__main__":
 
             elif sys.argv[i] == '-i':
                 try: in_dir = sys.argv[it.next()]
+                except StopIteration: print_usage(), sys.exit()
+
+            elif sys.argv[i] == '-o':
+                try: out_dir = sys.argv[it.next()]
                 except StopIteration: print_usage(), sys.exit()
 
             else: print_usage(), sys.exit()
