@@ -40,19 +40,29 @@ def equalize_histogram(img):
 
     _, thresh = cv2.threshold(equalized, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
 
+    #cv2.imshow('sdf',thresh)
+    #cv2.waitKey()
+
     return thresh
 
-def process_split(img):      
+def process_split(img):
 
     def process_channel(img):
-        thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 55, 7)
-        dilation = cv2.dilate(thresh, None, 1)
-        return cv2.erode(dilation, None, 1)
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        equalized = clahe.apply(img)
+        thresh = cv2.adaptiveThreshold(equalized, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 65, 17)
+        opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, None)
+        return opening
 
     b, g, r = map(process_channel, cv2.split(img))
     cv2.bitwise_and(b, g, b)
+    processed = cv2.bitwise_and(b, r)
+    processed = cv2.bilateralFilter(processed, 9, 100, 100)
 
-    return cv2.bitwise_and(b, r)
+    #cv2.imshow('sdf',processed)
+    #cv2.waitKey()
+
+    return processed
 
 def mask_circles(img):
     mask = np.zeros(img.shape[:2], dtype='uint8')
@@ -71,7 +81,7 @@ def mask_blobs(gray):
     mask = np.zeros(gray.shape[:2], dtype='uint8')
 
     # detect blobs
-    mser = cv2.MSER_create(_delta=4, _min_area=800, _max_area=14400, _max_variation=1.0)
+    mser = cv2.MSER_create(_delta=4, _min_area=65, _max_area=14400, _max_variation=1.0)
     blobs, _ = mser.detectRegions(gray)
 
     # find circular blobs
@@ -103,8 +113,8 @@ class Parser():
         # distorted:
 
         # CLAHE and Otsu threshold
-        equalized = equalize_histogram(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
-        mask_distorted += mask_blobs(equalized)
+        #equalized = equalize_histogram(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
+        #mask_distorted += mask_blobs(equalized)
         #mask_distorted += mask_circles(equalized)
 
         # adaptive threshold
@@ -117,8 +127,8 @@ class Parser():
         img_out = cv2.undistort(img, self.cam, DISTORTION)
 
         # CLAHE and Otsu threshold
-        equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
-        mask += mask_blobs(equalized)
+        #equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
+        #mask += mask_blobs(equalized)
         #mask += mask_circles(equalized)
 
         # adaptive threshold
