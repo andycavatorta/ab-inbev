@@ -28,7 +28,6 @@ def print_usage():
           '  options:\n'                                                    \
           '    -i  <path> of fridge images. format: A11[_?].png|jpg\n'      \
           '    -i3 <path> of "0" "50" "100" image directories\n'            \
-          '    -c  <path> of "dark" and "bright" calibration directories\n' \
           '    -o  <path> to save cropped images\n'                         \
           '    -v  <path> to (optionally) save visualizations\n'            \
           '    -b  run in batch mode' % (sys.argv[0])
@@ -36,7 +35,6 @@ def print_usage():
 if __name__== '__main__':
     d = os.path.dirname(__file__)
 
-    data_dir = os.path.join(d, '_data', 'illumination')
     in_dir   = os.path.join(d, '_data', 'ShelfB_Test_Images')
     out_dir  = os.path.join(d, 'out')
 
@@ -59,10 +57,6 @@ if __name__== '__main__':
             elif sys.argv[i] == '-o':
                 try: out_dir = sys.argv[it.next()]
                 except StopIteration: print_usage(), sys.exit()
-
-            elif sys.argv[i] == '-c':
-                try: data_dir = sys.argv[it.next()]
-                except StopIteration: print_usage(), sys.exit()
             
             elif sys.argv[i] == '-i3':
                 try:
@@ -79,8 +73,6 @@ if __name__== '__main__':
             else: print_usage(), sys.exit()
 
     parser = beer_parser.Parser(
-        os.path.join(data_dir, 'dark'), 
-        os.path.join(data_dir, 'bright'), 
         interactive=interactive, save_visuals=save_visuals)
 
     if use_average:

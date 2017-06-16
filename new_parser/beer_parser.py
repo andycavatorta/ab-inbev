@@ -90,25 +90,10 @@ def mask_blobs(gray):
 
 class Parser():
 
-    def __init__(self, dark_dir, bright_dir, interactive=None, save_visuals=None):
+    def __init__(self, interactive=None, save_visuals=None):
 
         self.interactive  = interactive  or False
         self.save_visuals = save_visuals or False
-
-        self.dark_images   = collections.defaultdict(dict)
-        self.bright_images = collections.defaultdict(dict)
-
-        print 'reading dark images from %s' % (dark_dir)
-        for f in os.listdir(dark_dir):
-            name = os.path.splitext(f)[0]
-            img = cv2.imread(os.path.join(dark_dir, f))
-            self.dark_images[name[0]][int(name[1:])] = img
-
-        print 'reading bright images from %s' % (bright_dir)
-        for f in os.listdir(bright_dir):
-            name = os.path.splitext(f)[0]
-            img = cv2.imread(os.path.join(bright_dir, f))
-            self.bright_images[name[0]][int(name[1:])] = img
 
     def mask_beers(self, img, shelf, camera):
         # create masks to accumulate blobs detected by each pass
