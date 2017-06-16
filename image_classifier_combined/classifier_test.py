@@ -4,6 +4,8 @@ import sys
 import tensorflow as tf
 import time
 
+# USAGE: python classifier_test.py <input_dir>
+#
 # NOTE: input_dir must have these subdirectories, or a subset of them:
 #   bottle_becks
 #   bottle_bud_america
@@ -39,8 +41,8 @@ def get_guesses(input_dir, beers_info):
         beer_dirs = os.listdir(input_dir)
         i = 0
         for beer_type_dir in beer_dirs:
-            beer_type_path = os.path.join(output_dir, beer_type_dir)
-            beer_type_imgs = os.path.listdir(beer_type_path)
+            beer_type_path = os.path.join(input_dir, beer_type_dir)
+            beer_type_imgs = os.listdir(beer_type_path)
             for img in beer_type_imgs:
                 if (i % 10) == 0:
                     print('processed %d images' % i)
@@ -53,37 +55,27 @@ def get_guesses(input_dir, beers_info):
 def test_classifier(input_dir):
     beers_info = []
     get_guesses(input_dir, beers_info)
-    num_imgs = len(beers.info)
+    num_imgs = len(beers_info)
 
     num_errors = 0
     for beer_info in beers_info:
-        if beer_info.beer_type != guesses[0][0]:
+        if beer_info.beer_type != beer_info.guesses[0][0]:
             num_errors += 1
     percent_correctness = ((num_imgs - num_errors) / float(num_imgs)) * 100
-    print("correctness = %.2f%" % percent_correctness)
+    print("percent correct = %.2f" % percent_correctness)
     print("errors:")
     for beer_info in beers_info:
         best_guess = beer_info.guesses[0]
         if beer_info.beer_type != best_guess[0]:
-            print("    %s classified as %s with %.2f% confidence (%s)" %
+            print("    %s classified as %s with %.2f percent confidence (%s)" %
                     (beer_info.beer_type, best_guess[0], best_guess[1],
                         beer_info.img_path))
 
     #TODO there might be other stats that it'd be nice to print, e.g. num
     # mistakes (or %correct) at each of a variety of confidence intervals.
 
-def print_usage():
-    print('usage: %s [options]\n'   \
-          '  options:\n'            \
-          '    -i <path> of input directory\n' % (sys.argv[0]))
-
 if __name__ == "__main__":
     in_dir = "classifier_test_input"
     if len(sys.argv) > 1:
-        it = iter(range (1, len(sys.argv)))
-        for i in it:
-            elif sys.argv[i] == '-i':
-                try: in_dir = sys.argv[it.next()]
-                except StopIteration: print_usage(), sys.exit()
-            else: print_usage(), sys.exit()
+        in_dir = sys.argv[1]
     test_classifier(in_dir)
