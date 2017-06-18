@@ -28,6 +28,7 @@ def print_usage():
           '  options:\n'                                                    \
           '    -i  <path> of fridge images. format: A11[_?].png|jpg\n'      \
           '    -i3 <path> of "0" "50" "100" image directories\n'            \
+          '    -m  <int>  minimum size of beer bounding boxes'              \
           '    -o  <path> to save cropped images\n'                         \
           '    -v  <path> to (optionally) save visualizations\n'            \
           '    -b  run in batch mode' % (sys.argv[0])
@@ -41,6 +42,8 @@ if __name__== '__main__':
     interactive  = True
     save_visuals = False
     use_average  = False
+
+    min_size = 65
 
     if len(sys.argv) < 2: print_usage()
     else:
@@ -57,6 +60,10 @@ if __name__== '__main__':
             elif sys.argv[i] == '-o':
                 try: out_dir = sys.argv[it.next()]
                 except StopIteration: print_usage(), sys.exit()
+
+            elif sys.argv[i] == '-m':
+                 try: min_size = int(sys.argv[it.next()])
+                 except StopIteration: print_usage(), sys.exit()
             
             elif sys.argv[i] == '-i3':
                 try:
@@ -73,7 +80,7 @@ if __name__== '__main__':
             else: print_usage(), sys.exit()
 
     parser = beer_parser.Parser(
-        interactive=interactive, save_visuals=save_visuals)
+        interactive=interactive, save_visuals=save_visuals, min_size=min_size)
 
     if use_average:
         in_dir_50 = os.path.join(in_dir,  '50')
