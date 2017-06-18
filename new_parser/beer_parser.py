@@ -119,7 +119,7 @@ class Parser():
 
         return mask
 
-    def find_beers(self, mask, vis, min_size):
+    def find_beers(self, mask, vis):
         _, contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         result = []
 
