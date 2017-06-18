@@ -5,13 +5,10 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-DISTORTION = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
+DISTORTION     = np.array([[-6.0e-5, 0.0, 0.0, 0.0]], np.float64)
+MAX_CONFIDENCE = 1.0
 
-""" Calculate camera matrix used to compensate for lens distortion
-Adapted from Junwei's code:
-https://github.com/andycavatorta/ab-inbev/blob/bd5cdd94e55ede948598a7d74e950424c8ec08e4/cropping_code/UnWrapImage.py
-"""
-def calc_camera_matrix(width, height):
+def calc_camera_matrix((height,width)):
     cam = np.eye(3, dtype=np.float32) # assume unit matrix for camera
 
     cam[0, 2] = width  / 2.0  # center x
@@ -21,46 +18,54 @@ def calc_camera_matrix(width, height):
 
     return cam
 
-""" Correct for variable illumination
-Based on tutorial by Regis Clouard:
-https://clouard.users.greyc.fr/Pantheon/experiments/illumination-correction/index-en.html
-"""
-def correct_illumination(img, dark, bright):
-    tmp = (img-dark) / (bright-dark)
-    c1  = cv2.mean(tmp)[:1]
-
-    result = cv2.mean(img)[:1] * (c1/tmp)
-    return cv2.convertScaleAbs(result, alpha=(255)) # return 8-bit image
-
 def equalize_histogram(img):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
     equalized = clahe.apply(img)
 
-    blur = cv2.GaussianBlur(equalized, (5,5), 0)
-    _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
+    _, thresh = cv2.threshold(equalized, 0, 255, cv2.THRESH_TOZERO + cv2.THRESH_OTSU)
 
     return thresh
 
-def process_split(img):      
+def process_split(img):
 
     def process_channel(img):
-        thresh = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 55, 7)
-        dilation = cv2.dilate(thresh, None, 1)
-        return cv2.erode(dilation, None, 1)
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        equalized = clahe.apply(img)
+
+        thresh = cv2.adaptiveThreshold(equalized, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 65, 17)
+        opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, None)
+
+        return opening
 
     b, g, r = map(process_channel, cv2.split(img))
     cv2.bitwise_and(b, g, b)
 
     processed = cv2.bitwise_and(b, r)
-    return cv2.GaussianBlur(processed, (7,7), 0)
+    processed = cv2.bilateralFilter(processed, 9, 100, 100)
 
-def mask_blobs(gray, mask):
+    return processed
+
+def mask_circles(img):
+    mask = np.zeros(img.shape[:2], dtype='uint8')
+
+    # detect circles
+    img = cv2.Canny(img, 100, 200)
+    circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 60, param1=90, param2=30, minRadius=65, maxRadius=110)
+
+    if circles is not None: 
+        circles = np.uint16(np.around(circles))
+        for i in circles[0, :]: cv2.circle(mask, (i[0],i[1]), i[2]/2, 255, -1)
+
+    return mask
+
+def mask_blobs(gray):
+    mask = np.zeros(gray.shape[:2], dtype='uint8')
+
     # detect blobs
-
-    mser = cv2.MSER_create(_delta=4, _min_area=800, _max_area=14400, _max_variation=1.0)
+    mser = cv2.MSER_create(_delta=4, _min_area=65, _max_area=14400, _max_variation=1.0)
     blobs, _ = mser.detectRegions(gray)
 
-    # find circles
+    # find circular blobs
 
     for blob in blobs:
         hull = cv2.convexHull(blob.reshape(-1, 1, 2))
@@ -70,31 +75,49 @@ def mask_blobs(gray, mask):
 
         # select polygons with more than 9 vertices
         if len(poly) > 9: 
-            cv2.polylines(mask, [blob], 1, 255, 2)
+            cv2.polylines(mask, [blob], 1, 255, 1)
 
     return mask
 
 class Parser():
 
-    def __init__(self, dark_dir, bright_dir, interactive=None, save_visuals=None):
+    def __init__(self, interactive=False, save_visuals=False, min_size=65):
 
-        self.interactive  = interactive  or False
-        self.save_visuals = save_visuals or False
+        self.interactive  = interactive
+        self.save_visuals = save_visuals
+        self.min_size     = min_size     
 
-        self.dark_images   = collections.defaultdict(dict)
-        self.bright_images = collections.defaultdict(dict)
+    def mask_beers(self, img, shelf, camera):
+        # create masks to accumulate blobs detected by each pass
+        mask_distorted = np.zeros(img.shape[:2], dtype = 'uint8')
+        mask           = np.zeros(img.shape[:2], dtype = 'uint8')
+        
+        # distorted:
 
-        print 'reading dark images from %s' % (dark_dir)
-        for f in os.listdir(dark_dir):
-            name = os.path.splitext(f)[0]
-            img = cv2.imread(os.path.join(dark_dir, f))
-            self.dark_images[name[0]][int(name[1:])] = img
+        # CLAHE and Otsu threshold
+        equalized = equalize_histogram(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
+        mask_distorted += mask_blobs(equalized)
 
-        print 'reading bright images from %s' % (bright_dir)
-        for f in os.listdir(bright_dir):
-            name = os.path.splitext(f)[0]
-            img = cv2.imread(os.path.join(bright_dir, f))
-            self.bright_images[name[0]][int(name[1:])] = img
+        # adaptive threshold
+        processed = process_split(img)
+        mask_distorted += mask_blobs(processed)
+
+        # undistorted:
+
+        img_out = cv2.undistort(img, self.cam, DISTORTION)
+
+        # CLAHE and Otsu threshold
+        equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
+        mask += mask_blobs(equalized)
+
+        # adaptive threshold
+        processed = process_split(img_out)
+        mask += mask_blobs  (processed)
+        
+        # undistort results from distorted image; sum with undistorted results
+        mask += cv2.undistort(mask_distorted, self.cam, DISTORTION)
+
+        return mask
 
     def find_beers(self, mask, vis, min_size):
         _, contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -103,68 +126,46 @@ class Parser():
         for contour in contours:
             x, y, w, h = cv2.boundingRect(contour)
 
-            size = max(w, h)
-            if (size < min_size):
-                continue
+            if max(w, h) < self.min_size: continue
 
+            (cx,cy), radius = cv2.minEnclosingCircle(contour)
+            center = (int(cx),int(cy))
+            radius = int(radius)
+
+            circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
+            confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
+
+            if confidence > MAX_CONFIDENCE: continue
+                
             result.append((x, y, w, h))
 
             if self.interactive | self.save_visuals:
                 cv2.polylines(vis, [contour], 0, (0,0,255), 1)
                 cv2.rectangle(vis, (x,y), (x+w,y+h), (0,255,0), 2)
-
-                (x,y), radius = cv2.minEnclosingCircle(contour)
-                center = (int(x),int(y))
-                radius = int(radius)
-
-                cv2.circle(vis, center, radius, (0,255,0), 2)      
-
-                # compare shapes with CONTOURS_MATCH_I1
-                circlePoints = cv2.ellipse2Poly(center, (radius,radius), 0, 0, 360, 1)
-                confidence = cv2.matchShapes(contour, circlePoints, 1, 0.0)
-                
+                cv2.circle(vis, center, radius, (0,255,0), 2)                      
                 cv2.putText(vis, '%.3f' % confidence, center, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,255), 2)
         
         if self.interactive: plt.imshow(vis), plt.show()
         return (result, vis)
 
-    def parse(self, filename, shelf, camera, min_size):
-        img_in  = cv2.imread(filename)
+    def parse(self, shelf, camera, filename, filename_50=None, filename_0=None):
+        img = cv2.imread(filename)
+        img_weighted = img.copy()
         
-        (height, width) = img_in.shape[:2]
-        cam = calc_camera_matrix(width, height)
+        self.cam = calc_camera_matrix(img.shape[:2])
+        mask_final = self.mask_beers(img, shelf, camera)
 
-        img_out = cv2.undistort(img_in, cam, DISTORTION)
+        if filename_50 is not None: 
+            img_weighted = cv2.addWeighted(img_weighted, 0.5, cv2.imread(filename_50), 0.5, 0)
+            mask_final += self.mask_beers(cv2.imread(filename_50), shelf, camera)
+        if filename_0  is not None:
+            img_weighted = cv2.addWeighted(img_weighted, 0.5, cv2.imread(filename_0 ), 0.5, 0)
+            mask_final += self.mask_beers(cv2.imread(filename_0 ), shelf, camera)
 
-        # create masks to accumulate blobs detected by each pass
-        mask           = np.zeros((height, width), dtype = 'uint8')
-        mask_distorted = np.zeros((height, width), dtype = 'uint8')
-        
-        # first pass: prospective illumination correction
-        corrected = correct_illumination(img_in, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        mask = mask_blobs(cv2.undistort(corrected, cam, DISTORTION), mask)
+        if filename_50 is not None or filename_0 is not None:
+            mask_final += self.mask_beers(img_weighted, shelf, camera)
 
-        # second pass: CLAHE and Otsu threshold
-        equalized = equalize_histogram(cv2.cvtColor(img_out, cv2.COLOR_BGR2GRAY))
-        mask = mask_blobs(equalized, mask)
+        img_out = cv2.undistort(img, self.cam, DISTORTION)
+        beer_bounds, vis = self.find_beers(mask_final, img_out.copy())
 
-        # third pass: Adaptive threshold
-        processed = process_split(img_out)
-        mask = mask_blobs(processed, mask)
-
-        # repeat each pass on distorted images
-
-        corrected = correct_illumination(img_in, self.dark_images[shelf][camera], self.bright_images[shelf][camera])
-        mask_distorted = mask_blobs(corrected, mask_distorted)
-
-        equalized = equalize_histogram(cv2.cvtColor(img_in, cv2.COLOR_BGR2GRAY))
-        mask_distorted = mask_blobs(equalized, mask_distorted)
-
-        processed = process_split(img_in)
-        mask_distorted = mask_blobs(processed, mask_distorted)
-
-        # undistort results from distorted image; sum with undistorted results
-        mask_final = mask + cv2.undistort(mask_distorted, cam, DISTORTION)
-
-        beer_bounds, vis = self.find_beers(mask_final, img_out.copy(), min_size)
         return beer_bounds, vis, img_out
